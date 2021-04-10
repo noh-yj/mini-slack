@@ -10,7 +10,6 @@ function App() {
       <ConnectedRouter history={history}>
         <Route path='/test' component={Test} />
       </ConnectedRouter>
-      good
     </>
   );
 }
