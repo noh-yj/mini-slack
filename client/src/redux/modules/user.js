@@ -32,9 +32,12 @@ const getUserDB = () => {
         console.log(res);
         dispatch(
           setUser({
-            email: res.data.email,
-            uid: res.data.id,
-            nickname: res.data.nickname,
+            email: res.data.userInfo.email,
+            uid: res.data.userInfo.id,
+            nickname: res.data.userInfo.nickname,
+            profile_img: res.data.userInfo.profile_img,
+            comment_myself: res.data.userInfo.comment_myself,
+            snsId: res.data.userInfo.snsId,
           }),
         );
       })
@@ -59,6 +62,7 @@ const loginDB = (user_id, password) => {
       },
     })
       .then((res) => {
+        console.log(res);
         const jwtToken = res.data.token;
         setCookie('is_login', jwtToken);
         axios.defaults.headers.common['token'] = `${jwtToken}`;
@@ -67,9 +71,12 @@ const loginDB = (user_id, password) => {
             email: res.data.user.email,
             uid: res.data.user.id,
             nickname: res.data.user.nickname,
+            profile_img: res.data.user.profile_img,
+            comment_myself: res.data.user.comment_myself,
+            snsId: res.data.user.snsId,
           }),
         );
-        history.push('/main');
+        history.replace('/main');
       })
       .catch((e) => {
         console.log('에러발생:', e);
@@ -99,9 +106,12 @@ const socialLoginDB = (id) => {
             email: res.data.user.email,
             uid: res.data.user.id,
             nickname: res.data.user.nickname,
+            profile_img: res.data.user.profile_img,
+            comment_myself: res.data.user.comment_myself,
+            snsId: res.data.user.snsId,
           }),
         );
-        history.push('/main');
+        history.replace('/main');
       })
       .catch((e) => {
         console.log('에러발생:', e);
