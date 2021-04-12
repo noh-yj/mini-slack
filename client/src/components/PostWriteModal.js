@@ -65,10 +65,6 @@ const ModalFrame = styled.div`
   background: #ffffff;
   border-radius: 10px;
   padding: 8px 16px;
-<<<<<<< HEAD
-  z-index: 3000;
-=======
->>>>>>> ccb64702519456e9a2ab4085d3740a15124628a1
   filter: drop-shadow(0 0 0.1rem lightgray);
   z-index: 5000;
 

@@ -13,9 +13,11 @@ function Signup(props) {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [user_name, setUserName] = useState('');
+  const [chk_userId, setChkUserId] = useState(false);
 
   const signup = () => {
     // 유효성 검증
+
     if (
       password === '' ||
       passwordCheck === '' ||
@@ -23,6 +25,10 @@ function Signup(props) {
       user_email === ''
     ) {
       window.alert('회원 정보를 모두 입력하세요.');
+      return;
+    }
+    if (!chk_userId) {
+      window.alert('아이디를 체크해주세요.');
       return;
     }
     if (password !== passwordCheck) {
@@ -56,6 +62,16 @@ function Signup(props) {
     })
       .then((res) => {
         console.log(res);
+        if (res.status === 200) {
+          window.alert('사용 가능한 아이디 입니다.');
+          setChkUserId(true);
+        } else if (res.status === 409) {
+          window.alert('이미 사용중인 아이디 입니다.');
+          setChkUserId(false);
+        } else {
+          window.alert('사용 불가한 아이디입니다.');
+          setChkUserId(false);
+        }
       })
       .catch((e) => {
         console.log('에러발생:', e);
