@@ -18,7 +18,7 @@ function PostWriteModal({ status, close }) {
                 wrap="hard"
                 placeholder="무슨 생각을 하고 계시나요?"
                 autoFocus
-                autoComplete="on"
+                autoComplete="true"
               />
               <AdditionalPost>
                 게시물에 추가
@@ -154,7 +154,7 @@ const PostingBtn = styled.button`
   padding: 8px 0;
 
   &:hover {
-    background: #1877f2;
+    background: #1890ff;
   }
 `;
 

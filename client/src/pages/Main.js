@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { FormOutlined, PictureOutlined } from "@ant-design/icons";
 import PostWriteModal from "../components/PostWriteModal";
+import Header from "../components/Header";
+import Sider from "../components/Sidebar";
 
 const Main = (props) => {
   // Modal control operations
@@ -13,7 +15,7 @@ const Main = (props) => {
 
   const closeModal = (event) => {
     // 현재 함수가 걸려있는 target 과 구분해주기 위함.
-    if (event.target != event.currentTarget) {
+    if (event.target !== event.currentTarget) {
       return;
     }
     setModal(false);
@@ -22,9 +24,18 @@ const Main = (props) => {
   return (
     <>
       <MainFrame>
-        <button onClick={modalBtn}>
+        <Header />
+        <MainContent>
+          <MainLeft>
+            <Sider />
+          </MainLeft>
+          <MainRight>
+            <PostList />
+          </MainRight>
+        </MainContent>
+        <PostWriteBtn onClick={modalBtn}>
           <FormOutlined style={{ fontSize: "30px" }} />
-        </button>
+        </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
       </MainFrame>
     </>
@@ -32,10 +43,6 @@ const Main = (props) => {
 };
 
 const MainFrame = styled.div`
-  width: 100%;
-  padding: 8px 12px;
-  background: yellow;
-
   & > button {
     border: none;
     outline: none;
@@ -52,18 +59,43 @@ const MainFrame = styled.div`
 `;
 
 // Styling header
-const MainHeader = styled.nav`
-  width: 100%;
-  background: red;
+
+const MainContent = styled.section`
+  display: flex;
+  background: #f0f2f5;
+  min-height: 80vh;
+  box-sizing: border-box;
 `;
 
-const MainLogo = styled.img``;
-
-const MainLeft = styled.section``;
+const MainLeft = styled.section`
+  height: 100%;
+  min-height: 80vh;
+  padding: 16px 24px;
+  border-right: 1px solid rgb(235, 237, 240);
+  flex-basis: 25%;
+`;
 
 const MainRight = styled.section`
+  flex-basis: 75%;
+  padding: 16px 24px;
+  min-height: 80vh;
   &::after {
   }
 `;
 
+const PostWriteBtn = styled.button`
+  position: fixed;
+  top: 80%;
+  right: 5%;
+  &:hover {
+    color: #1890ff;
+    transition: all 200ms ease-in-out;
+  }
+`;
+
+const PostList = styled.div`
+  width: 100%;
+  min-height: 80vh;
+  background: #ffffff;
+`;
 export default Main;
