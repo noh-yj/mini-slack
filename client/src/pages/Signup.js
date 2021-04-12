@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck, userpasswordCheck } from '../shared/common';
 import axios from 'axios';
 // 회원가입 페이지
 
 function Signup(props) {
+  const dispatch = useDispatch();
   const [user_email, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -34,8 +37,13 @@ function Signup(props) {
       window.alert('이메일 형식이 맞지 않습니다.');
       return;
     }
+    dispatch(userActions.signupDB(user_email, password, user_name));
   };
   const checkEmail = () => {
+    if (user_email === '') {
+      window.alert('아이디를 입력해주세요.');
+      return;
+    }
     axios({
       method: 'post',
       url: `/auth/checkEmail`,
@@ -45,7 +53,7 @@ function Signup(props) {
         console.log(res);
       })
       .catch((e) => {
-        console.log(e);
+        console.log('에러발생:', e);
       });
   };
 
