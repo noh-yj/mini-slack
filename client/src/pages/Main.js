@@ -11,7 +11,10 @@ const Main = (props) => {
     setModal(true);
   };
 
-  const closeModal = () => {
+  const closeModal = (event) => {
+    if (event.target != event.currentTarget) {
+      return;
+    }
     setModal(false);
   };
 
@@ -29,11 +32,9 @@ const Main = (props) => {
 
 const MainFrame = styled.div`
   width: 100%;
-  min-height: 100vh;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 8px 12px;
+  background: yellow;
+
   & > button {
     border: none;
     outline: none;
@@ -46,6 +47,21 @@ const MainFrame = styled.div`
 
   @media only screen and (max-width: 768px) {
     margin: 30px auto;
+  }
+`;
+
+// Styling header
+const MainHeader = styled.nav`
+  width: 100%;
+  background: red;
+`;
+
+const MainLogo = styled.img``;
+
+const MainLeft = styled.section``;
+
+const MainRight = styled.section`
+  &::after {
   }
 `;
 
