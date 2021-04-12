@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import { setCookie, getCookie, deleteCookie } from '../../shared/Cookie';
 import axios from 'axios';
+import { config } from '../../config';
 
 // 액션
 const SET_USER = 'SET_USER';
@@ -31,7 +32,7 @@ const loginDB = (user_id, password) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: 'post',
-      url: `/auth/login`,
+      url: `${config.api}/auth/login`,
       data: {
         email: user_id,
         password: password,
@@ -50,7 +51,7 @@ const signupDB = (user_email, password, user_name) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: 'post',
-      url: `/auth/register`,
+      url: `${config.api}/auth/register`,
       data: {
         email: user_email,
         nickname: user_name,
