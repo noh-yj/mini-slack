@@ -5,6 +5,8 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck, userpasswordCheck } from '../shared/common';
 import axios from 'axios';
 import { config } from '../config';
+import swal from 'sweetalert';
+
 // 회원가입 페이지
 
 function Signup(props) {
@@ -24,35 +26,57 @@ function Signup(props) {
       user_name === '' ||
       user_email === ''
     ) {
-      window.alert('회원 정보를 모두 입력하세요.');
+      swal({
+        title: '회원 정보를 모두 입력하세요.',
+        icon: 'warning',
+      });
       return;
     }
     if (!chk_userId) {
-      window.alert('아이디를 체크해주세요.');
+      swal({
+        title: '아이디를 체크해주세요.',
+        icon: 'warning',
+      });
       return;
     }
     if (password !== passwordCheck) {
-      window.alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      swal({
+        title: '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
+        icon: 'warning',
+      });
       return;
     }
     if (!userpasswordCheck(password) || !userpasswordCheck(passwordCheck)) {
-      window.alert('비밀번호는 형식이 맞지 않습니다.');
+      swal({
+        title: '비밀번호는 형식이 맞지 않습니다.',
+        icon: 'warning',
+      });
       return;
     }
 
     if (!emailCheck(user_email)) {
-      window.alert('이메일 형식이 맞지 않습니다.');
+      swal({
+        title: '이메일 형식이 맞지 않습니다.',
+        icon: 'warning',
+      });
       return;
     }
     dispatch(userActions.signupDB(user_email, password, user_name));
   };
   const checkEmail = () => {
     if (user_email === '') {
-      window.alert('아이디를 입력해주세요.');
+      swal({
+        title: '아이디를 입력해주세요.',
+        icon: 'warning',
+      });
+
       return;
     }
     if (!emailCheck(user_email)) {
-      window.alert('이메일 형식이 맞지 않습니다.');
+      swal({
+        title: '이메일 형식이 맞지 않습니다.',
+        icon: 'warning',
+      });
       return;
     }
     axios({
@@ -63,14 +87,20 @@ function Signup(props) {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          window.alert('사용 가능한 아이디 입니다.');
+          swal({
+            title: '사용 가능한 아이디 입니다.',
+            icon: 'success',
+          });
           setChkUserId(true);
         }
       })
       .catch((e) => {
         console.log('에러발생:', e);
         if (e.response) {
-          window.alert(e.response.data.err);
+          swal({
+            title: e.response.data.err,
+            icon: 'error',
+          });
           setChkUserId(false);
         }
       });

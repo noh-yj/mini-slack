@@ -3,6 +3,7 @@ import produce from 'immer';
 import { setCookie, getCookie, deleteCookie } from '../../shared/Cookie';
 import axios from 'axios';
 import { config } from '../../config';
+import swal from 'sweetalert';
 
 // 액션
 const SET_USER = 'SET_USER';
@@ -81,7 +82,10 @@ const loginDB = (user_id, password) => {
       .catch((e) => {
         console.log('에러발생:', e);
         if (e.response) {
-          window.alert(e.response.data.err);
+          swal({
+            title: e.response.data.err,
+            icon: 'error',
+          });
         }
       });
   };
@@ -132,8 +136,11 @@ const signupDB = (user_email, password, user_name) => {
       },
     })
       .then((res) => {
-        window.alert('회원가입이 완료되었습니다😊');
-        history.push('/');
+        swal({
+          title: '회원가입이 완료되었습니다😊',
+          icon: 'success',
+        });
+        history.replace('/');
       })
       .catch((e) => {
         console.log('에러발생:', e);

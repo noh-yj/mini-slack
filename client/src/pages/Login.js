@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
 import FindpwdModal from '../components/FindpwdModal';
+import swal from 'sweetalert';
 
 // 로그인 페이지
 
@@ -21,7 +22,10 @@ function Login(props) {
   };
   const login = () => {
     if (user_id === '' || password === '') {
-      window.alert('로그인 정보를 모두 입력해주세요.');
+      swal({
+        title: '로그인 정보를 모두 입력해주세요.',
+        icon: 'warning',
+      });
       return;
     }
     dispatch(userActions.loginDB(user_id, password));
