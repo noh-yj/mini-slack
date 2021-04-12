@@ -1,8 +1,8 @@
 // 쿠기에 값을 저장, 삭제, 조회
 
-const setCookie = (name, value, exp = 5) => {
+const setCookie = (name, value) => {
   let date = new Date();
-  date.setTime(date.getTime() + exp * 1000 * 60 * 60 * 24);
+  date.setTime(date.getTime() + 1 * 1000 * 60 * 60 * 5);
   document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
 };
 

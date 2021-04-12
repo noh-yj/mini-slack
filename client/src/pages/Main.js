@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import { FormOutlined, PictureOutlined } from "@ant-design/icons";
-import PostWriteModal from "../components/PostWriteModal";
+import React, { useRef, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { FormOutlined, PictureOutlined } from '@ant-design/icons';
+import PostWriteModal from '../components/PostWriteModal';
 
 const Main = (props) => {
   // Modal control operations
@@ -22,7 +22,7 @@ const Main = (props) => {
     <>
       <MainFrame>
         <button onClick={modalBtn}>
-          <FormOutlined style={{ fontSize: "30px" }} />
+          <FormOutlined style={{ fontSize: '30px' }} />
         </button>
         <PostWriteModal status={isModalOpen} close={closeModal} />
       </MainFrame>

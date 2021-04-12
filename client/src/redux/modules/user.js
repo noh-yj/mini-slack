@@ -6,15 +6,13 @@ import { config } from '../../config';
 
 // 액션
 const SET_USER = 'SET_USER';
-const GET_USER = 'GET_USER';
 const UPDATE_USER = 'UPDATE_USER';
 const LOG_OUT = 'LOG_OUT';
 
 // 액션 생성함수
 const setUser = createAction(SET_USER, (user) => ({ user }));
-const getUser = createAction(GET_USER, (user) => ({ user }));
 const updateUser = createAction(UPDATE_USER, (user) => ({ user }));
-const logOut = createAction(LOG_OUT, (user) => ({ user }));
+const logOut = createAction(LOG_OUT, () => ({}));
 
 // 초기 state값
 const initialState = {
@@ -25,17 +23,24 @@ const initialState = {
 const getUserDB = () => {
   return function (dispatch, getState, { history }) {
     const jwtToken = getCookie('is_login');
-    axios.defaults.headers.common['Authorization'] = `${jwtToken}`;
-    // axios({
-    //   method: 'get',
-    //   url: `${config.api}`,
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((e) => {
-    //     console.log('에러발생', e);
-    //   });
+    axios.defaults.headers.common['token'] = `${jwtToken}`;
+    axios({
+      method: 'get',
+      url: `${config.api}/auth/user`,
+    })
+      .then((res) => {
+        console.log(res);
+        dispatch(
+          setUser({
+            email: res.data.email,
+            uid: res.data.id,
+            nickname: res.data.nickname,
+          }),
+        );
+      })
+      .catch((e) => {
+        console.log('에러발생', e);
+      });
   };
 };
 
@@ -56,7 +61,36 @@ const loginDB = (user_id, password) => {
       .then((res) => {
         const jwtToken = res.data.token;
         setCookie('is_login', jwtToken);
-        axios.defaults.headers.common['Authorization'] = `${jwtToken}`;
+        axios.defaults.headers.common['token'] = `${jwtToken}`;
+        dispatch(
+          setUser({
+            email: res.data.user.email,
+            uid: res.data.user.id,
+            nickname: res.data.user.nickname,
+          }),
+        );
+        history.push('/main');
+      })
+      .catch((e) => {
+        console.log('에러발생:', e);
+      });
+  };
+};
+
+const socialLoginDB = (id) => {
+  return function (dispatch, getState, { history }) {
+    axios({
+      method: 'post',
+      url: `${config.api}/auth/me`,
+      data: {
+        id: id,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        const jwtToken = res.data.token;
+        setCookie('is_login', jwtToken);
+        axios.defaults.headers.common['token'] = `${jwtToken}`;
         dispatch(
           setUser({
             email: res.data.user.email,
@@ -105,11 +139,7 @@ export default handleActions(
         draft.user = action.payload.user;
         draft.is_login = true;
       }),
-    [GET_USER]: (state, action) =>
-      produce(state, (draft) => {
-        draft.user = action.payload.user;
-        draft.is_login = true;
-      }),
+
     [UPDATE_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
@@ -129,6 +159,7 @@ const actionCreators = {
   signupDB,
   loginDB,
   getUserDB,
+  socialLoginDB,
   logOut,
 };
 

@@ -3,13 +3,14 @@ import './App.css';
 import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from '../redux/configureStore';
+import { useDispatch } from 'react-redux';
+import { getCookie } from './Cookie';
+import { actionCreators as userActions } from '../redux/modules/user';
 import Test from '../pages/Test';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Main from '../pages/Main';
-import { useDispatch } from 'react-redux';
-import { getCookie } from './Cookie';
-import { actionCreators as userActions } from '../redux/modules/user';
+import Social from './Social';
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
         <Route path='/' exact component={Login} />
         <Route exact path='/main' component={Main} />
         <Route path='/signup' exact component={Signup} />
+        <Route path='/social/:id' exact component={Social} />
       </ConnectedRouter>
     </>
   );
