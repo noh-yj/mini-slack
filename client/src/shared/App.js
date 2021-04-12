@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
@@ -7,8 +7,19 @@ import Test from '../pages/Test';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Main from '../pages/Main';
+import { useDispatch } from 'react-redux';
+import { getCookie } from './Cookie';
+import { actionCreators as userActions } from '../redux/modules/user';
 
 function App() {
+  const dispatch = useDispatch();
+  const cookie = getCookie('is_login') ? true : false;
+  useEffect(() => {
+    if (cookie) {
+      dispatch(userActions.getUserDB());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <ConnectedRouter history={history}>

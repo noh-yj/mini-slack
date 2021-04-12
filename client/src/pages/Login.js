@@ -19,7 +19,6 @@ function Login(props) {
   const CloseModal = () => {
     setFindpwd(false);
   };
-
   const login = () => {
     if (user_id === '' || password === '') {
       window.alert('로그인 정보를 모두 입력해주세요.');
@@ -75,7 +74,7 @@ function Login(props) {
           <SnsBox>
             <SnsText>SNS로 시작하기</SnsText>
             <SnsBtnBox>
-              <KakaoBtn href='' target='_blank'>
+              <KakaoBtn href=''>
                 <img
                   src='https://auth.dano.me/res/images/49c343639ceea64b1fe7f46e2d6442ef.svg'
                   alt='카톡'
@@ -215,6 +214,9 @@ const KakaoBtn = styled.a`
     width: 22px;
     margin-right: 12px;
   }
+  &:hover {
+    color: #000;
+  }
 `;
 const GoogleBtn = styled.a`
   height: 50px;
@@ -232,6 +234,9 @@ const GoogleBtn = styled.a`
   & img {
     width: 22px;
     margin-right: 12px;
+  }
+  &:hover {
+    color: #000;
   }
 `;
 
