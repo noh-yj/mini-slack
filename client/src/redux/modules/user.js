@@ -73,6 +73,9 @@ const loginDB = (user_id, password) => {
       })
       .catch((e) => {
         console.log('에러발생:', e);
+        if (e.response) {
+          window.alert(e.response.data.err);
+        }
       });
   };
 };

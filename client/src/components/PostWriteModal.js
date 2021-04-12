@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PictureOutlined } from '@ant-design/icons';
+import Imgfile from './Imgfile';
 
 function PostWriteModal({ status, close }) {
   return (
@@ -22,6 +23,7 @@ function PostWriteModal({ status, close }) {
               />
               <AdditionalPost>
                 게시물에 추가
+                <Imgfile />
                 <div>
                   <button>
                     <PictureOutlined />

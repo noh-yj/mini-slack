@@ -74,7 +74,7 @@ function Login(props) {
           <SnsBox>
             <SnsText>SNS로 시작하기</SnsText>
             <SnsBtnBox>
-              <KakaoBtn href=''>
+              <KakaoBtn href='http://wcd21.shop/auth/kakao'>
                 <img
                   src='https://auth.dano.me/res/images/49c343639ceea64b1fe7f46e2d6442ef.svg'
                   alt='카톡'
@@ -162,7 +162,7 @@ const LoginBtn = styled.button`
   font-size: 14px;
   border: 1px solid #e7e7e7;
   background-color: #fbfbfb;
-  color: #ff6f61;
+  color: #1890ff;
   cursor: pointer;
   &:focus {
     outline: none;
@@ -171,7 +171,7 @@ const LoginBtn = styled.button`
 const SignupBtn = styled.button`
   margin-top: 10px;
   color: #fff;
-  background-color: #ff6f61;
+  background-color: #1890ff;
   width: 100%;
   height: 45px;
   border-radius: 2px;

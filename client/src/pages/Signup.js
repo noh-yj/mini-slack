@@ -65,16 +65,14 @@ function Signup(props) {
         if (res.status === 200) {
           window.alert('사용 가능한 아이디 입니다.');
           setChkUserId(true);
-        } else if (res.status === 409) {
-          window.alert('이미 사용중인 아이디 입니다.');
-          setChkUserId(false);
-        } else {
-          window.alert('사용 불가한 아이디입니다.');
-          setChkUserId(false);
         }
       })
       .catch((e) => {
         console.log('에러발생:', e);
+        if (e.response) {
+          window.alert(e.response.data.err);
+          setChkUserId(false);
+        }
       });
   };
 
@@ -233,10 +231,10 @@ const IdCheckBtn = styled.button`
   width: 100%;
   height: 44px;
   font-size: 13px;
-  background: #ff6f61;
+  background: #1890ff;
   color: #fff;
   margin-bottom: 10px;
-  border-radius: 2px;
+  border-radius: 8px;
   margin-left: 10px;
   border: 0.7px solid #e7e7e7;
   cursor: pointer;
@@ -251,7 +249,7 @@ const IdCheckBtn = styled.button`
 const SignupBtn = styled.button`
   margin-top: 10px;
   color: #fff;
-  background-color: #ff6f61;
+  background-color: #1890ff;
   width: 100%;
   height: 45px;
   border-radius: 2px;
