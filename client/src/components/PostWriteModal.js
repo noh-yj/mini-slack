@@ -154,7 +154,7 @@ const PostingBtn = styled.button`
   padding: 8px 0;
 
   &:hover {
-    background: #1877f2;
+    background: #1890ff;
   }
 `;
 
