@@ -12,6 +12,7 @@ const Main = (props) => {
   };
 
   const closeModal = (event) => {
+    // 현재 함수가 걸려있는 target 과 구분해주기 위함.
     if (event.target != event.currentTarget) {
       return;
     }

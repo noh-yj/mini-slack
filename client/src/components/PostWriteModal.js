@@ -18,7 +18,7 @@ function PostWriteModal({ status, close }) {
                 wrap="hard"
                 placeholder="무슨 생각을 하고 계시나요?"
                 autoFocus
-                autoComplete
+                autoComplete="on"
               />
               <AdditionalPost>
                 게시물에 추가
