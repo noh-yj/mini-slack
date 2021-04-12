@@ -65,8 +65,8 @@ const ModalFrame = styled.div`
   background: #ffffff;
   border-radius: 10px;
   padding: 8px 16px;
-  z-index: 5000;
   filter: drop-shadow(0 0 0.1rem lightgray);
+  z-index: 5000;
 
   @media only screen and (max-width: 768px) {
     width: 80%;
@@ -118,7 +118,7 @@ const AdditionalPost = styled.div`
   margin: 50px 0;
   border: 1px solid #ced0d4;
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
