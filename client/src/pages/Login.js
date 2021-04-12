@@ -1,86 +1,101 @@
 import React, { useState } from 'react';
-
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/user';
+import FindpwdModal from '../components/FindpwdModal';
 
 // 로그인 페이지
 
 function Login(props) {
+  const dispatch = useDispatch();
   const { history } = props;
-
   const [user_id, SetUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [findpwd, setFindpwd] = useState(false);
+
+  const OpenModal = () => {
+    setFindpwd(true);
+  };
+  const CloseModal = () => {
+    setFindpwd(false);
+  };
+
   const login = () => {
     if (user_id === '' || password === '') {
       window.alert('로그인 정보를 모두 입력해주세요.');
       return;
     }
+    dispatch(userActions.loginDB(user_id, password));
   };
   return (
-    <Container>
-      <MainContainer>
-        <TitleBox>
-          <Title>로그인</Title>
-        </TitleBox>
+    <>
+      <Container>
+        <MainContainer>
+          <TitleBox>
+            <Title>로그인</Title>
+          </TitleBox>
 
-        <InputBox>
-          <Input
-            type='text'
-            placeholder='아이디'
-            onChange={(e) => {
-              SetUserId(e.target.value);
-            }}
-          />
-        </InputBox>
-        <InputBox>
-          <Input
-            type='password'
-            placeholder='비밀번호'
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </InputBox>
-        <FindId>
-          <span>
-            아이디/비밀번호 찾기{' '}
-            <img
-              src='https://auth.dano.me/res/images/ec1e39bf2b6a3857a9e6bd2c3364a67f.png'
-              alt='화살표'
+          <InputBox>
+            <Input
+              type='text'
+              placeholder='아이디'
+              onChange={(e) => {
+                SetUserId(e.target.value);
+              }}
             />
-          </span>
-        </FindId>
-        <div>
-          <LoginBtn onClick={login}>로그인</LoginBtn>
-          <SignupBtn
-            onClick={() => {
-              history.push('/signup');
-            }}
-          >
-            회원가입
-          </SignupBtn>
-        </div>
-        <SnsBox>
-          <SnsText>SNS로 시작하기</SnsText>
-          <SnsBtnBox>
-            <KakaoBtn>
+          </InputBox>
+          <InputBox>
+            <Input
+              type='password'
+              placeholder='비밀번호'
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </InputBox>
+          <FindId>
+            <span onClick={OpenModal}>
+              비밀번호 찾기{' '}
               <img
-                src='https://auth.dano.me/res/images/49c343639ceea64b1fe7f46e2d6442ef.svg'
-                alt='카톡'
+                src='https://auth.dano.me/res/images/ec1e39bf2b6a3857a9e6bd2c3364a67f.png'
+                alt='화살표'
               />
-              카카오톡
-            </KakaoBtn>
+            </span>
+          </FindId>
+          <div>
+            <LoginBtn onClick={login}>로그인</LoginBtn>
+            <SignupBtn
+              onClick={() => {
+                history.push('/signup');
+              }}
+            >
+              회원가입
+            </SignupBtn>
+          </div>
+          <SnsBox>
+            <SnsText>SNS로 시작하기</SnsText>
+            <SnsBtnBox>
+              <KakaoBtn>
+                <img
+                  src='https://auth.dano.me/res/images/49c343639ceea64b1fe7f46e2d6442ef.svg'
+                  alt='카톡'
+                />
+                카카오톡
+              </KakaoBtn>
 
-            <GoogleBtn>
-              <img
-                src='https://tinder.com/static/build/m/143e05ff53bb18f3504332bca8beb85e.svg'
-                alt='구글'
-              />
-              Google
-            </GoogleBtn>
-          </SnsBtnBox>
-        </SnsBox>
-      </MainContainer>
-    </Container>
+              <GoogleBtn>
+                <img
+                  src='https://tinder.com/static/build/m/143e05ff53bb18f3504332bca8beb85e.svg'
+                  alt='구글'
+                />
+                Google
+              </GoogleBtn>
+            </SnsBtnBox>
+          </SnsBox>
+        </MainContainer>
+      </Container>
+      <FindpwdModal status={findpwd} close={CloseModal} />
+    </>
   );
 }
 
@@ -195,6 +210,7 @@ const KakaoBtn = styled.a`
   background-color: rgb(254, 229, 0);
   border: 0;
   cursor: pointer;
+  color: #000;
   & img {
     width: 22px;
     margin-right: 12px;
@@ -212,6 +228,7 @@ const GoogleBtn = styled.a`
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(218, 218, 218);
   cursor: pointer;
+  color: #000;
   & img {
     width: 22px;
     margin-right: 12px;
