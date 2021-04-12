@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck, userpasswordCheck } from '../shared/common';
 import axios from 'axios';
+import { config } from '../config';
 // 회원가입 페이지
 
 function Signup(props) {
@@ -44,9 +45,13 @@ function Signup(props) {
       window.alert('아이디를 입력해주세요.');
       return;
     }
+    if (!emailCheck(user_email)) {
+      window.alert('이메일 형식이 맞지 않습니다.');
+      return;
+    }
     axios({
       method: 'post',
-      url: `/auth/checkEmail`,
+      url: `${config.api}/auth/checkEmail`,
       data: { email: user_email },
     })
       .then((res) => {
