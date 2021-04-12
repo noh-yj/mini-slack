@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { PictureOutlined } from "@ant-design/icons";
+import swal from "sweetalert";
 
 function PostWriteModal({ status, close }) {
   // Image file & preview image setting
@@ -37,7 +38,12 @@ function PostWriteModal({ status, close }) {
   const addPost = () => {
     // contents 가 비어있을 때
     if (contents === "") {
-      window.alert("게시글 내용이 없습니다.");
+      //window.alert("게시글 내용이 없습니다.");
+      swal({
+        title: "업로드에 실패하였습니다 😥",
+        text: "게시글이 공란입니다.",
+        icon: "error",
+      });
       return;
     }
     // 사진 없이 올리고 싶은 경우 고려해야함
