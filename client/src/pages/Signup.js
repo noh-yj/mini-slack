@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { emailCheck, idCheck } from '../shared/common';
-
+import { emailCheck, userpasswordCheck } from '../shared/common';
+import axios from 'axios';
 // 회원가입 페이지
 
 function Signup(props) {
-  const [user_id, SetUserId] = useState('');
+  const [user_email, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [user_name, setUserName] = useState('');
-  const [user_email, setUserEmail] = useState('');
 
   const signup = () => {
     // 유효성 검증
     if (
-      user_id === '' ||
       password === '' ||
       passwordCheck === '' ||
       user_name === '' ||
@@ -27,23 +25,28 @@ function Signup(props) {
       window.alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
       return;
     }
-    if (
-      password.length < 4 ||
-      password.length > 16 ||
-      passwordCheck.length < 4 ||
-      passwordCheck.length > 16
-    ) {
+    if (!userpasswordCheck(password) || !userpasswordCheck(passwordCheck)) {
       window.alert('비밀번호는 형식이 맞지 않습니다.');
       return;
     }
-    if (!idCheck(user_id) || user_id.length < 4 || user_id.length > 16) {
-      window.alert('아이디 형식이 맞지 않습니다.');
-      return;
-    }
+
     if (!emailCheck(user_email)) {
       window.alert('이메일 형식이 맞지 않습니다.');
       return;
     }
+  };
+  const checkEmail = () => {
+    axios({
+      method: 'post',
+      url: `/auth/checkEmail`,
+      data: { email: user_email },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
@@ -63,11 +66,14 @@ function Signup(props) {
                 <td>
                   <input
                     type='text'
-                    placeholder='영문, 숫자 4~16자'
+                    placeholder='ex) abc@email.com'
                     onChange={(e) => {
-                      SetUserId(e.target.value);
+                      setUserEmail(e.target.value);
                     }}
                   />
+                </td>
+                <td>
+                  <IdCheckBtn onClick={checkEmail}>중복확인</IdCheckBtn>
                 </td>
               </tr>
               <tr>
@@ -75,7 +81,7 @@ function Signup(props) {
                 <td>
                   <input
                     type='password'
-                    placeholder='영문, 숫자, 특수문자 4~16자 이내'
+                    placeholder='영문, 숫자 조합 4~16자 이내'
                     onChange={(e) => {
                       setPassword(e.target.value);
                     }}
@@ -98,21 +104,8 @@ function Signup(props) {
                 <td>
                   <input
                     type='text'
-                    placeholder='성과 이름을 모두 입력하세요.'
                     onChange={(e) => {
                       setUserName(e.target.value);
-                    }}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>이메일</th>
-                <td>
-                  <input
-                    type='text'
-                    placeholder='abc@email.com'
-                    onChange={(e) => {
-                      setUserEmail(e.target.value);
                     }}
                   />
                 </td>
@@ -140,6 +133,9 @@ const Container = styled.div`
 
 const MainContainer = styled.div`
   margin: auto 40px;
+  @media only screen and (max-width: 768px) {
+    margin: auto 20px;
+  }
 `;
 
 const TitleBox = styled.div`
@@ -165,6 +161,9 @@ const SignupTitle = styled.div`
 
 const SignupBox = styled.div`
   padding: 15px 20px 20px;
+  @media only screen and (max-width: 768px) {
+    padding: 15px 0 15px;
+  }
   & table {
     border-spacing: 0;
     border: 0;
@@ -188,7 +187,7 @@ const SignupBox = styled.div`
         & input {
           width: 100%;
           height: 44px;
-          font-size: 13px;
+          font-size: 11px;
           color: #2c2c2c;
           margin-bottom: 10px;
           border-radius: 2px;
@@ -198,6 +197,25 @@ const SignupBox = styled.div`
         }
       }
     }
+  }
+`;
+
+const IdCheckBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  font-size: 13px;
+  background: #ff6f61;
+  color: #fff;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  margin-left: 10px;
+  border: 0.7px solid #e7e7e7;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 60px;
   }
 `;
 
