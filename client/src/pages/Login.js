@@ -75,7 +75,7 @@ function Login(props) {
           <SnsBox>
             <SnsText>SNS로 시작하기</SnsText>
             <SnsBtnBox>
-              <KakaoBtn>
+              <KakaoBtn href='' target='_blank'>
                 <img
                   src='https://auth.dano.me/res/images/49c343639ceea64b1fe7f46e2d6442ef.svg'
                   alt='카톡'
@@ -83,7 +83,7 @@ function Login(props) {
                 카카오톡
               </KakaoBtn>
 
-              <GoogleBtn>
+              <GoogleBtn href='http://wcd21.shop/auth/google'>
                 <img
                   src='https://tinder.com/static/build/m/143e05ff53bb18f3504332bca8beb85e.svg'
                   alt='구글'
