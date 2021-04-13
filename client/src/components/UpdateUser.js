@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Input, Image } from 'antd';
-import { CloseOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { userpasswordCheck } from '../shared/common';
 import { actionCreators as userActions } from '../redux/modules/user';
+import swal from 'sweetalert';
 
 function UpdateUser({ status, close }) {
   const dispatch = useDispatch();
@@ -11,41 +13,63 @@ function UpdateUser({ status, close }) {
   const fileInput = useRef();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
-  const [comment_myself, setCommentMyself] = useState('');
+  const [comment_myself, setCommentMyself] = useState(
+    user ? user?.comment_myself : '',
+  );
   const [pwd, setPwd] = useState('');
   const [pwdChk, setPwdChk] = useState('');
-  console.log(user);
-  console.log(file, comment_myself, pwd, pwdChk);
   const selectFile = (e) => {
+    // 파일 state에 저장
     setFile(fileInput.current.files[0]);
     const reader = new FileReader();
-    // 현재 선택된 파일을 dataurl로 변환
+    // 현재 선택된 파일을 data url로 변환
     reader.readAsDataURL(fileInput.current.files[0]);
-    // 변환된 dataurl을 preview state에 저장
     reader.onload = () => {
+      // 변환된 data url을 preview state에 저장
       setPreview(reader.result);
     };
   };
   const updateProfile = () => {
     // 일반 유저
     if (!user?.snsId) {
+      // 패스워드 변경 시
+      if (pwd !== pwdChk) {
+        swal({
+          title: '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if (pwd !== '' && pwdChk !== '') {
+        if (!userpasswordCheck(pwd) || !userpasswordCheck(pwdChk)) {
+          swal({
+            title: '비밀번호는 형식이 맞지 않습니다.',
+            icon: 'warning',
+          });
+          return;
+        }
+      }
       dispatch(userActions.updateUserDB(file, comment_myself, pwd));
     }
     // 소셜로그인 유저
     dispatch(userActions.updateUserDB(file, comment_myself));
+    close();
   };
 
   return (
     <>
       {status ? (
         <>
-          <Container onClick={close} />
+          <Container
+            onClick={() => {
+              close();
+              setPreview(user?.profile_img);
+              setCommentMyself(user?.comment_myself);
+            }}
+          />
           <ModalContainer>
             <TitleBox>
               <Title>내 프로필 편집</Title>
-              <CloseBtn onClick={close}>
-                <CloseOutlined />
-              </CloseBtn>
             </TitleBox>
             <UpdateBox>
               <InputBox>
@@ -97,10 +121,11 @@ function UpdateUser({ status, close }) {
                 <InputFileLabel htmlFor='input-file'>
                   <UploadOutlined />
                 </InputFileLabel>
-
+                {/* 파일 확장자 gif, jpg, png만 고려 (정규식 사용법도 있지만 accept 사용해봄) */}
                 <InputFile
                   type='file'
                   id='input-file'
+                  accept='.gif, .jpg, .png'
                   ref={fileInput}
                   onChange={selectFile}
                 />
@@ -108,11 +133,19 @@ function UpdateUser({ status, close }) {
             </UpdateBox>
             <br />
             <br />
-            <Button type='default' onClick={close} block>
+            <Button
+              type='default'
+              onClick={() => {
+                close();
+                setPreview(user?.profile_img);
+                setCommentMyself(user?.comment_myself);
+              }}
+              block
+            >
               취소
             </Button>
             <br />
-            <Button type='primary' block>
+            <Button type='primary' block onClick={updateProfile}>
               변경사항 저장
             </Button>
           </ModalContainer>
@@ -167,10 +200,6 @@ const Title = styled.div`
   margin-bottom: 5px;
 `;
 
-const CloseBtn = styled.div`
-  cursor: pointer;
-  font-size: 18px;
-`;
 const UpdateBox = styled.div`
   display: flex;
   justify-content: space-between;
