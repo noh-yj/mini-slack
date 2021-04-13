@@ -178,6 +178,7 @@ const actionCreators = {
   //getPostDB,
   setPost,
   addPostDB,
+  getPostDB,
   updatePost,
 };
 
