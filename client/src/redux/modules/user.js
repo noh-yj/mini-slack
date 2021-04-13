@@ -50,7 +50,6 @@ const getUserDB = () => {
 
 const updateUserDB = (file, comment_myself, pwd = 'null') => {
   return function (dispatch, getState, { history }) {
-    // console.log(pwd);
     if (file === null) {
       file = getState().user.user.profile_img;
     }
