@@ -91,15 +91,15 @@ function UpdateUser({ status, close }) {
                 />
                 {user?.snsId ? null : (
                   <>
-                    <span>비밀번호</span>
+                    <span>비밀번호 변경</span>
                     <Input
                       type='password'
-                      placeholder='비밀번호'
+                      placeholder='비밀번호 변경시만 내용을 추가해주세요'
                       onChange={(e) => {
                         setPwd(e.target.value);
                       }}
                     />
-                    <span>비밀번호 확인</span>
+                    <span>비밀번호 변경 확인</span>
                     <Input
                       type='password'
                       placeholder='비밀번호 확인'
@@ -180,7 +180,7 @@ const ModalContainer = styled.div`
   z-index: 20;
   cursor: default;
   @media only screen and (max-width: 768px) {
-    width: 300px;
+    width: 100%;
   }
 `;
 const TitleBox = styled.div`

@@ -34,13 +34,14 @@ const Header = (props) => {
           <p onClick={OpenModal} style={{ cursor: 'pointer' }}>
             {user?.nickname} 님
           </p>
-          <ExportOutlined
-            onClick={() => {
-              dispatch(userActions.logOut());
-              history.replace('/');
-            }}
-            style={{ cursor: 'pointer', marginLeft: '14px', fontSize: '20px' }}
-          />
+          <LogOut>
+            <ExportOutlined
+              onClick={() => {
+                dispatch(userActions.logOut());
+                history.replace('/');
+              }}
+            />
+          </LogOut>
         </UserFrame>
       </HeaderFrame>
       <UpdateUser status={userprofile} close={CloseModal} />
@@ -62,6 +63,14 @@ const UserFrame = styled.div`
   padding: 10px 0 12px 0;
   & p {
     margin: 0 0 0 14px;
+  }
+`;
+const LogOut = styled.div`
+  cursor: pointer;
+  margin-left: 14px;
+  font-size: 20px;
+  &:hover {
+    color: #fe4a49;
   }
 `;
 

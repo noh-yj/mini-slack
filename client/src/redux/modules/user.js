@@ -48,32 +48,33 @@ const getUserDB = () => {
   };
 };
 
-const updateUserDB = (file = null, comment_myself, pwd = null) => {
+const updateUserDB = (file, comment_myself, pwd = 'null') => {
   return function (dispatch, getState, { history }) {
+    // console.log(pwd);
+    if (file === null) {
+      file = getState().user.user.profile_img;
+    }
+
     let formData = new FormData();
     formData.append('profile_img', file);
     formData.append('comment_myself', comment_myself);
     formData.append('password', pwd);
-    console.log(formData);
 
-    for (let key of formData.entries()) {
-      console.log(key);
-    }
     axios({
       method: 'patch',
-      url: `${config.api}/myProfile`,
+      url: `${config.api}/auth/myProfile`,
       data: formData,
     })
       .then((res) => {
         console.log(res);
         dispatch(
           updateUser({
-            // email: res.data.user.email,
-            // uid: res.data.user.id,
-            // nickname: res.data.user.nickname,
-            // profile_img: res.data.user.profile_img,
-            // comment_myself: res.data.user.comment_myself,
-            // snsId: res.data.user.snsId,
+            email: res.data.newUserInfo.email,
+            uid: res.data.newUserInfo.id,
+            nickname: res.data.newUserInfo.nickname,
+            profile_img: res.data.newUserInfo.profile_img,
+            comment_myself: res.data.newUserInfo.comment_myself,
+            snsId: res.data.newUserInfo.snsId,
           }),
         );
         swal({
