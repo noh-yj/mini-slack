@@ -49,9 +49,6 @@ const addPostDB = (content, item) => {
     formData.append("content", content);
     formData.append("BoardImg", item);
 
-    for (let key of formData.entries()) {
-      console.log(`formData key`, key);
-    }
     const postDB = {
       url: `${config.api}/board`,
       method: "POST",
@@ -60,10 +57,9 @@ const addPostDB = (content, item) => {
         "Content-Type": "multipart/form-data",
       },
     };
-    console.log(postDB);
+
     axios(postDB)
       .then((res) => {
-        console.log(`res: `, res);
         let result = {
           content: content,
           day: moment(new Date()).fromNow(),
@@ -73,7 +69,7 @@ const addPostDB = (content, item) => {
           post_id: res.data.post._id,
           comment_cnt: 0,
         };
-        console.log(`result: `, result);
+
         dispatch(addPost(result));
 
         swal({
@@ -106,20 +102,21 @@ const getPostDB = () => {
     };
     axios(options)
       .then((res) => {
-        console.log(res.data);
         let post_data = [];
         //let emoji_data = [];
 
-        res.data.forEach((singleData) => {
+        res.data.posts.forEach((singleData) => {
           post_data.push({
             comment_list: singleData.comment,
             content: singleData.content,
-            // img url 도 들어가야겠지?
+            imgUrl: singleData.imgUrl,
             user_id: singleData.user,
+            profile_img: singleData.user?.profile_img,
+            day: singleData.day,
             post_id: singleData._id,
           });
         });
-
+        //console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
