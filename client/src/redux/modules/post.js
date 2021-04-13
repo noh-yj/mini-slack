@@ -7,6 +7,8 @@ import "moment/locale/ko";
 import axios from "axios";
 import { config } from "../../config";
 import swal from "sweetalert";
+// import comment from "./comment";
+// import user from "./user";
 
 // actions
 const SET_POST = "SET_POST";
@@ -37,17 +39,18 @@ const initialState = {
 };
 
 // middleware communication
+// Add Post to DB
 const addPostDB = (content, item) => {
-  return function (getState, dispatch, { history }) {
-    //let userId = getState().user.user.uid;
+  return function (dispatch, getState, { history }) {
+    let userId = getState().user.user.uid;
+    console.log(content, item);
     let formData = new FormData();
 
     formData.append("content", content);
     formData.append("BoardImg", item);
-    // it always returns empty
-    console.log(formData);
+
     for (let key of formData.entries()) {
-      console.log(key);
+      console.log(`formData key`, key);
     }
     const postDB = {
       url: `${config.api}/board`,
@@ -60,19 +63,18 @@ const addPostDB = (content, item) => {
     console.log(postDB);
     axios(postDB)
       .then((res) => {
-        console.log(res);
-        return;
+        console.log(`res: `, res);
         let result = {
-          contents: content,
+          content: content,
           day: moment(new Date()).fromNow(),
           img: item,
-          //emoji: {},
-          //uid: userId,
-          post_id: res.data.post_list.post_id,
+          emoticon: [],
+          uid: userId,
+          post_id: res.data.post._id,
           comment_cnt: 0,
         };
-
-        addPost(result);
+        console.log(`result: `, result);
+        dispatch(addPost(result));
 
         swal({
           title: "성공 ☺",
@@ -91,6 +93,7 @@ const addPostDB = (content, item) => {
   };
 };
 
+// GET All Posts From DB
 const getPostDB = () => {
   return function (dispatch, getState, { history }) {
     const options = {
@@ -108,36 +111,96 @@ const getPostDB = () => {
         let emoji_data = [];
 
         res.data.forEach((singleData) => {
-          post_data.push({ ...singleData });
+          post_data.push({
+            comment_list: singleData.comment,
+            content: singleData.content,
+            // img url 도 들어가야겠지?
+            user_id: singleData.user,
+            post_id: singleData._id,
+          });
         });
-        // response로 받은 데이터중 게시물 데이터와 좋아요 데이터를 분류하여 정리한다.
-        // for (let i = 0; i < response.data.post_list.length; i++) {
-        //   post_data.push({
-        //     post_id: response.data.post_list[i].post_Id,
-        //     name: response.data.post_list[i].name,
-        //     content: response.data.post_list[i].content,
-        //     image: response.data.post_list[i].file_name,
-        //     createAt: response.data.post_list[i].createAt,
-        //     profile_image: response.data.post_list[i].profile_img,
-        //     like_count: response.data.post_list[i].like_count,
-        //     insta_id: response.data.post_list[i].insta_Id,
-        //     comments: response.data.post_list[i].comments,
-        //   });
-        //   like_data.push({
-        //     post_id: response.data.post_list[i].post_Id,
-        //     like_user: response.data.post_list[i].like_user,
-        //     like_count: response.data.post_list[i].like_count,
-        //   });
-        // }
-        // // 각각의 리덕스 업데이트
-        // dispatch(setPost(post_data));
-        // dispatch(likeActions.setLike(like_data));
+
+        dispatch(addPost(post_data));
       })
       .catch((error) => {
         console.log(error);
         if (error.response) {
           window.alert(error.response.data.errorMessage);
         }
+      });
+  };
+};
+
+// UPDATE DB
+const updatePostDB = (post_id, content, item) => {
+  return function (dispatch, getState, { history }) {
+    const _post_idx = getState().post.list.findIndex((p) => p.id === post_id);
+    const _post = getState().post.list[_post_idx];
+
+    let formData = new FormData();
+
+    formData.append("content", content);
+    formData.append("BoardImg", item);
+
+    const options = {
+      url: `${config.api}/board/${post_id}`,
+      method: "PATCH",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    axios(options)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(updatePost(post_id, { content: content, BoardImg: item }));
+        swal({
+          title: "수정 성공 ☺",
+          text: "게시글 수정에 성공하였습니다❕",
+          icon: "success",
+        });
+        history.replace("/main");
+      })
+      .catch((error) => {
+        swal({
+          title: "수정 실패 🙄",
+          text: "뭔가.. 잘못됐어요!",
+          icon: "error",
+        });
+      });
+  };
+};
+
+// Delete DB
+const deletePostDB = (post_id) => {
+  return function (dispatch, getState, { history }) {
+    const options = {
+      url: `${config.api}/board/${post_id}`,
+      method: "DELETE",
+      data: post_id,
+      headers: {
+        // 백 분들과 맞춰보기
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    };
+    axios(options)
+      .then((res) => {
+        console.log(res.data);
+        dispatch(deletePost(post_id));
+        swal({
+          title: "삭제 성공 👋",
+          text: "게시글을 삭제하셨습니다❕",
+          icon: "success",
+        });
+        history.replace("/main");
+      })
+      .catch((error) => {
+        swal({
+          title: "삭제 실패 🙄",
+          text: "뭔가.. 잘못됐어요!",
+          icon: "error",
+        });
       });
   };
 };
@@ -158,15 +221,12 @@ export default handleActions(
       }),
     [UPDATE_POST]: (state, action) =>
       produce(state, (draft) => {
-        //     let idx = draft.list.findIndex(
-        //       (p) => p._id === action.payload.post_idx
-        //     );
-        //     draft.list[idx].likeYn = action.payload.msg;
-        //     if (action.payload.msg === "like") {
-        //       draft.list[idx].like = parseInt(draft.list[idx].like) + 1;
-        //     } else {
-        //       draft.list[idx].like = parseInt(draft.list[idx].like) - 1;
-        //     }
+        let idx = draft.list.findIndex((p) => p._id === action.payload.post_id);
+        draft.list[idx] = { ...draft.list[idx], ...action.payload.content };
+      }),
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.list = draft.list.filter((p) => p._id !== action.payload.post_id);
       }),
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
@@ -184,6 +244,8 @@ const actionCreators = {
   addPostDB,
   getPostDB,
   updatePost,
+  updatePostDB,
+  deletePostDB,
 };
 
 // export

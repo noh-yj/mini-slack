@@ -53,6 +53,7 @@ function PostWriteModal({ status, close }) {
     console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
     dispatch(postActions.addPostDB(contents, file));
     // 사진 없이 올리고 싶은 경우 고려해야함
+    close();
   };
   return (
     <>

@@ -9,6 +9,8 @@ import { config } from "../../config";
 
 const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
+const UPDATE_COMMENT = "UPDATE_COMMENT";
+const DELETE_COMMENT = "DELETE_COMMENT";
 
 // action creator functions
 
@@ -22,6 +24,14 @@ const addComment = createAction(ADD_COMMENT, (post_id, comment) => ({
   comment,
 }));
 
+const updateComment = createAction(UPDATE_COMMENT, (comment_id, comment) => ({
+  comment_id,
+  comment,
+}));
+
+const deleteComment = createAction(DELETE_COMMENT, (comment_id) => ({
+  comment_id,
+}));
 // contains objects that has post_id & comment info
 const initialState = {
   list: {},
