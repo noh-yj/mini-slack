@@ -3,6 +3,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axios from "axios";
 import swal from "sweetalert";
+import { config } from "../../config";
 
 // actions
 
@@ -36,7 +37,7 @@ const addCommentDB = (post_id, contents) => {
     };
     axios({
       method: "POST",
-      url: `${config.api}/comment/${postId}`,
+      url: `${config.api}/comment/${post_id}`,
       data: comment_data,
     })
       .then((res) => {
@@ -65,7 +66,7 @@ const getCommentDB = (post_id) => {
     }
     axios({
       method: "GET",
-      url: `${config.api}/comment/${postId}`,
+      url: `${config.api}/comment/${post_id}`,
     })
       .then((res) => {
         let list = [];
