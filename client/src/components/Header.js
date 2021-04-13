@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../redux/configureStore';
 import { actionCreators as userActions } from '../redux/modules/user';
-import { LogoutOutlined } from '@ant-design/icons';
+import { ExportOutlined } from '@ant-design/icons';
 import UpdateUser from './UpdateUser';
 
 const Header = (props) => {
@@ -34,13 +34,12 @@ const Header = (props) => {
           <p onClick={OpenModal} style={{ cursor: 'pointer' }}>
             {user?.nickname} 님
           </p>
-
-          <LogoutOutlined
+          <ExportOutlined
             onClick={() => {
               dispatch(userActions.logOut());
               history.replace('/');
             }}
-            style={{ cursor: 'pointer', marginLeft: '14px' }}
+            style={{ cursor: 'pointer', marginLeft: '14px', fontSize: '20px' }}
           />
         </UserFrame>
       </HeaderFrame>
