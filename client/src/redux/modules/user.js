@@ -48,8 +48,47 @@ const getUserDB = () => {
   };
 };
 
-const updateUserDB = () => {
-  return function (dispatch, getState, { history }) {};
+const updateUserDB = (file = null, comment_myself, pwd = null) => {
+  return function (dispatch, getState, { history }) {
+    let formData = new FormData();
+    formData.append('profile_img', file);
+    formData.append('comment_myself', comment_myself);
+    formData.append('password', pwd);
+    console.log(formData);
+
+    for (let key of formData.entries()) {
+      console.log(key);
+    }
+    axios({
+      method: 'patch',
+      url: `${config.api}/myProfile`,
+      data: formData,
+    })
+      .then((res) => {
+        console.log(res);
+        dispatch(
+          updateUser({
+            // email: res.data.user.email,
+            // uid: res.data.user.id,
+            // nickname: res.data.user.nickname,
+            // profile_img: res.data.user.profile_img,
+            // comment_myself: res.data.user.comment_myself,
+            // snsId: res.data.user.snsId,
+          }),
+        );
+        swal({
+          title: '회원정보가 변경되었습니다😊',
+          icon: 'success',
+        });
+      })
+      .catch((e) => {
+        console.log('에러발생', e);
+        swal({
+          title: '회원정보 변경에 실패했습니다 😞',
+          icon: 'error',
+        });
+      });
+  };
 };
 
 const loginDB = (user_id, password) => {
