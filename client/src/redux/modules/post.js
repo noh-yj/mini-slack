@@ -43,7 +43,7 @@ const addPostDB = (content, item) => {
     let formData = new FormData();
 
     formData.append("content", content);
-    //formData.append("boardImg", item);
+    formData.append("boardImg", item);
     // it always returns empty
     console.log(formData);
     for (let key of formData.entries()) {
