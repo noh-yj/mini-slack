@@ -108,7 +108,7 @@ const getPostDB = () => {
       .then((res) => {
         console.log(res.data);
         let post_data = [];
-        let emoji_data = [];
+        //let emoji_data = [];
 
         res.data.forEach((singleData) => {
           post_data.push({
@@ -120,12 +120,12 @@ const getPostDB = () => {
           });
         });
 
-        dispatch(addPost(post_data));
+        dispatch(setPost(post_data));
       })
       .catch((error) => {
         console.log(error);
-        if (error.response) {
-          window.alert(error.response.data.errorMessage);
+        if (error.res) {
+          window.alert(error.res.data.errorMessage);
         }
       });
   };
@@ -212,7 +212,7 @@ export default handleActions(
       produce(state, (draft) => {
         draft.list.push(...action.payload.post_list);
         //draft.paging = action.payload.paging;
-        draft.likelist = action.payload.likelist;
+        //draft.likelist = action.payload.likelist;
         draft.is_loading = false;
       }),
     [ADD_POST]: (state, action) =>
