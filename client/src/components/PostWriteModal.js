@@ -53,13 +53,22 @@ function PostWriteModal({ status, close }) {
     console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
     dispatch(postActions.addPostDB(contents, file));
     // 사진 없이 올리고 싶은 경우 고려해야함
+    setFile(null);
+    setContents(null);
+    setPreview(null);
     close();
   };
   return (
     <>
       {status ? (
         <>
-          <Container onClick={close}>
+          <Container
+            onClick={(e) => {
+              setContents(null);
+              setPreview(null);
+              close(e);
+            }}
+          >
             <ModalFrame>
               <ModalTitle>게시물 만들기</ModalTitle>
               <ModalUserFrame>
