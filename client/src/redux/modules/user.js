@@ -180,6 +180,7 @@ const actionCreators = {
   loginDB,
   getUserDB,
   socialLoginDB,
+  updateUserDB,
   logOut,
 };
 
