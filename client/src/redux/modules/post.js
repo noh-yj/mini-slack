@@ -43,7 +43,7 @@ const addPostDB = (content, item) => {
     let formData = new FormData();
 
     formData.append('content', content);
-    //formData.append("boardImg", item);
+    formData.append('boardImg', item);
     // it always returns empty
     console.log(formData);
     for (let key of formData.entries()) {
@@ -91,6 +91,53 @@ const addPostDB = (content, item) => {
   };
 };
 
+const getPostDB = () => {
+  return function (dispatch, getState, { history }) {
+    const options = {
+      url: `${config.api}/board`,
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    };
+    axios(options)
+      .then((res) => {
+        console.log(res.data);
+        let post_data = [];
+        let like_data = [];
+        // response로 받은 데이터중 게시물 데이터와 좋아요 데이터를 분류하여 정리한다.
+        // for (let i = 0; i < response.data.post_list.length; i++) {
+        //   post_data.push({
+        //     post_id: response.data.post_list[i].post_Id,
+        //     name: response.data.post_list[i].name,
+        //     content: response.data.post_list[i].content,
+        //     image: response.data.post_list[i].file_name,
+        //     createAt: response.data.post_list[i].createAt,
+        //     profile_image: response.data.post_list[i].profile_img,
+        //     like_count: response.data.post_list[i].like_count,
+        //     insta_id: response.data.post_list[i].insta_Id,
+        //     comments: response.data.post_list[i].comments,
+        //   });
+        //   like_data.push({
+        //     post_id: response.data.post_list[i].post_Id,
+        //     like_user: response.data.post_list[i].like_user,
+        //     like_count: response.data.post_list[i].like_count,
+        //   });
+        // }
+        // // 각각의 리덕스 업데이트
+        // dispatch(setPost(post_data));
+        // dispatch(likeActions.setLike(like_data));
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response) {
+          window.alert(error.response.data.errorMessage);
+        }
+      });
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -131,6 +178,7 @@ const actionCreators = {
   //getPostDB,
   setPost,
   addPostDB,
+  getPostDB,
   updatePost,
 };
 
