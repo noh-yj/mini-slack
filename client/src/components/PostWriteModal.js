@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useDebugValue, useState } from "react";
 import styled from "styled-components";
 import { PictureOutlined } from "@ant-design/icons";
 import swal from "sweetalert";
+import { useDispatch } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 function PostWriteModal({ status, close }) {
+  const dispatch = useDispatch();
   // Image file & preview image setting
   const [file, setFile] = React.useState(null);
   const [preview, setPreview] = React.useState(
@@ -38,7 +41,6 @@ function PostWriteModal({ status, close }) {
   const addPost = () => {
     // contents 가 비어있을 때
     if (contents === "") {
-      //window.alert("게시글 내용이 없습니다.");
       swal({
         title: "업로드에 실패하였습니다 😥",
         text: "게시글이 공란입니다.",
@@ -46,8 +48,9 @@ function PostWriteModal({ status, close }) {
       });
       return;
     }
-    // 사진 없이 올리고 싶은 경우 고려해야함
     console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
+    dispatch(postActions.addPostDB(contents, file));
+    // 사진 없이 올리고 싶은 경우 고려해야함
   };
   return (
     <>
