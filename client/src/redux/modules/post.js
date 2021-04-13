@@ -1,19 +1,19 @@
-import { createAction, handleActions } from 'redux-actions';
-import produce from 'immer';
+import { createAction, handleActions } from "redux-actions";
+import produce from "immer";
 
-import moment from 'moment';
-import 'moment/locale/ko';
+import moment from "moment";
+import "moment/locale/ko";
 
-import axios from 'axios';
-import { config } from '../../config';
-import swal from 'sweetalert';
+import axios from "axios";
+import { config } from "../../config";
+import swal from "sweetalert";
 
 // actions
-const SET_POST = 'SET_POST';
-const ADD_POST = 'ADD_POST';
-const LOADING = 'LOADING';
-const UPDATE_POST = 'UPDATE_POST';
-const DELETE_POST = 'DELETE_POST';
+const SET_POST = "SET_POST";
+const ADD_POST = "ADD_POST";
+const LOADING = "LOADING";
+const UPDATE_POST = "UPDATE_POST";
+const DELETE_POST = "DELETE_POST";
 
 // action creator functions\
 // paging parameter will be added for infinity scroll
@@ -42,8 +42,8 @@ const addPostDB = (content, item) => {
     //let userId = getState().user.user.uid;
     let formData = new FormData();
 
-    formData.append('content', content);
-    formData.append('boardImg', item);
+    formData.append("content", content);
+    formData.append("BoardImg", item);
     // it always returns empty
     console.log(formData);
     for (let key of formData.entries()) {
@@ -51,10 +51,10 @@ const addPostDB = (content, item) => {
     }
     const postDB = {
       url: `${config.api}/board`,
-      method: 'POST',
+      method: "POST",
       data: formData,
       headers: {
-        // "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
       },
     };
     console.log(postDB);
@@ -75,17 +75,17 @@ const addPostDB = (content, item) => {
         addPost(result);
 
         swal({
-          title: '성공 ☺',
-          text: '업로드에 성공하였습니다❕',
-          icon: 'success',
+          title: "성공 ☺",
+          text: "업로드에 성공하였습니다❕",
+          icon: "success",
         });
-        history.replace('/main');
+        history.replace("/main");
       })
       .catch((error) => {
         swal({
-          title: '업로드 실패 🙄',
-          text: '뭔가.. 잘못됐어요!',
-          icon: 'error',
+          title: "업로드 실패 🙄",
+          text: "뭔가.. 잘못됐어요!",
+          icon: "error",
         });
       });
   };
@@ -95,17 +95,21 @@ const getPostDB = () => {
   return function (dispatch, getState, { history }) {
     const options = {
       url: `${config.api}/board`,
-      method: 'GET',
+      method: "GET",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
       },
     };
     axios(options)
       .then((res) => {
         console.log(res.data);
         let post_data = [];
-        let like_data = [];
+        let emoji_data = [];
+
+        res.data.forEach((singleData) => {
+          post_data.push({ ...singleData });
+        });
         // response로 받은 데이터중 게시물 데이터와 좋아요 데이터를 분류하여 정리한다.
         // for (let i = 0; i < response.data.post_list.length; i++) {
         //   post_data.push({
@@ -169,7 +173,7 @@ export default handleActions(
         draft.is_loading = action.payload.is_loading;
       }),
   },
-  initialState,
+  initialState
 );
 
 // action creator
