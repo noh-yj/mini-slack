@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { PageHeader, Avatar } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { history } from '../redux/configureStore';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { ExportOutlined } from '@ant-design/icons';
 import UpdateUser from './UpdateUser';
 
 const Header = (props) => {
+  const { history } = props;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [userprofile, setUserprofile] = useState(false);
@@ -21,7 +21,14 @@ const Header = (props) => {
   return (
     <>
       <HeaderFrame>
-        <PageHeader className='site-page-header' title='🎨 Palette' />
+        <PageHeader
+          className='site-page-header'
+          title='🎨 Palette'
+          onClick={() => {
+            history.push('/main');
+          }}
+          style={{ cursor: 'pointer' }}
+        />
         <UserFrame>
           <Avatar
             size={40}
