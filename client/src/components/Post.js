@@ -43,9 +43,11 @@ const Post = (props) => {
   return (
     <>
       <PostFrame>
-        <MoreBtn onClick={toggleBtn}>
-          <MoreOutlined />
-        </MoreBtn>
+        {userInfo?.uid === props.user_id.userId ? (
+          <MoreBtn onClick={toggleBtn}>
+            <MoreOutlined />
+          </MoreBtn>
+        ) : null}
 
         {isOpen && (
           <Btngroup>
