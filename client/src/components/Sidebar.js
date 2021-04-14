@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import axios from 'axios';
 import { config } from '../config';
+import { history } from '../redux/configureStore';
 // Post에 가야하는 컴포넌트 뷰 그리기위해 일시 적 위치
 import UserProfile from './UserProfile';
 
@@ -37,6 +38,7 @@ const Sidebar = (props) => {
   users = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });
+  console.log(users);
   return (
     <>
       <UserProfile status={userprofile} close={CloseModal} />
@@ -69,7 +71,12 @@ const Sidebar = (props) => {
 
             {users.map((val, idx) => {
               return (
-                <Menu.Item key={idx}>
+                <Menu.Item
+                  key={idx}
+                  onClick={() => {
+                    history.push(`/user/post/${val.id}`);
+                  }}
+                >
                   <Avatar
                     size={30}
                     style={{

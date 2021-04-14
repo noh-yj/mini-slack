@@ -21,14 +21,15 @@ const Header = (props) => {
   return (
     <>
       <HeaderFrame>
-        <PageHeader
-          className='site-page-header'
-          title='🎨 Palette'
+        <PageHeader className='site-page-header' title='🎨 Palette' />
+        <div
           onClick={() => {
             history.push('/main');
           }}
           style={{ cursor: 'pointer' }}
-        />
+        >
+          LOGO
+        </div>
         <UserFrame>
           <Avatar
             size={40}

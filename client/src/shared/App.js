@@ -10,6 +10,7 @@ import Test from '../pages/Test';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Main from '../pages/Main';
+import UserPost from '../pages/UserPost';
 import Social from './Social';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route exact path='/main' component={Main} />
         <Route path='/signup' exact component={Signup} />
         <Route path='/social/:id' exact component={Social} />
+        <Route path='/user/post/:id' exact component={UserPost} />
       </ConnectedRouter>
     </>
   );

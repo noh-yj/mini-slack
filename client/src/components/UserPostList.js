@@ -4,7 +4,7 @@ import Post from './Post';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as postActions } from '../redux/modules/post';
 
-const PostList = (props) => {
+const UserPostList = (props) => {
   const dispatch = useDispatch();
   const post_list = useSelector((state) => state.post.list);
   console.log(post_list);
@@ -24,8 +24,6 @@ const PostList = (props) => {
     </PostListFrame>
   );
 };
-
-export default PostList;
 
 const PostListFrame = styled.div`
   width: 100%;
@@ -48,3 +46,5 @@ const PostListFrame = styled.div`
     //border: 3px solid orange; /* creates padding around scroll thumb */
   }
 `;
+
+export default UserPostList;
