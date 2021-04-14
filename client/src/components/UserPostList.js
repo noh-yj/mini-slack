@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Post from './Post';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as postActions } from '../redux/modules/post';
 
 const UserPostList = (props) => {
+  const id = props.match.params.id;
   const dispatch = useDispatch();
   const post_list = useSelector((state) => state.post.list);
-  console.log(post_list);
-
   React.useEffect(() => {
-    if (post_list.length === 0) {
-      dispatch(postActions.getPostDB());
-    }
+    dispatch(postActions.getUserPostDB(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <PostListFrame>
-      {post_list?.map((p) => {
-        return <Post {...p} />;
+      {post_list?.map((p, idx) => {
+        return <Post key={idx} {...p} />;
       })}
     </PostListFrame>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Post from './Post';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,8 +18,8 @@ const PostList = (props) => {
 
   return (
     <PostListFrame>
-      {post_list?.map((p) => {
-        return <Post {...p} />;
+      {post_list?.map((p, idx) => {
+        return <Post key={idx} {...p} />;
       })}
     </PostListFrame>
   );

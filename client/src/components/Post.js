@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Avatar, Image } from "antd";
+import UserProfile from "./UserProfile";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
-import { useSelector, useDispatch } from "react-redux";
 import {
   MoreOutlined,
-  DeleteOutlined,
   EditOutlined,
+  DeleteOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
 
@@ -29,6 +31,15 @@ const Post = (props) => {
     console.log(props.post_id);
     dispatch(postActions.deletePostDB(props.post_id));
   };
+
+  const [userprofile, setUserprofile] = useState(false);
+  const OpenModal = () => {
+    setUserprofile(true);
+  };
+  const CloseModal = () => {
+    setUserprofile(false);
+  };
+
   return (
     <>
       <PostFrame>
@@ -50,17 +61,38 @@ const Post = (props) => {
           </Btngroup>
         )}
         <Postsub>
-          <UserImg src={props.profile_img} />
+          <Avatar
+            style={{
+              backgroundColor: "#87d068",
+              cursor: "pointer",
+              width: "3rem",
+              height: "3rem",
+              borderRadius: "30%",
+              marginRight: "0.5rem",
+            }}
+            src={props?.profile_img}
+            onClick={OpenModal}
+          >
+            {props?.profile_img === " " ? props?.nickname[0] : null}
+          </Avatar>
           <PostInfo>
             <UserInfo>
-              <UserName>{props.user_id?.nickname}</UserName>
+              <UserName onClick={OpenModal}>{props.user_id?.nickname}</UserName>
               <WritingDt>{props.day}</WritingDt>
             </UserInfo>
             <ContentBox>{props.content}</ContentBox>
           </PostInfo>
         </Postsub>
-        <div>{props.imgUrl && <PostImg src={props.imgUrl} />}</div>
+        <ImgBox style={{ width: "40%", height: "40%" }}>
+          {props.imgUrl && (
+            <Image
+              src={props.imgUrl}
+              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+            />
+          )}{" "}
+        </ImgBox>
       </PostFrame>
+      <UserProfile status={userprofile} close={CloseModal} user={props} />
     </>
   );
 };
@@ -134,6 +166,12 @@ const UserName = styled.span`
 const WritingDt = styled.span``;
 
 const ContentBox = styled.p``;
+
+const ImgBox = styled.div`
+  width: 40%;
+  height: 40%;
+  border-radius: 10px;
+`;
 
 const PostImg = styled.img`
   width: 40%;

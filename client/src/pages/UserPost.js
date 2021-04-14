@@ -36,7 +36,7 @@ function UserPost(props) {
             <Sider />
           </MainLeft>
           <MainRight>
-            <UserPostList />
+            <UserPostList {...props} />
           </MainRight>
         </MainContent>
         <PostWriteBtn onClick={modalBtn}>
