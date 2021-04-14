@@ -10,9 +10,9 @@ const PostList = (props) => {
   console.log(post_list);
 
   React.useEffect(() => {
-    if (post_list.length === 0) {
-      dispatch(postActions.getPostDB());
-    }
+    // if (post_list.length === 0) {
+    dispatch(postActions.getPostDB());
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

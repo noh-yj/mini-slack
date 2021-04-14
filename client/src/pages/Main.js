@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import { FormOutlined, SmileOutlined } from "@ant-design/icons";
-import PostWriteModal from "../components/PostWriteModal";
-import Header from "../components/Header";
-import Sider from "../components/Sidebar";
-import PostList from "../components/PostList";
+import React, { useRef, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { FormOutlined, SmileOutlined } from '@ant-design/icons';
+import PostWriteModal from '../components/PostWriteModal';
+import Header from '../components/Header';
+import Sider from '../components/Sidebar';
+import PostList from '../components/PostList';
 
 const Main = (props) => {
   // Modal control operations
@@ -39,17 +39,17 @@ const Main = (props) => {
           </MainRight>
         </MainContent>
         <PostWriteBtn onClick={modalBtn}>
-          <FormOutlined style={{ fontSize: "30px" }} />
+          <FormOutlined style={{ fontSize: '30px' }} />
         </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
         {/* 심심해서 만든거 */}
         <div
           style={{
-            fontSize: "24px",
-            height: "95px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            fontSize: '24px',
+            height: '95px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           Happy coding&nbsp;&nbsp;&nbsp;&nbsp;

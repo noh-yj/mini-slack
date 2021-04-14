@@ -28,7 +28,7 @@ const Sidebar = (props) => {
   let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });
-  console.log(users);
+
   return (
     <>
       <PostListFrame>

@@ -31,7 +31,6 @@ const getUserDB = () => {
       url: `${config.api}/auth/user`,
     })
       .then((res) => {
-        console.log(res);
         dispatch(
           setUser({
             email: res.data.userInfo.email,
@@ -69,7 +68,6 @@ const updateUserDB = (file, comment_myself, pwd) => {
       data: formData,
     })
       .then((res) => {
-        console.log(res);
         dispatch(
           updateUser({
             email: res.data.newUserInfo.email,
@@ -84,7 +82,9 @@ const updateUserDB = (file, comment_myself, pwd) => {
           title: '회원정보가 변경되었습니다😊',
           icon: 'success',
         });
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
       .catch((e) => {
         console.log('에러발생', e);
@@ -107,7 +107,6 @@ const loginDB = (user_id, password) => {
       },
     })
       .then((res) => {
-        console.log(res);
         const jwtToken = res.data.token;
         setCookie('is_login', jwtToken);
         axios.defaults.headers.common['token'] = `${jwtToken}`;
@@ -145,7 +144,6 @@ const socialLoginDB = (id) => {
       },
     })
       .then((res) => {
-        console.log(res);
         const jwtToken = res.data.token;
         setCookie('is_login', jwtToken);
         axios.defaults.headers.common['token'] = `${jwtToken}`;

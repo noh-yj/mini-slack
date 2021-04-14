@@ -91,11 +91,14 @@ const Post = (props) => {
               height: "3rem",
               borderRadius: "30%",
               marginRight: "0.5rem",
+              fontSize: "25px",
+              display: "flex",
+              alignItems: "center",
             }}
-            src={props?.profile_img}
+            src={props.profile_img}
             onClick={OpenModal}
           >
-            {props?.profile_img === " " ? props?.nickname[0] : null}
+            {props.profile_img === " " ? props.user_id?.nickname[0] : null}
           </Avatar>
           <PostInfo>
             <UserInfo>
@@ -133,6 +136,7 @@ const PostFrame = styled.div`
   flex-direction: column;
   margin-bottom: 10px;
   position: relative;
+  cursor: default;
 `;
 
 const Postsub = styled.div`
@@ -173,12 +177,12 @@ const Btngroup = styled.div`
   }
 `;
 
-const UserImg = styled.img`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 30%;
-  margin-right: 0.5rem;
-`;
+// const UserImg = styled.img`
+//   width: 3rem;
+//   height: 3rem;
+//   border-radius: 30%;
+//   margin-right: 0.5rem;
+// `;
 
 const UserInfo = styled.div`
   display: flex;
@@ -188,6 +192,7 @@ const UserInfo = styled.div`
 const UserName = styled.span`
   font-size: 18px;
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const WritingDt = styled.span``;
@@ -200,10 +205,10 @@ const ImgBox = styled.div`
   border-radius: 10px;
 `;
 
-const PostImg = styled.img`
-  width: 40%;
-  height: 40%;
-  border-radius: 10px;
-`;
+// const PostImg = styled.img`
+//   width: 40%;
+//   height: 40%;
+//   border-radius: 10px;
+// `;
 
 export default Post;

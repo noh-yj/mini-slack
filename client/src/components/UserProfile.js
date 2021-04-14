@@ -4,7 +4,6 @@ import { CloseOutlined } from '@ant-design/icons';
 import { Image } from 'antd';
 
 function UserProfile({ status, close, user }) {
-  console.log(user);
   return (
     <>
       {status ? (
@@ -26,7 +25,7 @@ function UserProfile({ status, close, user }) {
               <p>{user.user_id.nickname}</p>
               <hr />
               <br />
-              <p>안녕하세요 :)</p>
+              <p>{user.user_id.comment_myself}</p>
             </UserInfo>
           </ModalContainer>
         </>
