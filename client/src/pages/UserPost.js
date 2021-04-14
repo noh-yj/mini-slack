@@ -43,6 +43,19 @@ function UserPost(props) {
           <FormOutlined style={{ fontSize: '30px' }} />
         </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
+        {/* 심심해서 만든거 */}
+        <div
+          style={{
+            fontSize: '24px',
+            height: '95px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          Happy coding&nbsp;&nbsp;&nbsp;&nbsp;
+          <SmileOutlined spin />
+        </div>
       </MainFrame>
     </>
   );

@@ -82,7 +82,9 @@ const updateUserDB = (file, comment_myself, pwd) => {
           title: '회원정보가 변경되었습니다😊',
           icon: 'success',
         });
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
       .catch((e) => {
         console.log('에러발생', e);

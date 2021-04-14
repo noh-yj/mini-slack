@@ -43,9 +43,11 @@ const Post = (props) => {
   return (
     <>
       <PostFrame>
-        <MoreBtn onClick={toggleBtn}>
-          <MoreOutlined />
-        </MoreBtn>
+        {userInfo?.uid === props.user_id.userId ? (
+          <MoreBtn onClick={toggleBtn}>
+            <MoreOutlined />
+          </MoreBtn>
+        ) : null}
 
         {isOpen && (
           <Btngroup>
@@ -69,11 +71,14 @@ const Post = (props) => {
               height: '3rem',
               borderRadius: '30%',
               marginRight: '0.5rem',
+              fontSize: '25px',
+              display: 'flex',
+              alignItems: 'center',
             }}
-            src={props?.profile_img}
+            src={props.profile_img}
             onClick={OpenModal}
           >
-            {props?.profile_img === ' ' ? props?.nickname[0] : null}
+            {props.profile_img === ' ' ? props.user_id?.nickname[0] : null}
           </Avatar>
           <PostInfo>
             <UserInfo>
@@ -106,6 +111,7 @@ const PostFrame = styled.div`
   flex-direction: column;
   margin-bottom: 10px;
   position: relative;
+  cursor: default;
 `;
 
 const Postsub = styled.div`
@@ -161,6 +167,7 @@ const UserInfo = styled.div`
 const UserName = styled.span`
   font-size: 18px;
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const WritingDt = styled.span``;

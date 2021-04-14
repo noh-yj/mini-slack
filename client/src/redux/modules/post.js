@@ -152,6 +152,7 @@ const getUserPostDB = (id) => {
             post_id: singleData._id,
           });
         });
+        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
@@ -209,7 +210,6 @@ const deletePostDB = (post_id) => {
     const options = {
       url: `${config.api}/board/${post_id}`,
       method: 'DELETE',
-      data: post_id,
       headers: {
         // 백 분들과 맞춰보기
         Accept: 'application/json',
@@ -219,13 +219,13 @@ const deletePostDB = (post_id) => {
     axios(options)
       .then((res) => {
         console.log(res.data);
+        // 삭제할 건지 말지 한 번 더 물어볼까?
         dispatch(deletePost(post_id));
         swal({
           title: '삭제 성공 👋',
-          text: '게시글을 삭제하셨습니다❕',
-          icon: 'success',
+          closeOnClickOutside: false,
         });
-        history.replace('/main');
+        window.location.reload();
       })
       .catch((error) => {
         swal({
@@ -242,7 +242,8 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list.push(...action.payload.post_list);
+        // draft.list.push(...action.payload.post_list);
+        draft.list = action.payload.post_list;
         //draft.paging = action.payload.paging;
         //draft.likelist = action.payload.likelist;
         draft.is_loading = false;

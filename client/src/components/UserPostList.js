@@ -10,8 +10,7 @@ const UserPostList = (props) => {
   const post_list = useSelector((state) => state.post.list);
   React.useEffect(() => {
     dispatch(postActions.getUserPostDB(id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <PostListFrame>

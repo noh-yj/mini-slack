@@ -43,7 +43,7 @@ const Container = styled.div`
 const ModalContainer = styled.div`
   position: fixed;
   top: 50%;
-  left: 44.5%;
+  left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
   display: flex;
