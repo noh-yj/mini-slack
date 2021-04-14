@@ -88,7 +88,7 @@ const Sidebar = (props) => {
             })}
             {users.length === 0 ? (
               <Menu.Item style={{ textAlign: 'center' }}>
-                유저 정보가 없습니다.
+                유저 정보가 없습니다 &nbsp;
                 <FrownOutlined />
               </Menu.Item>
             ) : null}

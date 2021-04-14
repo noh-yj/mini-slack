@@ -13,6 +13,7 @@ function UpdateUser({ status, close }) {
   const fileInput = useRef();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
+  // 새로고침 시 상메 날라가는거 수정하기
   const [comment_myself, setCommentMyself] = useState(
     user ? user?.comment_myself : '',
   );
@@ -50,9 +51,9 @@ function UpdateUser({ status, close }) {
         }
       }
       dispatch(userActions.updateUserDB(file, comment_myself, pwd));
+    } else if (user?.snsId) {
+      dispatch(userActions.updateUserDB(file, comment_myself));
     }
-    // 소셜로그인 유저
-    dispatch(userActions.updateUserDB(file, comment_myself));
     close();
   };
 

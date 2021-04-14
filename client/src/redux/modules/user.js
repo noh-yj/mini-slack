@@ -25,6 +25,7 @@ const getUserDB = () => {
   return function (dispatch, getState, { history }) {
     const jwtToken = getCookie('is_login');
     axios.defaults.headers.common['token'] = `${jwtToken}`;
+
     axios({
       method: 'get',
       url: `${config.api}/auth/user`,
@@ -48,8 +49,11 @@ const getUserDB = () => {
   };
 };
 
-const updateUserDB = (file, comment_myself, pwd = 'null') => {
+const updateUserDB = (file, comment_myself, pwd) => {
   return function (dispatch, getState, { history }) {
+    if (pwd === '') {
+      pwd = 'null';
+    }
     if (file === null) {
       file = getState().user.user.profile_img;
     }
