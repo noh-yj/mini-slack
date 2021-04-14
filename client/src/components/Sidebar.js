@@ -11,20 +11,10 @@ import {
 import axios from 'axios';
 import { config } from '../config';
 import { history } from '../redux/configureStore';
-// Post에 가야하는 컴포넌트 뷰 그리기위해 일시 적 위치
-import UserProfile from './UserProfile';
 
 const { SubMenu } = Menu;
 
 const Sidebar = (props) => {
-  const [userprofile, setUserprofile] = useState(false);
-  const OpenModal = () => {
-    setUserprofile(true);
-  };
-  const CloseModal = () => {
-    setUserprofile(false);
-  };
-
   let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   useEffect(() => {
@@ -35,13 +25,12 @@ const Sidebar = (props) => {
       setUsers(res.data.users);
     });
   }, []);
-  users = users.filter((val) => {
+  let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });
   console.log(users);
   return (
     <>
-      <UserProfile status={userprofile} close={CloseModal} />
       <PostListFrame>
         <Menu
           mode='inline'
@@ -69,7 +58,7 @@ const Sidebar = (props) => {
               />
             </Menu.Item>
 
-            {users.map((val, idx) => {
+            {searchUser.map((val, idx) => {
               return (
                 <Menu.Item
                   key={idx}
@@ -85,7 +74,6 @@ const Sidebar = (props) => {
                       marginRight: '20px',
                     }}
                     src={val.profile_img}
-                    onClick={OpenModal}
                   >
                     {val.profile_img === ' ' ? val.nickname[0] : null}
                   </Avatar>
@@ -93,7 +81,7 @@ const Sidebar = (props) => {
                 </Menu.Item>
               );
             })}
-            {users.length === 0 ? (
+            {searchUser.length === 0 ? (
               <Menu.Item style={{ textAlign: 'center' }}>
                 유저 정보가 없습니다 &nbsp;
                 <FrownOutlined />
