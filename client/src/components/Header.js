@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { ExportOutlined } from '@ant-design/icons';
 import UpdateUser from './UpdateUser';
+import { history } from '../redux/configureStore';
 
 const Header = (props) => {
-  const { history } = props;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [userprofile, setUserprofile] = useState(false);
