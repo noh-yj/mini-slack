@@ -53,8 +53,8 @@ function PostWriteModal({ status, close }) {
     console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
     dispatch(postActions.addPostDB(contents, file));
     // 사진 없이 올리고 싶은 경우 고려해야함
-    setFile(null);
-    setContents(null);
+
+    setContents("");
     setPreview(null);
     close();
   };
@@ -64,7 +64,7 @@ function PostWriteModal({ status, close }) {
         <>
           <Container
             onClick={(e) => {
-              setContents(null);
+              // setContents(null);
               setPreview(null);
               close(e);
             }}

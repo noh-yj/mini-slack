@@ -60,9 +60,10 @@ const addPostDB = (content, item) => {
 
     axios(postDB)
       .then((res) => {
+        console.log(res.data);
         let result = {
           content: content,
-          day: moment(new Date()).fromNow(),
+          day: res.data.createdAt,
           img: item,
           emoticon: [],
           uid: userId,
@@ -70,14 +71,10 @@ const addPostDB = (content, item) => {
           comment_cnt: 0,
         };
 
-        dispatch(addPost(result));
+        console.log(result);
 
-        swal({
-          title: "성공 ☺",
-          text: "업로드에 성공하였습니다❕",
-          icon: "success",
-        });
-        history.replace("/main");
+        window.location.reload();
+        dispatch(addPost(result));
       })
       .catch((error) => {
         swal({
@@ -102,6 +99,7 @@ const getPostDB = () => {
     };
     axios(options)
       .then((res) => {
+        console.log(res.data);
         let post_data = [];
         //let emoji_data = [];
 
@@ -112,11 +110,11 @@ const getPostDB = () => {
             imgUrl: singleData.imgUrl,
             user_id: singleData.user,
             profile_img: singleData.user?.profile_img,
-            day: singleData.day,
+            day: singleData.createdAt.split("T")[0],
             post_id: singleData._id,
           });
         });
-        //console.log(post_data);
+        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
