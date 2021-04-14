@@ -5,17 +5,15 @@ import { Avatar } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 
-function EditPostModal({ status, close }) {
+function EditPostModal({ status, close, post_info }) {
   const userInfo = useSelector((state) => state.user.user);
   //const dispatch = useDispatch();
   // Image file & preview image setting
   const [file, setFile] = React.useState(null);
-  const [preview, setPreview] = React.useState(
-    "http://via.placeholder.com/400x300"
-  );
+  const [preview, setPreview] = React.useState(post_info.imgUrl);
 
   // contents upload
-  const [contents, setContents] = React.useState("");
+  const [contents, setContents] = React.useState(post_info.content);
   const changeContents = (e) => {
     setContents(e.target.value);
   };
@@ -74,11 +72,12 @@ function EditPostModal({ status, close }) {
                 onChange={changeContents}
                 value={contents}
               />
-              {file !== null ? (
+              <Image src={preview} />
+              {/* {file !== null ? (
                 <>
                   <Image src={preview} />
                 </>
-              ) : null}
+              ) : null} */}
               <AdditionalPost>
                 게시물에 추가
                 {/* Image file uploader */}

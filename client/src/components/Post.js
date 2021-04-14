@@ -8,10 +8,30 @@ import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
-  CloseOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
+import EditPostModal from "./EditPostModal";
 
 const Post = (props) => {
+  // Modal control operations
+  const [isModalOpen, setModal] = useState(false);
+
+  const modalBtn = () => {
+    setModal(true);
+  };
+
+  const closeModal = (event) => {
+    if (event === undefined) {
+      setModal(false);
+      return;
+    }
+    // 현재 함수가 걸려있는 target 과 구분해주기 위함.
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+    setModal(false);
+  };
+
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.user);
   const [isOpen, setToggle] = useState(false);
@@ -51,14 +71,14 @@ const Post = (props) => {
 
         {isOpen && (
           <Btngroup>
-            <button>
+            <button onClick={modalBtn}>
               <EditOutlined />
             </button>
             <button>
               <DeleteOutlined onClick={deletePost} />
             </button>
             <button onClick={closeToggle}>
-              <CloseOutlined />
+              <RedoOutlined />
             </button>
           </Btngroup>
         )}
@@ -95,6 +115,11 @@ const Post = (props) => {
         </ImgBox>
       </PostFrame>
       <UserProfile status={userprofile} close={CloseModal} user={props} />
+      <EditPostModal
+        status={isModalOpen}
+        close={closeModal}
+        post_info={props}
+      />
     </>
   );
 };
