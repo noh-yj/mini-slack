@@ -68,12 +68,12 @@ const Postsub = styled.div`
 
 const PostInfo = styled.div``;
 
-const UserImg = styled.img`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 30%;
-  margin-right: 0.5rem;
-`;
+// const UserImg = styled.img`
+//   width: 3rem;
+//   height: 3rem;
+//   border-radius: 30%;
+//   margin-right: 0.5rem;
+// `;
 
 const UserInfo = styled.div`
   display: flex;
@@ -95,10 +95,10 @@ const ImgBox = styled.div`
   border-radius: 10px;
 `;
 
-const PostImg = styled.img`
-  width: 40%;
-  height: 40%;
-  border-radius: 10px;
-`;
+// const PostImg = styled.img`
+//   width: 40%;
+//   height: 40%;
+//   border-radius: 10px;
+// `;
 
 export default Post;
