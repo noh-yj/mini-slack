@@ -2,8 +2,36 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Avatar, Image } from 'antd';
 import UserProfile from './UserProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as postActions } from '../redux/modules/post';
+import {
+  MoreOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 
 const Post = (props) => {
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.user);
+  const [isOpen, setToggle] = useState(false);
+  const toggleBtn = () => {
+    if (isOpen === false) {
+      setToggle(true);
+      return;
+    }
+    setToggle(false);
+  };
+
+  const closeToggle = () => {
+    setToggle(false);
+  };
+
+  const deletePost = () => {
+    console.log(props.post_id);
+    dispatch(postActions.deletePostDB(props.post_id));
+  };
+
   const [userprofile, setUserprofile] = useState(false);
   const OpenModal = () => {
     setUserprofile(true);
@@ -15,6 +43,23 @@ const Post = (props) => {
   return (
     <>
       <PostFrame>
+        <MoreBtn onClick={toggleBtn}>
+          <MoreOutlined />
+        </MoreBtn>
+
+        {isOpen && (
+          <Btngroup>
+            <button>
+              <EditOutlined />
+            </button>
+            <button>
+              <DeleteOutlined onClick={deletePost} />
+            </button>
+            <button onClick={closeToggle}>
+              <CloseOutlined />
+            </button>
+          </Btngroup>
+        )}
         <Postsub>
           <Avatar
             style={{
@@ -60,6 +105,7 @@ const PostFrame = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  position: relative;
 `;
 
 const Postsub = styled.div`
@@ -67,6 +113,38 @@ const Postsub = styled.div`
 `;
 
 const PostInfo = styled.div``;
+
+const MoreBtn = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  right: 10px;
+  outline: none;
+  :hover {
+    background: #ececec;
+    border-radius: 50%;
+  }
+`;
+
+const Btngroup = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 3rem;
+  background: #ffffff;
+  right: 10px;
+  border: solid #ececec;
+  border-radius: 10px;
+  & > button {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ececec;
+    outline: none;
+    :hover {
+      background: #ececec;
+    }
+  }
+`;
 
 // const UserImg = styled.img`
 //   width: 3rem;
