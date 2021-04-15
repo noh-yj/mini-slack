@@ -88,7 +88,7 @@ const getCommentDB = (post_id) => {
         let response_data = res.data;
 
         response_data.forEach((rd) => {
-          list.push({ ...rd });
+          list.push(rd);
         });
 
         dispatch(setComment(post_id, list));
