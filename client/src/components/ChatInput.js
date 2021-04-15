@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
 
-function ChatInput({ socket, username, room }) {
+function ChatInput({ socket, username, room, myId }) {
   const [msg, setMsg] = useState('');
   const msgSubmit = () => {
     socket.emit('send', {
       room: room,
       username: username,
+      myId: myId,
       msg: msg,
     });
     setMsg('');
