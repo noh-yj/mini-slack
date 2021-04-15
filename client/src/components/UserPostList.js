@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Empty } from 'antd';
 import Post from './Post';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as postActions } from '../redux/modules/post';
@@ -14,6 +15,11 @@ const UserPostList = (props) => {
 
   return (
     <PostListFrame>
+      {post_list.length === 0 ? (
+        <EmptyPost>
+          <Empty />
+        </EmptyPost>
+      ) : null}
       {post_list?.map((p, idx) => {
         return <Post key={idx} {...p} />;
       })}
@@ -28,6 +34,7 @@ const PostListFrame = styled.div`
   padding: 8px 12px;
   height: 80vh;
   overflow: auto;
+  position: relative;
   ::-webkit-scrollbar {
     width: 12px; /* width of the entire scrollbar */
   }
@@ -41,6 +48,13 @@ const PostListFrame = styled.div`
     border-radius: 20px; /* roundness of the scroll thumb */
     //border: 3px solid orange; /* creates padding around scroll thumb */
   }
+`;
+const EmptyPost = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: default;
 `;
 
 export default UserPostList;

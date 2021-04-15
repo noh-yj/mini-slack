@@ -1,20 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, Input } from 'antd';
+import { emailCheck } from '../shared/common';
+import swal from 'sweetalert';
+import axios from 'axios';
+import { config } from '../config';
 
 function DeleteModal({ status, close }) {
+  const [user_id, SetUserId] = useState('');
+  const findPwd = () => {
+    if (user_id === '') {
+      swal({
+        title: '찾고자 하는 아이디를 입력해주세요.',
+        icon: 'warning',
+      });
+      return;
+    }
+    if (!emailCheck(user_id)) {
+      swal({
+        title: '이메일 형식이 맞지 않습니다.',
+        icon: 'warning',
+      });
+      return;
+    }
+    axios({
+      method: 'post',
+      url: `${config.api}/auth/searchPwd`,
+      data: { email: user_id },
+    })
+      .then(() => {
+        swal({
+          title: '메일 전송이 완료되었습니다 😊',
+          icon: 'success',
+        });
+        close();
+        SetUserId('');
+      })
+      .catch(() => {
+        swal({
+          title: '비밀번호 찾기에 실패했습니다 😞',
+          icon: 'error',
+        });
+        close();
+        SetUserId('');
+      });
+  };
   return (
     <>
       {status ? (
         <>
-          <Container onClick={close} />
+          <Container
+            onClick={() => {
+              close();
+              SetUserId('');
+            }}
+          />
           <ModalContainer>
             <TitleBox>
               <Title>비밀번호 찾기</Title>
             </TitleBox>
-            <Input type='text' placeholder='아이디를 입력해주세요.' />
+            <Input
+              type='text'
+              placeholder='아이디를 입력해주세요.'
+              onChange={(e) => {
+                SetUserId(e.target.value);
+              }}
+            />
             <br />
-            <Button type='primary' block>
+            <Button type='primary' block onClick={findPwd}>
               찾기
             </Button>
           </ModalContainer>

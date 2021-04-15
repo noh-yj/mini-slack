@@ -45,6 +45,11 @@ function Login(props) {
               onChange={(e) => {
                 SetUserId(e.target.value);
               }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  login();
+                }
+              }}
             />
           </InputBox>
           <InputBox>
@@ -53,6 +58,11 @@ function Login(props) {
               placeholder='비밀번호'
               onChange={(e) => {
                 setPassword(e.target.value);
+              }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  login();
+                }
               }}
             />
           </InputBox>

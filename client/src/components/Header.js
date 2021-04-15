@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageHeader, Avatar } from 'antd';
+import { Avatar, Skeleton } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
@@ -21,27 +21,39 @@ const Header = (props) => {
   return (
     <>
       <HeaderFrame>
-        <PageHeader className='site-page-header' title='🎨 Palette' />
-        <div
+        <Logo
           onClick={() => {
             history.push('/main');
           }}
           style={{ cursor: 'pointer' }}
         >
-          LOGO
-        </div>
+          🎨 Palette
+        </Logo>
         <UserFrame>
-          <Avatar
-            size={40}
-            style={{ backgroundColor: '#87d068', cursor: 'pointer' }}
-            src={user?.profile_img}
-            onClick={OpenModal}
-          >
-            {user?.profile_img === ' ' ? user?.nickname[0] : null}
-          </Avatar>
-          <p onClick={OpenModal} style={{ cursor: 'pointer' }}>
-            {user?.nickname} 님
-          </p>
+          {!user ? (
+            <>
+              <Skeleton.Avatar active size={40} />
+              <Skeleton.Input
+                style={{ width: '52px', height: '22px', marginLeft: '14px' }}
+                active
+              />
+            </>
+          ) : (
+            <>
+              <Avatar
+                size={40}
+                style={{ backgroundColor: '#87d068', cursor: 'pointer' }}
+                src={user?.profile_img}
+                onClick={OpenModal}
+              >
+                {user?.profile_img === ' ' ? user?.nickname[0] : null}
+              </Avatar>
+              <p onClick={OpenModal} style={{ cursor: 'pointer' }}>
+                {user?.nickname} 님
+              </p>
+            </>
+          )}
+
           <LogOut>
             <ExportOutlined
               onClick={() => {
@@ -61,6 +73,18 @@ const HeaderFrame = styled.div`
   display: flex;
   justify-content: space-between;
   cursor: default;
+`;
+
+const Logo = styled.div`
+  padding: 4px 12px 4px 28px;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0, 0.85);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const UserFrame = styled.div`
