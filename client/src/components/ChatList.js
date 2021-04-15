@@ -4,18 +4,18 @@ function ChatList({ socket }) {
   const [msgList, setMsgList] = useState([]);
   useEffect(() => {
     socket.on('receive', (res) => {
+      setMsgList((msgList) => [...msgList, res]);
       console.log(res);
-      setMsgList.push(res);
     });
     socket.on('load', (res) => {
       console.log(res);
-      setMsgList(...res);
+      setMsgList((msgList) => [...msgList, ...res]);
     });
     return () => {
       socket.disconnect();
     };
   }, [socket]);
-
+  console.log(msgList);
   return (
     <>
       <div>채팅 리스트</div>

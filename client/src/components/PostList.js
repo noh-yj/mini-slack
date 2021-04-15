@@ -1,13 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import Post from './Post';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
+import React from "react";
+import styled from "styled-components";
+import Post from "./Post";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 const PostList = (props) => {
   const dispatch = useDispatch();
   const post_list = useSelector((state) => state.post.list);
-  console.log(post_list);
 
   React.useEffect(() => {
     // if (post_list.length === 0) {

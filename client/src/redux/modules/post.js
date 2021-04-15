@@ -71,8 +71,6 @@ const addPostDB = (content, item) => {
           comment_cnt: 0,
         };
 
-        console.log(result);
-
         window.location.reload();
         dispatch(addPost(result));
       })
@@ -99,7 +97,6 @@ const getPostDB = () => {
     };
     axios(options)
       .then((res) => {
-        console.log(res.data);
         let post_data = [];
         //let emoji_data = [];
 
@@ -114,11 +111,9 @@ const getPostDB = () => {
             post_id: singleData._id,
           });
         });
-        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
-        console.log(error);
         if (error.res) {
           window.alert(error.res.data.errorMessage);
         }
@@ -138,7 +133,6 @@ const getUserPostDB = (id) => {
       },
     })
       .then((res) => {
-        console.log(res);
         let post_data = [];
 
         res.data.posts.forEach((singleData) => {
@@ -152,11 +146,9 @@ const getUserPostDB = (id) => {
             post_id: singleData._id,
           });
         });
-        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
-        console.log(error);
         if (error.res) {
           window.alert(error.res.data.errorMessage);
         }
@@ -167,8 +159,6 @@ const getUserPostDB = (id) => {
 // UPDATE DB
 const updatePostDB = (post_id, content, item) => {
   return function (dispatch, getState, { history }) {
-    console.log(post_id, content, item);
-
     let formData = new FormData();
 
     formData.append("content", content);
@@ -184,7 +174,6 @@ const updatePostDB = (post_id, content, item) => {
     };
     axios(options)
       .then((res) => {
-        console.log(res.data);
         dispatch(updatePost(post_id, { content: content, img_url: item }));
         swal({
           title: "수정 성공 ☺",
@@ -217,7 +206,6 @@ const deletePostDB = (post_id) => {
     };
     axios(options)
       .then((res) => {
-        console.log(res.data);
         // 삭제할 건지 말지 한 번 더 물어볼까?
         dispatch(deletePost(post_id));
         swal({

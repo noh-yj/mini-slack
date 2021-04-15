@@ -9,12 +9,17 @@ import {
   EditOutlined,
   DeleteOutlined,
   RedoOutlined,
+  CommentOutlined,
 } from "@ant-design/icons";
 import EditPostModal from "./EditPostModal";
+import "animate.css";
+
+import CommentList from "./CommentList";
 
 const Post = (props) => {
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
+  const [isCommentOpen, openCommentBox] = useState(false);
 
   const modalBtn = () => {
     setModal(true);
@@ -60,6 +65,14 @@ const Post = (props) => {
     setUserprofile(false);
   };
 
+  const commentOn = () => {
+    if (!isCommentOpen) {
+      openCommentBox(true);
+      return;
+    }
+    openCommentBox(false);
+  };
+
   return (
     <>
       <PostFrame>
@@ -82,40 +95,50 @@ const Post = (props) => {
             </button>
           </Btngroup>
         )}
-        <Postsub>
-          <Avatar
-            style={{
-              backgroundColor: "#87d068",
-              cursor: "pointer",
-              width: "3rem",
-              height: "3rem",
-              borderRadius: "30%",
-              marginRight: "0.5rem",
-              fontSize: "25px",
-              display: "flex",
-              alignItems: "center",
-            }}
-            src={props.profile_img}
-            onClick={OpenModal}
-          >
-            {props.profile_img === " " ? props.user_id?.nickname[0] : null}
-          </Avatar>
-          <PostInfo>
-            <UserInfo>
-              <UserName onClick={OpenModal}>{props.user_id?.nickname}</UserName>
-              <WritingDt>{props.day}</WritingDt>
-            </UserInfo>
-            <ContentBox>{props.content}</ContentBox>
-          </PostInfo>
-        </Postsub>
-        <ImgBox style={{ width: "40%", height: "40%" }}>
-          {props.imgUrl && (
-            <Image
-              src={props.imgUrl}
-              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
-            />
-          )}{" "}
-        </ImgBox>
+        <PostBox>
+          <Postsub>
+            <Avatar
+              style={{
+                backgroundColor: "#87d068",
+                cursor: "pointer",
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "30%",
+                marginRight: "0.5rem",
+                fontSize: "25px",
+                display: "flex",
+                alignItems: "center",
+              }}
+              src={props.profile_img}
+              onClick={OpenModal}
+            >
+              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
+            </Avatar>
+            <PostInfo>
+              <UserInfo>
+                <UserName onClick={OpenModal}>
+                  {props.user_id?.nickname}
+                </UserName>
+                <WritingDt>{props.day}</WritingDt>
+              </UserInfo>
+              <ContentBox>{props.content}</ContentBox>
+            </PostInfo>
+          </Postsub>
+          <ImgBox style={{ width: "40%", height: "40%" }}>
+            {props.imgUrl && (
+              <Image
+                src={props.imgUrl}
+                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+              />
+            )}{" "}
+          </ImgBox>
+          <CommentFrame>
+            <button onClick={commentOn}>
+              <CommentOutlined />
+            </button>
+          </CommentFrame>
+        </PostBox>
+        {isCommentOpen && <CommentList post_id={props.post_id} />}
       </PostFrame>
       <UserProfile status={userprofile} close={CloseModal} user={props} />
       <EditPostModal
@@ -133,7 +156,6 @@ const PostFrame = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   display: flex;
-  flex-direction: column;
   margin-bottom: 10px;
   position: relative;
   cursor: default;
@@ -151,8 +173,9 @@ const MoreBtn = styled.button`
   position: absolute;
   right: 10px;
   outline: none;
+  z-index: 5;
   :hover {
-    background: #ececec;
+    background: #d8d9dc;
     border-radius: 50%;
     cursor: pointer;
   }
@@ -167,6 +190,7 @@ const Btngroup = styled.div`
   right: 10px;
   border: solid #ececec;
   border-radius: 10px;
+  z-index: 5;
   & > button {
     background: none;
     border: none;
@@ -212,5 +236,33 @@ const ImgBox = styled.div`
 //   height: 40%;
 //   border-radius: 10px;
 // `;
+
+// 포스트와 댓글 박스를 구별해주기 위함
+// 포스트 박스
+const PostBox = styled.div`
+  position: relative;
+  flex-basis: 50%;
+`;
+
+const CommentFrame = styled.div`
+  position: absolute;
+  right: 36%;
+  top: 50%;
+  & > button {
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #c1c1c1;
+    :hover {
+      /* animation: bounce; /* referring directly to the animation's @keyframe declaration */
+      /* animation-duration: 1s; don't forget to set a duration! */
+      color: #262626;
+      transform: scale(1.1);
+      transition: all 200ms ease-in-out;
+    }
+  }
+`;
 
 export default Post;
