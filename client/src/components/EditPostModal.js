@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { PictureOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { PictureOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
+import swal from "sweetalert";
 
 function EditPostModal({ status, close, post_info }) {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.user);
   //const dispatch = useDispatch();
   // Image file & preview image setting
@@ -23,7 +25,7 @@ function EditPostModal({ status, close, post_info }) {
   const selectFile = (e) => {
     if (e.target.files[0] === undefined) {
       setFile(null);
-      setPreview('http://via.placeholder.com/400x300');
+      setPreview(post_info.imgUrl);
       return;
     }
     //file state에 현재 선택된 파일 저장
@@ -37,6 +39,25 @@ function EditPostModal({ status, close, post_info }) {
     };
   };
 
+  const updatePost = () => {
+    // contents 가 비어있을 때
+    if (contents === "") {
+      swal({
+        title: "업로드에 실패하였습니다 😥",
+        text: "게시글이 공란입니다.",
+        icon: "error",
+      });
+      return;
+    }
+    console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
+    dispatch(postActions.updatePostDB(post_info.post_id, contents, file));
+    // 사진 없이 올리고 싶은 경우 고려해야함
+
+    setContents("");
+    setPreview(null);
+    close();
+  };
+
   return (
     <>
       {status ? (
@@ -44,7 +65,7 @@ function EditPostModal({ status, close, post_info }) {
           <Container
             onClick={(e) => {
               // setContents(null);
-              //setPreview(null);
+              setPreview(post_info.imgUrl);
               close(e);
             }}
           >
@@ -54,21 +75,21 @@ function EditPostModal({ status, close, post_info }) {
                 <Avatar
                   size={40}
                   style={{
-                    backgroundColor: '#87d068',
-                    cursor: 'pointer',
-                    margin: '0 8px 0 0',
+                    backgroundColor: "#87d068",
+                    cursor: "pointer",
+                    margin: "0 8px 0 0",
                   }}
                   src={userInfo?.profile_img}
                 >
-                  {userInfo?.profile_img === ' ' ? userInfo?.nickname[0] : null}
+                  {userInfo?.profile_img === " " ? userInfo?.nickname[0] : null}
                 </Avatar>
-                <span>{userInfo ? userInfo.nickname : 'User Name'}</span>
+                <span>{userInfo ? userInfo.nickname : "User Name"}</span>
               </ModalUserFrame>
               <ElTextarea
-                wrap='hard'
-                placeholder='무슨 생각을 하고 계시나요?'
+                wrap="hard"
+                placeholder="무슨 생각을 하고 계시나요?"
                 autoFocus
-                autoComplete='true'
+                autoComplete="true"
                 onChange={changeContents}
                 value={contents}
               />
@@ -81,18 +102,12 @@ function EditPostModal({ status, close, post_info }) {
               <AdditionalPost>
                 게시물에 추가
                 {/* Image file uploader */}
-                <InputLabel className='input-file-button' htmlFor='input-file'>
+                <InputLabel className="input-file-button" htmlFor="input-file">
                   <PictureOutlined />
                 </InputLabel>
-                <Input type='file' id='input-file' onChange={selectFile} />
+                <Input type="file" id="input-file" onChange={selectFile} />
               </AdditionalPost>
-              <PostingBtn
-                onClick={() => {
-                  console.log('수정하기!');
-                }}
-              >
-                수정
-              </PostingBtn>
+              <PostingBtn onClick={updatePost}>수정</PostingBtn>
             </ModalFrame>
           </Container>
         </>
@@ -240,7 +255,7 @@ const Input = styled.input`
 // preview image
 
 const Image = styled.img`
-  width: 40%;
-  height: 40%;
+  width: 20%;
+  height: 20%;
 `;
 export default EditPostModal;

@@ -254,7 +254,7 @@ const Input = styled.input`
 // preview image
 
 const Image = styled.img`
-  width: 40%;
-  height: 40%;
+  width: 20%;
+  height: 20%;
 `;
 export default PostWriteModal;
