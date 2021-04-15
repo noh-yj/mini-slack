@@ -55,6 +55,7 @@ const addCommentDB = (post_id, contents) => {
       data: comment_data,
     })
       .then((res) => {
+        console.log(res.data);
         swal({
           title: "코멘트 😎",
           text: "댓글을 달았습니다❕",
