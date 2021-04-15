@@ -127,6 +127,11 @@ function Signup(props) {
                     onChange={(e) => {
                       setUserEmail(e.target.value);
                     }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        signup();
+                      }
+                    }}
                   />
                 </td>
                 <td>
@@ -142,6 +147,11 @@ function Signup(props) {
                     onChange={(e) => {
                       setPassword(e.target.value);
                     }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        signup();
+                      }
+                    }}
                   />
                 </td>
               </tr>
@@ -153,6 +163,11 @@ function Signup(props) {
                     onChange={(e) => {
                       setPasswordCheck(e.target.value);
                     }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        signup();
+                      }
+                    }}
                   />
                 </td>
               </tr>
@@ -163,6 +178,11 @@ function Signup(props) {
                     type='text'
                     onChange={(e) => {
                       setUserName(e.target.value);
+                    }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        signup();
+                      }
                     }}
                   />
                 </td>
