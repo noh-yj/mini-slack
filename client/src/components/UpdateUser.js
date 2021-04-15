@@ -2,21 +2,25 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Input, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { userpasswordCheck } from '../shared/common';
 import { actionCreators as userActions } from '../redux/modules/user';
 import swal from 'sweetalert';
 
-function UpdateUser({ status, close }) {
+function UpdateUser({ status, close, user }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
   const fileInput = useRef();
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
-  // 새로고침 시 상메 날라가는거 수정하기
-  const [comment_myself, setCommentMyself] = useState(
-    user ? user?.comment_myself : '',
-  );
+  const [comment_myself, setCommentMyself] = useState(user?.comment_myself);
+
+  // 새로고침 시 comment_myself가 공백으로 뜰 경우 조건 처리 setTimeout을 통해 값을 넣어준다
+  if (comment_myself === undefined) {
+    setTimeout(() => {
+      setCommentMyself(user?.comment_myself);
+    }, 100);
+  }
+
   const [pwd, setPwd] = useState('');
   const [pwdChk, setPwdChk] = useState('');
   const selectFile = (e) => {
