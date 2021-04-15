@@ -12,6 +12,7 @@ import Signup from '../pages/Signup';
 import Main from '../pages/Main';
 import UserPost from '../pages/UserPost';
 import Social from './Social';
+import Chat from '../pages/Chat';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function App() {
         <Route path='/signup' exact component={Signup} />
         <Route path='/social/:id' exact component={Social} />
         <Route path='/user/post/:id' exact component={UserPost} />
+        <Route path='/chat/:otherId/:myId' exact component={Chat} />
       </ConnectedRouter>
     </>
   );

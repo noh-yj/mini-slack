@@ -11,12 +11,14 @@ import {
 import axios from 'axios';
 import { config } from '../config';
 import { history } from '../redux/configureStore';
+import { useSelector } from 'react-redux';
 
 const { SubMenu } = Menu;
 
 const Sidebar = (props) => {
   let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
+  const uid = useSelector((state) => state.user.user?.uid);
   useEffect(() => {
     axios({
       method: 'get',
@@ -91,7 +93,12 @@ const Sidebar = (props) => {
           <SubMenu key='sub2' icon={<MessageOutlined />} title='채팅 하기'>
             {users.map((val, idx) => {
               return (
-                <Menu.Item key={idx + 'msg'}>
+                <Menu.Item
+                  key={idx + 'msg'}
+                  onClick={() => {
+                    history.push(`/chat/${val.id}/${uid}`);
+                  }}
+                >
                   <Avatar
                     size={30}
                     style={{
