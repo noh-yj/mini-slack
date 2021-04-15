@@ -229,6 +229,7 @@ const PostingBtn = styled.button`
   font-weight: 400;
   color: white;
   padding: 8px 0;
+  cursor: pointer;
 
   &:hover {
     background: #1890ff;

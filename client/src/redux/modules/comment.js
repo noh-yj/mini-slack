@@ -39,12 +39,16 @@ const initialState = {
 
 const addCommentDB = (post_id, contents) => {
   return function (dispatch, getState, { history }) {
+    const userId = getState().user.user.uid;
+    console.log(userId);
     // generates data for sending a request to the server
     let comment_data = {
       post_id: post_id,
-      //   username: localStorage.getItem("nick").replace('"', "").replace('"', ""),
       content: contents,
+      userId: userId,
     };
+    console.log(comment_data);
+    return;
     axios({
       method: "POST",
       url: `${config.api}/comment/${post_id}`,

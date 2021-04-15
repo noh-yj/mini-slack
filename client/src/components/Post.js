@@ -14,6 +14,8 @@ import {
 import EditPostModal from "./EditPostModal";
 import "animate.css";
 
+import CommentList from "./CommentList";
+
 const Post = (props) => {
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
@@ -136,7 +138,7 @@ const Post = (props) => {
             </button>
           </CommentFrame>
         </PostBox>
-        {isCommentOpen && <CommentBox></CommentBox>}
+        {isCommentOpen && <CommentList post_id={props.post_id} />}
       </PostFrame>
       <UserProfile status={userprofile} close={CloseModal} user={props} />
       <EditPostModal
@@ -171,8 +173,9 @@ const MoreBtn = styled.button`
   position: absolute;
   right: 10px;
   outline: none;
+  z-index: 5;
   :hover {
-    background: #ececec;
+    background: #d8d9dc;
     border-radius: 50%;
     cursor: pointer;
   }
@@ -187,6 +190,7 @@ const Btngroup = styled.div`
   right: 10px;
   border: solid #ececec;
   border-radius: 10px;
+  z-index: 5;
   & > button {
     background: none;
     border: none;
@@ -237,35 +241,28 @@ const ImgBox = styled.div`
 // 포스트 박스
 const PostBox = styled.div`
   position: relative;
-  flex-basis: 60%;
+  flex-basis: 50%;
 `;
 
 const CommentFrame = styled.div`
   position: absolute;
   right: 36%;
-  bottom: 0;
+  top: 50%;
   & > button {
     border: none;
     outline: none;
     background: none;
     font-size: 1.5rem;
     cursor: pointer;
+    color: #c1c1c1;
     :hover {
       /* animation: bounce; /* referring directly to the animation's @keyframe declaration */
       /* animation-duration: 1s; don't forget to set a duration! */
+      color: #262626;
       transform: scale(1.1);
       transition: all 200ms ease-in-out;
     }
   }
-`;
-
-// 댓글 박스
-const CommentBox = styled.div`
-  flex-basis: 40%;
-  padding: 8px 12px;
-  border: 1px solid #ececec;
-  border-radius: 10px;
-  background: #f0f2f5;
 `;
 
 export default Post;
