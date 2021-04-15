@@ -27,7 +27,10 @@ function Chat(props) {
 
   console.log(props.match.params);
   const [currentSocket, setCurrentSocket] = useState();
-  const room = props.match.params.otherId + '-' + props.match.params.myId;
+  //   const room = props.match.params.otherId + '-' + props.match.params.myId;
+  const rooms = [props.match.params.otherId, props.match.params.myId].sort();
+  const room = rooms[0] + '-' + rooms[1];
+
   const username = useSelector((state) => state.user.user?.nickname);
   const Info = {
     room: room,
