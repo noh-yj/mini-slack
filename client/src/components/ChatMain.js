@@ -3,12 +3,17 @@ import styled from 'styled-components';
 import ChatList from './ChatList';
 import ChatInput from './ChatInput';
 
-function ChatMain({ socket, username, room }) {
+function ChatMain({ socket, username, room, myId }) {
   return (
     <>
       <PostListFrame>
         <ChatList socket={socket} />
-        <ChatInput socket={socket} username={username} room={room} />
+        <ChatInput
+          socket={socket}
+          username={username}
+          room={room}
+          myId={myId}
+        />
       </PostListFrame>
     </>
   );

@@ -28,6 +28,7 @@ function Chat(props) {
   console.log(props.match.params);
   const [currentSocket, setCurrentSocket] = useState();
   //   const room = props.match.params.otherId + '-' + props.match.params.myId;
+  const myId = props.match.params.myId;
   const rooms = [props.match.params.otherId, props.match.params.myId].sort();
   const room = rooms[0] + '-' + rooms[1];
 
@@ -56,6 +57,7 @@ function Chat(props) {
                 socket={currentSocket}
                 username={username}
                 room={room}
+                myId={myId}
               />
             ) : (
               <Spin
