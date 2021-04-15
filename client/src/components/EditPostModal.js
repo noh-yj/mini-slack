@@ -64,7 +64,10 @@ function EditPostModal({ status, close, post_info }) {
         <>
           <Container
             onClick={(e) => {
-              // setContents(null);
+              if (e.target !== e.currentTarget) {
+                return;
+              }
+              setContents(post_info.content);
               setPreview(post_info.imgUrl);
               close(e);
             }}

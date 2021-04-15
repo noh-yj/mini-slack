@@ -64,7 +64,11 @@ function PostWriteModal({ status, close }) {
         <>
           <Container
             onClick={(e) => {
-              // setContents(null);
+              // 현재 함수가 걸려있는 target 과 구분해주기 위함.
+              if (e.target !== e.currentTarget) {
+                return;
+              }
+              setContents("");
               setPreview(null);
               close(e);
             }}
