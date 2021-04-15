@@ -9,12 +9,15 @@ import {
   EditOutlined,
   DeleteOutlined,
   RedoOutlined,
+  CommentOutlined,
 } from "@ant-design/icons";
 import EditPostModal from "./EditPostModal";
+import "animate.css";
 
 const Post = (props) => {
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
+  const [isCommentOpen, openCommentBox] = useState(false);
 
   const modalBtn = () => {
     setModal(true);
@@ -60,6 +63,14 @@ const Post = (props) => {
     setUserprofile(false);
   };
 
+  const commentOn = () => {
+    if (!isCommentOpen) {
+      openCommentBox(true);
+      return;
+    }
+    openCommentBox(false);
+  };
+
   return (
     <>
       <PostFrame>
@@ -82,40 +93,50 @@ const Post = (props) => {
             </button>
           </Btngroup>
         )}
-        <Postsub>
-          <Avatar
-            style={{
-              backgroundColor: "#87d068",
-              cursor: "pointer",
-              width: "3rem",
-              height: "3rem",
-              borderRadius: "30%",
-              marginRight: "0.5rem",
-              fontSize: "25px",
-              display: "flex",
-              alignItems: "center",
-            }}
-            src={props.profile_img}
-            onClick={OpenModal}
-          >
-            {props.profile_img === " " ? props.user_id?.nickname[0] : null}
-          </Avatar>
-          <PostInfo>
-            <UserInfo>
-              <UserName onClick={OpenModal}>{props.user_id?.nickname}</UserName>
-              <WritingDt>{props.day}</WritingDt>
-            </UserInfo>
-            <ContentBox>{props.content}</ContentBox>
-          </PostInfo>
-        </Postsub>
-        <ImgBox style={{ width: "40%", height: "40%" }}>
-          {props.imgUrl && (
-            <Image
-              src={props.imgUrl}
-              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
-            />
-          )}{" "}
-        </ImgBox>
+        <PostBox>
+          <Postsub>
+            <Avatar
+              style={{
+                backgroundColor: "#87d068",
+                cursor: "pointer",
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "30%",
+                marginRight: "0.5rem",
+                fontSize: "25px",
+                display: "flex",
+                alignItems: "center",
+              }}
+              src={props.profile_img}
+              onClick={OpenModal}
+            >
+              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
+            </Avatar>
+            <PostInfo>
+              <UserInfo>
+                <UserName onClick={OpenModal}>
+                  {props.user_id?.nickname}
+                </UserName>
+                <WritingDt>{props.day}</WritingDt>
+              </UserInfo>
+              <ContentBox>{props.content}</ContentBox>
+            </PostInfo>
+          </Postsub>
+          <ImgBox style={{ width: "40%", height: "40%" }}>
+            {props.imgUrl && (
+              <Image
+                src={props.imgUrl}
+                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+              />
+            )}{" "}
+          </ImgBox>
+          <CommentFrame>
+            <button onClick={commentOn}>
+              <CommentOutlined />
+            </button>
+          </CommentFrame>
+        </PostBox>
+        {isCommentOpen && <CommentBox></CommentBox>}
       </PostFrame>
       <UserProfile status={userprofile} close={CloseModal} user={props} />
       <EditPostModal
@@ -133,7 +154,6 @@ const PostFrame = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   display: flex;
-  flex-direction: column;
   margin-bottom: 10px;
   position: relative;
   cursor: default;
@@ -212,5 +232,40 @@ const ImgBox = styled.div`
 //   height: 40%;
 //   border-radius: 10px;
 // `;
+
+// 포스트와 댓글 박스를 구별해주기 위함
+// 포스트 박스
+const PostBox = styled.div`
+  position: relative;
+  flex-basis: 60%;
+`;
+
+const CommentFrame = styled.div`
+  position: absolute;
+  right: 36%;
+  bottom: 0;
+  & > button {
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    :hover {
+      /* animation: bounce; /* referring directly to the animation's @keyframe declaration */
+      /* animation-duration: 1s; don't forget to set a duration! */
+      transform: scale(1.1);
+      transition: all 200ms ease-in-out;
+    }
+  }
+`;
+
+// 댓글 박스
+const CommentBox = styled.div`
+  flex-basis: 40%;
+  padding: 8px 12px;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  background: #f0f2f5;
+`;
 
 export default Post;
