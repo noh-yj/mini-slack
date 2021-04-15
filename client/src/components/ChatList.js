@@ -9,7 +9,7 @@ function ChatList({ socket }) {
     });
     socket.on('load', (res) => {
       console.log(res);
-      setMsgList((msgList) => [...msgList, ...res]);
+      setMsgList(() => [...res]);
     });
     return () => {
       socket.disconnect();
