@@ -154,6 +154,7 @@ const MoreBtn = styled.button`
   :hover {
     background: #ececec;
     border-radius: 50%;
+    cursor: pointer;
   }
 `;
 
@@ -173,6 +174,7 @@ const Btngroup = styled.div`
     outline: none;
     :hover {
       background: #ececec;
+      cursor: pointer;
     }
   }
 `;

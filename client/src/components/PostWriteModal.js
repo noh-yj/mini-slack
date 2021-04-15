@@ -196,6 +196,7 @@ const AdditionalPost = styled.div`
   justify-content: space-between;
   align-items: center;
   font-weight: 400;
+  cursor: default;
 
   & > div > button {
     background: none;

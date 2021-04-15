@@ -44,7 +44,7 @@ function EditPostModal({ status, close, post_info }) {
           <Container
             onClick={(e) => {
               // setContents(null);
-              setPreview(null);
+              //setPreview(null);
               close(e);
             }}
           >
@@ -182,6 +182,7 @@ const AdditionalPost = styled.div`
   justify-content: space-between;
   align-items: center;
   font-weight: 400;
+  cursor: default;
 
   & > div > button {
     background: none;
