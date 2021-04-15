@@ -52,7 +52,7 @@ const Header = (props) => {
           </LogOut>
         </UserFrame>
       </HeaderFrame>
-      <UpdateUser status={userprofile} close={CloseModal} />
+      <UpdateUser status={userprofile} close={CloseModal} user={user} />
     </>
   );
 };

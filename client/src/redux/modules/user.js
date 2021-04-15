@@ -84,7 +84,7 @@ const updateUserDB = (file, comment_myself, pwd) => {
         });
         setTimeout(() => {
           window.location.reload();
-        }, 500);
+        }, 550);
       })
       .catch((e) => {
         console.log('에러발생', e);
