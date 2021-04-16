@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { WechatOutlined } from '@ant-design/icons';
 import { Empty } from 'antd';
 import Msg from './Msg';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 
-function ChatList({ socket, targetName }) {
-  const [msgList, setMsgList] = useState([]);
+function ChatList({ targetName }) {
+  const dispatch = useDispatch();
+  // 스토어에서 채팅리스트 가져옴
+  const msgList = useSelector((state) => state.chat.chat_list);
+
   useEffect(() => {
-    socket.on('receive', (res) => {
-      setMsgList((msgList) => [...msgList, res]);
-      console.log(res);
-    });
-    socket.on('load', (res) => {
-      console.log(res);
-      setMsgList(() => [...res]);
-    });
+    // 로드될때 채팅 목록 디스패치
+    dispatch(chatActions.loadChatList());
+    // 메세지 보낼때 디스패치
+    dispatch(chatActions.addChatList());
+
     return () => {
-      socket.disconnect();
+      // 채팅 나가면 소켓 연결 해제
+      chatActions.socket.disconnect();
     };
-  }, [socket]);
+  }, [dispatch]);
   return (
     <>
       <Title>

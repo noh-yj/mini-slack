@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 
-function ChatInput({ socket, room }) {
+function ChatInput({ room }) {
+  const dispatch = useDispatch();
   const [msg, setMsg] = useState('');
   const userImg = useSelector((state) => state.user.user?.profile_img);
   const username = useSelector((state) => state.user.user?.nickname);
+  // 채팅 전송 시 방 정보, 유저 이름, 유저 프로필, 메세지 전송
+  const Info = {
+    room: room,
+    username: username,
+    profile_img: userImg,
+    msg: msg,
+  };
   const msgSubmit = () => {
-    socket.emit('send', {
-      room: room,
-      username: username,
-      profile_img: userImg,
-      msg: msg,
-    });
+    // 채팅 전송, 디스패치
+    dispatch(chatActions.msgSubmit(Info));
     setMsg('');
   };
   return (
