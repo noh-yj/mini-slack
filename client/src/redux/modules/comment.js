@@ -70,7 +70,6 @@ const addCommentDB = (post_id, contents) => {
           user_id: res.data.newComment.user.userId,
         };
         dispatch(addComment(post_id, comment_info));
-        history.replace("/main");
       })
       .catch((err) => {
         swal({

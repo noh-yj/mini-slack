@@ -1,8 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { Avatar } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const Comment = (props) => {
+  // console.log(props);
+  const userId = useSelector((state) => state.user.user.uid);
+
   return (
     <>
       <CommentFrame>
@@ -21,6 +26,16 @@ const Comment = (props) => {
           <span>{props.user ? props.user.nickname : "User Name"}</span>
         </UserFrame>
         <CommentBox>{props.content}</CommentBox>
+        {userId === props.user.userId ? (
+          <Btngroup>
+            <button>
+              <EditOutlined />
+            </button>
+            <button>
+              <DeleteOutlined />
+            </button>
+          </Btngroup>
+        ) : null}
       </CommentFrame>
     </>
   );
@@ -48,4 +63,21 @@ const UserFrame = styled.div`
 `;
 
 const CommentBox = styled.p``;
+
+const Btngroup = styled.div`
+  display: inline-block;
+  background: #ffffff;
+  border: solid #ececec;
+  border-radius: 10px;
+  & > button {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ececec;
+    outline: none;
+    :hover {
+      background: #ececec;
+      cursor: pointer;
+    }
+  }
+`;
 export default Comment;
