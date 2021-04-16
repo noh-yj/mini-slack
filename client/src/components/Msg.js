@@ -16,7 +16,7 @@ function Msg(props) {
               <FlexContainer>
                 <Avatar
                   size={40}
-                  style={{ backgroundColor: '#87d068', cursor: 'pointer' }}
+                  style={{ backgroundColor: '#87d068' }}
                   src={props.profile_img}
                 >
                   {props.profile_img === ' ' ? props.nickname[0] : null}

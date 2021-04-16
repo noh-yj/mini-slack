@@ -27,7 +27,6 @@ function Chat(props) {
   }
 
   const [currentSocket, setCurrentSocket] = useState();
-  const myId = props.match.params.myId;
   const makeRoom = [props.match.params.otherId, props.match.params.myId].sort();
   const room = makeRoom[0] + '-' + makeRoom[1];
   const targetName = props.match.params.otherName;
@@ -53,19 +52,8 @@ function Chat(props) {
           <MainRight>
             {currentSocket ? (
               <>
-                <ChatMain
-                  socket={currentSocket}
-                  username={username}
-                  room={room}
-                  myId={myId}
-                  targetName={targetName}
-                />
-                <ChatInput
-                  socket={currentSocket}
-                  username={username}
-                  room={room}
-                  myId={myId}
-                />
+                <ChatMain socket={currentSocket} targetName={targetName} />
+                <ChatInput socket={currentSocket} room={room} />
               </>
             ) : (
               <Spin
@@ -79,7 +67,6 @@ function Chat(props) {
             )}
           </MainRight>
         </MainContent>
-
         <Footer>
           🎨 Palette&nbsp;&nbsp;&nbsp;&nbsp;
           <SmileOutlined spin />

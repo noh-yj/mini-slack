@@ -9,10 +9,10 @@ function ChatList({ socket, targetName }) {
   useEffect(() => {
     socket.on('receive', (res) => {
       setMsgList((msgList) => [...msgList, res]);
-      //   console.log(res);
+      console.log(res);
     });
     socket.on('load', (res) => {
-      //   console.log(res);
+      console.log(res);
       setMsgList(() => [...res]);
     });
     return () => {

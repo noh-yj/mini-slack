@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
+import { useSelector } from 'react-redux';
 
-function ChatInput({ socket, username, room, myId }) {
+function ChatInput({ socket, room }) {
   const [msg, setMsg] = useState('');
+  const userImg = useSelector((state) => state.user.user?.profile_img);
+  const username = useSelector((state) => state.user.user?.nickname);
   const msgSubmit = () => {
     socket.emit('send', {
       room: room,
       username: username,
-      myId: myId,
+      profile_img: userImg,
       msg: msg,
     });
     setMsg('');
