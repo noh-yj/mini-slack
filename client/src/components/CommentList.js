@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { actionCreators as commentActions } from "../redux/modules/comment";
 import Comment from "./Comment";
 
-function CommentList({ post_id }) {
+function CommentList({ post_id, comment_list }) {
+  console.log(comment_list);
   const dispatch = useDispatch();
-  const comment_list = useSelector((state) => state.comment.list);
+  //const comment_list = useSelector((state) => state.comment.list);
   // 서버에 줄 데이터: user_id (리덕스에서 보내기), content, post_id
   // 서버에서 받을 데이터: user_id, user's nicname, user's profile img, content, post_id, comment's id
   const userInfo = useSelector((state) => state.user.user);
@@ -30,10 +31,9 @@ function CommentList({ post_id }) {
   return (
     <CommentListFrame>
       <CommentBox>
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
+        {comment_list?.map((c) => {
+          return <Comment key={c._id} {...c} />;
+        })}
       </CommentBox>
       <WritingBox>
         <ElTextarea

@@ -138,7 +138,12 @@ const Post = (props) => {
             </button>
           </CommentFrame>
         </PostBox>
-        {isCommentOpen && <CommentList post_id={props.post_id} />}
+        {isCommentOpen && (
+          <CommentList
+            post_id={props.post_id}
+            comment_list={props.comment_list}
+          />
+        )}
       </PostFrame>
       <UserProfile status={userprofile} close={CloseModal} user={props} />
       <EditPostModal
