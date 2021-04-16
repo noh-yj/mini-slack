@@ -96,7 +96,7 @@ const Sidebar = (props) => {
                 <Menu.Item
                   key={idx + 'msg'}
                   onClick={() => {
-                    history.push(`/chat/${val.id}/${uid}`);
+                    history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
                   }}
                 >
                   <Avatar

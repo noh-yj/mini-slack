@@ -10,6 +10,7 @@ import ChatMain from '../components/ChatMain';
 import { config } from '../config';
 import socketIOClient from 'socket.io-client';
 import { useSelector } from 'react-redux';
+import ChatInput from '../components/ChatInput';
 
 function Chat(props) {
   const { history } = props;
@@ -25,13 +26,11 @@ function Chat(props) {
     history.replace('/');
   }
 
-  console.log(props.match.params);
   const [currentSocket, setCurrentSocket] = useState();
-  //   const room = props.match.params.otherId + '-' + props.match.params.myId;
   const myId = props.match.params.myId;
-  const rooms = [props.match.params.otherId, props.match.params.myId].sort();
-  const room = rooms[0] + '-' + rooms[1];
-
+  const makeRoom = [props.match.params.otherId, props.match.params.myId].sort();
+  const room = makeRoom[0] + '-' + makeRoom[1];
+  const targetName = props.match.params.otherName;
   const username = useSelector((state) => state.user.user?.nickname);
   const Info = {
     room: room,
@@ -53,12 +52,21 @@ function Chat(props) {
           </MainLeft>
           <MainRight>
             {currentSocket ? (
-              <ChatMain
-                socket={currentSocket}
-                username={username}
-                room={room}
-                myId={myId}
-              />
+              <>
+                <ChatMain
+                  socket={currentSocket}
+                  username={username}
+                  room={room}
+                  myId={myId}
+                  targetName={targetName}
+                />
+                <ChatInput
+                  socket={currentSocket}
+                  username={username}
+                  room={room}
+                  myId={myId}
+                />
+              </>
             ) : (
               <Spin
                 tip='Loading...'
@@ -116,8 +124,7 @@ const MainRight = styled.section`
   flex-basis: 75%;
   padding: 16px 24px;
   min-height: 80vh;
-  &::after {
-  }
+  cursor: default;
 `;
 
 const Footer = styled.div`
@@ -127,6 +134,7 @@ const Footer = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  cursor: default;
 `;
 
 export default Chat;

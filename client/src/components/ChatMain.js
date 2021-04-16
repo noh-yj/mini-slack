@@ -1,19 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import ChatList from './ChatList';
-import ChatInput from './ChatInput';
 
-function ChatMain({ socket, username, room, myId }) {
+function ChatMain({ socket, targetName }) {
   return (
     <>
       <PostListFrame>
-        <ChatList socket={socket} />
-        <ChatInput
-          socket={socket}
-          username={username}
-          room={room}
-          myId={myId}
-        />
+        <ChatList socket={socket} targetName={targetName} />
       </PostListFrame>
     </>
   );
@@ -21,10 +14,10 @@ function ChatMain({ socket, username, room, myId }) {
 
 const PostListFrame = styled.div`
   width: 100%;
-  min-height: 80vh;
+  min-height: 77.5vh;
   background: #ffffff;
   padding: 8px 12px;
-  height: 80vh;
+  height: 77.5vh;
   overflow: auto;
   position: relative;
   ::-webkit-scrollbar {
@@ -38,7 +31,6 @@ const PostListFrame = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: #d8d9dc; /* color of the scroll thumb */
     border-radius: 20px; /* roundness of the scroll thumb */
-    //border: 3px solid orange; /* creates padding around scroll thumb */
   }
 `;
 

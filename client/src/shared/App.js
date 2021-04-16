@@ -32,7 +32,7 @@ function App() {
         <Route path='/signup' exact component={Signup} />
         <Route path='/social/:id' exact component={Social} />
         <Route path='/user/post/:id' exact component={UserPost} />
-        <Route path='/chat/:otherId/:myId' exact component={Chat} />
+        <Route path='/chat/:otherId/:myId/:otherName' exact component={Chat} />
       </ConnectedRouter>
     </>
   );

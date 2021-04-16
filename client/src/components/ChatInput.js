@@ -23,7 +23,10 @@ function ChatInput({ socket, username, room, myId }) {
               전송
             </Button>
           }
-          style={{ padding: '0', paddingLeft: '14px' }}
+          style={{
+            padding: '0',
+            paddingLeft: '14px',
+          }}
           onChange={(e) => {
             setMsg(e.target.value);
           }}
@@ -40,9 +43,8 @@ function ChatInput({ socket, username, room, myId }) {
 }
 
 const InputBox = styled.div`
-  width: 95%;
-  position: absolute;
-  bottom: 20px;
+  width: 100%;
+  bottom: 0;
 `;
 
 export default ChatInput;

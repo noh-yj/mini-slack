@@ -116,7 +116,7 @@ function UpdateUser({ status, close, user }) {
                 )}
               </InputBox>
               <ImgBox>
-                <span>이미지 업로드</span>
+                <span>프로필 사진 업로드</span>
                 <Image
                   width={200}
                   src={preview ? preview : user?.profile_img}

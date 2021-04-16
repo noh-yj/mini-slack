@@ -123,5 +123,6 @@ const Footer = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  cursor: default;
 `;
 export default UserPost;
