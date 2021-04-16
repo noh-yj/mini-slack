@@ -6,6 +6,11 @@ import { useSelector } from "react-redux";
 
 const Comment = (props) => {
   // console.log(props);
+  const [contents, setContents] = React.useState("");
+  const [isEdit, doEdit] = React.useState(false);
+  const changeContents = (e) => {
+    setContents(e.target.value);
+  };
   const userId = useSelector((state) => state.user.user.uid);
 
   return (

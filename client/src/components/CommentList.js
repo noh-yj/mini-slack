@@ -5,7 +5,6 @@ import { actionCreators as commentActions } from "../redux/modules/comment";
 import Comment from "./Comment";
 
 function CommentList({ post_id, comment_list }) {
-  console.log(comment_list);
   const dispatch = useDispatch();
   // const userInfo = useSelector((state) => state.user.user);
   // contents upload

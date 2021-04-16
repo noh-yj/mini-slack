@@ -7,13 +7,14 @@ import { actionCreators as postActions } from "../redux/modules/post";
 const PostList = (props) => {
   const dispatch = useDispatch();
   const post_list = useSelector((state) => state.post.list);
+  const comment_list = useSelector((state) => state.comment.list);
 
   React.useEffect(() => {
     // if (post_list.length === 0) {
     dispatch(postActions.getPostDB());
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [comment_list]);
 
   return (
     <PostListFrame>
