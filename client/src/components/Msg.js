@@ -6,19 +6,16 @@ import { useSelector } from 'react-redux';
 function Msg(props) {
   const me = useSelector((state) => state.user.user);
   let comment;
-  me.nickname !== props.username ? (comment = 0) : (comment = 20);
+  // 내가 말하면 오른쪽에 위치 상대방이 말하면 왼쪽에 위치
+  me?.nickname !== props.username ? (comment = 0) : (comment = 20);
   return (
     <>
-      {me.nickname !== props.username ? (
+      {me?.nickname !== props.username ? (
         <>
           <Row style={{ margin: '10px 0' }}>
             <Col>
               <FlexContainer>
-                <Avatar
-                  size={40}
-                  style={{ backgroundColor: '#87d068' }}
-                  src={props.profile_img}
-                >
+                <Avatar size={40} src={props.profile_img}>
                   {props.profile_img === ' ' ? props.nickname[0] : null}
                 </Avatar>
                 <MsgDiv>{props.msg}</MsgDiv>
@@ -46,6 +43,7 @@ const FlexContainer = styled.div`
 
 const MsgDiv = styled.div`
   width: auto;
+  max-width: 200px;
   word-break: break-all;
   background: #e2e2e2;
   padding: 5px 15px;

@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { Spin } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
-import { Spin } from 'antd';
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
-import { getCookie } from '../shared/Cookie';
 import ChatMain from '../components/ChatMain';
-import { config } from '../config';
-import socketIOClient from 'socket.io-client';
-import { useSelector } from 'react-redux';
 import ChatInput from '../components/ChatInput';
+import { getCookie } from '../shared/Cookie';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 
 function Chat(props) {
+  const dispatch = useDispatch();
   const { history } = props;
   // 쿠키에 저장된 토큰 조회
   const cookie = getCookie('is_login') ? true : false;
@@ -23,24 +23,33 @@ function Chat(props) {
       text: '다시 로그인 해주세요!',
       icon: 'error',
     });
+    // 로그인창으로 이동
     history.replace('/');
   }
-
-  const [currentSocket, setCurrentSocket] = useState();
   const makeRoom = [props.match.params.otherId, props.match.params.myId].sort();
+  // 방
   const room = makeRoom[0] + '-' + makeRoom[1];
+  // 대화 상대 이름
   const targetName = props.match.params.otherName;
+  // 내 이름
   const username = useSelector((state) => state.user.user?.nickname);
+  // 방 생성 정보
   const Info = {
     room: room,
     username: username,
   };
+
   useEffect(() => {
-    setCurrentSocket(socketIOClient(`${config.api}/chat`));
+    // 웹소켓 연결
+    dispatch(chatActions.socketConnect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (currentSocket) {
-    currentSocket.emit('join', Info);
+
+  //   웹소켓 연결이 성공하면 채팅 방 생성
+  if (chatActions.socket) {
+    dispatch(chatActions.joinRoom(Info));
   }
+
   return (
     <>
       <MainFrame>
@@ -50,10 +59,10 @@ function Chat(props) {
             <Sider />
           </MainLeft>
           <MainRight>
-            {currentSocket ? (
+            {chatActions.socket ? (
               <>
-                <ChatMain socket={currentSocket} targetName={targetName} />
-                <ChatInput socket={currentSocket} room={room} />
+                <ChatMain targetName={targetName} />
+                <ChatInput room={room} />
               </>
             ) : (
               <Spin

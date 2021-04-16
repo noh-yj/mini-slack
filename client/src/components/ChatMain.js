@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import ChatList from './ChatList';
 
-function ChatMain({ socket, targetName }) {
+function ChatMain({ targetName }) {
   return (
     <>
       <PostListFrame>
-        <ChatList socket={socket} targetName={targetName} />
+        <ChatList targetName={targetName} />
       </PostListFrame>
     </>
   );

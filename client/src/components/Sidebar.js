@@ -36,7 +36,7 @@ const Sidebar = (props) => {
       <PostListFrame>
         <Menu
           mode='inline'
-          defaultOpenKeys={['sub2']}
+          defaultOpenKeys={['sub1', 'sub2']}
           style={{ width: '100%' }}
         >
           <SubMenu key='sub1' icon={<UserOutlined />} title='유저 목록'>
