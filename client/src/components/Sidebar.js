@@ -107,21 +107,20 @@ const Sidebar = (props) => {
                   }}
                 >
                   {/* 배지 일치여부 문제 */}
-                  {val.nickname === is_user ? (
-                    <Badge dot={is_badge}></Badge>
-                  ) : null}
-                  <Avatar
-                    size={30}
-                    style={{
-                      backgroundColor: '#87d068',
-                      cursor: 'pointer',
-                      marginRight: '20px',
-                    }}
-                    src={val.profile_img}
-                  >
-                    {val.profile_img === ' ' ? val.nickname[0] : null}
-                  </Avatar>
 
+                  <Badge dot={is_badge}>
+                    <Avatar
+                      size={30}
+                      style={{
+                        backgroundColor: '#87d068',
+                        cursor: 'pointer',
+                        marginRight: '20px',
+                      }}
+                      src={val.profile_img}
+                    >
+                      {val.profile_img === ' ' ? val.nickname[0] : null}
+                    </Avatar>
+                  </Badge>
                   {val.nickname}
                 </Menu.Item>
               );

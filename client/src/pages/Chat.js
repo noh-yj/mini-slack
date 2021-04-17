@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
 import { getCookie } from '../shared/Cookie';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { actionCreators as chatActions } from '../redux/modules/chat';
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
@@ -12,7 +12,6 @@ import ChatMain from '../components/ChatMain';
 import ChatInput from '../components/ChatInput';
 
 function Chat(props) {
-  const dispatch = useDispatch();
   const { history } = props;
   // 쿠키에 저장된 토큰 조회
   const cookie = getCookie('is_login') ? true : false;
@@ -34,7 +33,6 @@ function Chat(props) {
   // 내 이름
   const username = useSelector((state) => state.user.user?.nickname);
   // 방 생성 정보
-
   const Info = {
     room: room,
     username: username,
@@ -42,22 +40,20 @@ function Chat(props) {
 
   useEffect(() => {
     // 웹소켓 연결
-    dispatch(chatActions.socketConnect());
-    // 로드될때 채팅 목록 디스패치
-    dispatch(chatActions.loadChatList());
-    // 메세지 보낼때 디스패치
-    dispatch(chatActions.addChatList());
-    return () => {
-      // 채팅 나가면 소켓 연결 해제
+    chatActions.socket.connect();
 
-      dispatch(chatActions.socketDisConnect());
+    return () => {
+      // 채팅 방 나가기
+      chatActions.socket.emit('leave', { room: room });
+      // 채팅 페이지 나가면 웹소켓 연결 해제
+      chatActions.socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, []);
 
   //   웹소켓 연결이 성공하면 채팅 방 생성
   if (chatActions.socket) {
-    dispatch(chatActions.joinRoom(Info));
+    chatActions.socket.emit('join', Info);
   }
   return (
     <>
@@ -70,7 +66,7 @@ function Chat(props) {
           <MainRight>
             {chatActions.socket ? (
               <>
-                <ChatMain targetName={targetName} />
+                <ChatMain targetName={targetName} room={room} />
                 <ChatInput room={room} />
               </>
             ) : (

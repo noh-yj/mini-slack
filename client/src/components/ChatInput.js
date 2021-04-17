@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { actionCreators as chatActions } from '../redux/modules/chat';
 
 function ChatInput({ room }) {
-  const dispatch = useDispatch();
   const [msg, setMsg] = useState('');
   const userImg = useSelector((state) => state.user.user?.profile_img);
   const username = useSelector((state) => state.user.user?.nickname);
+
   // 채팅 전송 시 방 정보, 유저 이름, 유저 프로필, 메세지 전송
   const Info = {
     room: room,
@@ -21,8 +21,13 @@ function ChatInput({ room }) {
     if (msg === '') {
       return;
     }
-    // 채팅 전송, 디스패치
-    dispatch(chatActions.msgSubmit(Info));
+    // 채팅 전송
+    chatActions.socket.emit('send', {
+      room: Info.room,
+      username: Info.username,
+      profile_img: Info.profile_img,
+      msg: Info.msg,
+    });
     setMsg('');
   };
   return (

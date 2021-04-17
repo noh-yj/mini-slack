@@ -28,42 +28,6 @@ const initialState = {
 // 소켓 설정
 const socket = socketIOClient(`${config.api}/chat`);
 
-// 소캣 연결
-const socketConnect = () => {
-  return function () {
-    socket.connect();
-    console.log(socket);
-  };
-};
-// 소캣 연결 해제
-const socketDisConnect = () => {
-  return function () {
-    socket.disconnect();
-    console.log(socket);
-  };
-};
-
-// emit: 서버로 보내는 느낌, on: 서버에서 받는 느낌
-
-// 방 생성하기
-const joinRoom = (Info) => {
-  return function () {
-    socket.emit('join', Info);
-  };
-};
-
-// 메세지 보내기
-const msgSubmit = (Info) => {
-  return function () {
-    socket.emit('send', {
-      room: Info.room,
-      username: Info.username,
-      profile_img: Info.profile_img,
-      msg: Info.msg,
-    });
-  };
-};
-
 // 채팅 목록 불러오기
 const loadChatList = () => {
   return function (dispatch) {
@@ -80,8 +44,8 @@ const addChatList = () => {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
       // // 브라우저 알람 기능 다른사람일 때
-      // dispatch(badge(true));
-      // dispatch(receive(res.username));
+      dispatch(badge(true));
+      dispatch(receive(res.username));
       // if (getState().user.user.nickname !== res.username) {
       //   // 알랍 권한 허용일 경우
       //   if (Notification.permission === 'granted') {
@@ -110,12 +74,12 @@ export default handleActions(
   {
     [GET_MSG]: (state, action) =>
       produce(state, (draft) => {
-        draft.chat_list = action.payload.msg;
+        // draft.chat_list = action.payload.msg;
         draft.is_loading = false;
       }),
     [SET_MSG]: (state, action) =>
       produce(state, (draft) => {
-        draft.chat_list = [...draft.chat_list, action.payload.msg];
+        // draft.chat_list = [...draft.chat_list, action.payload.msg];
       }),
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
@@ -134,10 +98,6 @@ export default handleActions(
 );
 
 const actionCreators = {
-  socketDisConnect,
-  socketConnect,
-  joinRoom,
-  msgSubmit,
   loadChatList,
   addChatList,
   badge,
