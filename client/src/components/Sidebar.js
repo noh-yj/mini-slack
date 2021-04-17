@@ -106,6 +106,7 @@ const Sidebar = (props) => {
                     dispatch(chatActions.badge(false));
                   }}
                 >
+                  {/* 배지 일치여부 문제 */}
                   {val.nickname === is_user ? (
                     <Badge dot={is_badge}></Badge>
                   ) : null}
