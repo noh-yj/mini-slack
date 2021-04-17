@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+// 소셜로그인 용 스피너
+
 function Spinner() {
   return (
     <>

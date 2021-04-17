@@ -17,6 +17,7 @@ import Chat from '../pages/Chat';
 function App() {
   const dispatch = useDispatch();
   const cookie = getCookie('is_login') ? true : false;
+
   useEffect(() => {
     if (cookie) {
       dispatch(userActions.getUserDB());

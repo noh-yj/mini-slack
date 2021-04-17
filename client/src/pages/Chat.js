@@ -41,9 +41,16 @@ function Chat(props) {
 
   useEffect(() => {
     // 웹소켓 연결
-    dispatch(chatActions.socketConnect);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(chatActions.socketConnect());
+    // 로드될때 채팅 목록 디스패치
+    dispatch(chatActions.loadChatList());
+    // 메세지 보낼때 디스패치
+    dispatch(chatActions.addChatList());
+    return () => {
+      // 채팅 나가면 소켓 연결 해제
+      dispatch(chatActions.socketDisConnect());
+    };
+  }, [dispatch]);
 
   //   웹소켓 연결이 성공하면 채팅 방 생성
   if (chatActions.socket) {
@@ -66,6 +73,7 @@ function Chat(props) {
               </>
             ) : (
               <Spin
+                size='large'
                 tip='Loading...'
                 style={{
                   position: 'absolute',
