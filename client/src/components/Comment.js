@@ -1,16 +1,42 @@
 import React from "react";
 import styled from "styled-components";
 import { Avatar } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  CheckSquareOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as commentActions } from "../redux/modules/comment";
 
 const Comment = (props) => {
-  // console.log(props);
-  const [contents, setContents] = React.useState("");
+  const dispatch = useDispatch();
+  const [contents, setContents] = React.useState(props.content);
   const [isEdit, doEdit] = React.useState(false);
+
+  const setEdit = () => {
+    if (isEdit) {
+      doEdit(false);
+      return;
+    }
+    doEdit(true);
+  };
+
   const changeContents = (e) => {
     setContents(e.target.value);
   };
+
+  const updateComment = () => {
+    dispatch(
+      commentActions.updateCommentDB(props.post_id, props._id, contents)
+    );
+  };
+
+  const deleteComment = () => {
+    dispatch(commentActions.deleteCommentDB(props.post_id, props._id));
+  };
+
   const userId = useSelector((state) => state.user.user.uid);
 
   return (
@@ -30,15 +56,37 @@ const Comment = (props) => {
           </Avatar>
           <span>{props.user ? props.user.nickname : "User Name"}</span>
         </UserFrame>
-        <CommentBox>{props.content}</CommentBox>
+        {isEdit ? (
+          <ElTextarea rows={1} value={contents} onChange={changeContents} />
+        ) : (
+          <CommentBox>{props.content}</CommentBox>
+        )}
         {userId === props.user.userId ? (
           <Btngroup>
-            <button>
-              <EditOutlined />
-            </button>
-            <button>
-              <DeleteOutlined />
-            </button>
+            {isEdit ? (
+              <>
+                <button onClick={updateComment}>
+                  <CheckSquareOutlined />
+                </button>
+                <button
+                  onClick={() => {
+                    setEdit(false);
+                    setContents(props.content);
+                  }}
+                >
+                  <RollbackOutlined />
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={setEdit}>
+                  <EditOutlined />
+                </button>
+                <button onClick={deleteComment}>
+                  <DeleteOutlined />
+                </button>
+              </>
+            )}
           </Btngroup>
         ) : null}
       </CommentFrame>
@@ -83,6 +131,27 @@ const Btngroup = styled.div`
       background: #ececec;
       cursor: pointer;
     }
+  }
+`;
+
+const InputBox = styled.input``;
+
+const ElTextarea = styled.textarea`
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+
+  & :focus {
+    border: none;
   }
 `;
 export default Comment;

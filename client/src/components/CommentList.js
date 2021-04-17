@@ -22,7 +22,7 @@ function CommentList({ post_id, comment_list }) {
     <CommentListFrame>
       <CommentBox>
         {comment_list?.map((c) => {
-          return <Comment key={c._id} {...c} />;
+          return <Comment key={c._id} post_id={post_id} {...c} />;
         })}
       </CommentBox>
       <WritingBox>

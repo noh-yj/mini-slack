@@ -24,19 +24,20 @@ const addComment = createAction(ADD_COMMENT, (post_id, comment) => ({
   comment,
 }));
 
-const updateComment = createAction(
-  UPDATE_COMMENT,
-  (post_id, comment_id, comment) => ({
-    post_id,
-    comment_id,
-    comment,
-  })
-);
+// const updateComment = createAction(
+//   UPDATE_COMMENT,
+//   (post_id, comment_id, comment) => ({
+//     post_id,
+//     comment_id,
+//     comment,
+//   })
+// );
 
-const deleteComment = createAction(DELETE_COMMENT, (post_id, comment_id) => ({
-  post_id,
-  comment_id,
-}));
+// const deleteComment = createAction(DELETE_COMMENT, (post_id, comment_id) => ({
+//   post_id,
+//   comment_id,
+// }));
+
 // contains objects that has post_id & comment info
 const initialState = {
   list: {},
@@ -115,10 +116,11 @@ const updateCommentDB = (post_id, comment_id, comment) => {
       commentId: comment_id,
       content: comment,
     };
-    return;
+    console.log(post_id, comment_data);
+
     axios({
       method: "PATCH",
-      url: `${config.api}/comment`,
+      url: `${config.api}/comment/${post_id}`,
       data: comment_data,
     })
       .then((res) => {
@@ -128,7 +130,7 @@ const updateCommentDB = (post_id, comment_id, comment) => {
           text: "댓글을 수정했습니다❕",
           icon: "success",
         });
-        dispatch(updateComment(post_id, comment_id, comment_data));
+        window.location.reload();
       })
       .catch((err) => {
         swal({
@@ -141,16 +143,12 @@ const updateCommentDB = (post_id, comment_id, comment) => {
 };
 
 const deleteCommentDB = (post_id, comment_id) => {
+  console.log(post_id, comment_id);
   return function (dispatch, getState, { history }) {
-    let comment_data = {
-      postId: post_id,
-      commentId: comment_id,
-    };
-    return;
     axios({
-      method: "PATCH",
-      url: `${config.api}/comment`,
-      data: comment_data,
+      method: "DELETE",
+      url: `${config.api}/comment/${post_id}`,
+      data: { commentId: comment_id },
     })
       .then((res) => {
         console.log(res.data);
@@ -159,7 +157,7 @@ const deleteCommentDB = (post_id, comment_id) => {
           text: "댓글을 삭제했습니다❕",
           icon: "success",
         });
-        dispatch(updateComment(post_id, comment_id));
+        window.location.reload();
       })
       .catch((err) => {
         swal({
@@ -188,12 +186,12 @@ export default handleActions(
         draft.list[action.payload.post_id].unshift(action.payload.comment);
         console.log(action.payload.post_id, action.payload.comment);
       }),
-    [UPDATE_COMMENT]: (state, action) =>
-      produce(state, (draft) => {
-        // let data = {[post_id]: com_list, ...}
-        let comment_list = state.list[action.payload.post_id];
-        draft.list[action.payload.post_id] = action.payload.comment_list;
-      }),
+    // [UPDATE_COMMENT]: (state, action) =>
+    //   produce(state, (draft) => {
+    //     let comment_list = state.list[action.payload.post_id];
+    //     let index = comment_list.findIndex();
+    //     draft.list[action.payload.post_id] = action.payload.comment_list;
+    //   }),
   },
   initialState
 );
@@ -203,6 +201,8 @@ const actionCreators = {
   addComment,
   getCommentDB,
   addCommentDB,
+  updateCommentDB,
+  deleteCommentDB,
 };
 
 export { actionCreators };
