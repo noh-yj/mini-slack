@@ -32,6 +32,7 @@ const socket = socketIOClient(`${config.api}/chat`);
 const loadChatList = () => {
   return function (dispatch) {
     dispatch(loading(true));
+
     socket.on('load', (res) => {
       dispatch(getMsg(res));
     });
@@ -43,28 +44,29 @@ const addChatList = () => {
   return function (dispatch, getState) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
-      // // 브라우저 알람 기능 다른사람일 때
+
       dispatch(badge(true));
       dispatch(receive(res.username));
-      // if (getState().user.user.nickname !== res.username) {
-      //   // 알랍 권한 허용일 경우
-      //   if (Notification.permission === 'granted') {
-      //     new Notification(res.username, {
-      //       body: res.msg,
-      //       icon: res.profile_img,
-      //     });
-      //     // 알람 권한이 허용이 아닐 경우
-      //   } else if (Notification.permission !== 'denied') {
-      //     Notification.requestPermission(function (permission) {
-      //       if (permission === 'granted') {
-      //         new Notification(res.username, {
-      //           body: res.msg,
-      //           icon: res.profile_img,
-      //         });
-      //       }
-      //     });
-      //   }
-      // }
+      // 브라우저 알람 기능 다른사람일 때
+      if (getState().user.user.nickname !== res.username) {
+        // 알랍 권한 허용일 경우
+        if (Notification.permission === 'granted') {
+          new Notification(res.username, {
+            body: res.msg,
+            icon: res.profile_img,
+          });
+          // 알람 권한이 허용이 아닐 경우
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission(function (permission) {
+            if (permission === 'granted') {
+              new Notification(res.username, {
+                body: res.msg,
+                icon: res.profile_img,
+              });
+            }
+          });
+        }
+      }
     });
   };
 };
@@ -74,12 +76,12 @@ export default handleActions(
   {
     [GET_MSG]: (state, action) =>
       produce(state, (draft) => {
-        // draft.chat_list = action.payload.msg;
+        draft.chat_list = action.payload.msg;
         draft.is_loading = false;
       }),
     [SET_MSG]: (state, action) =>
       produce(state, (draft) => {
-        // draft.chat_list = [...draft.chat_list, action.payload.msg];
+        draft.chat_list = [...draft.chat_list, action.payload.msg];
       }),
     [LOADING]: (state, action) =>
       produce(state, (draft) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Empty, Spin } from 'antd';
 import { WechatOutlined } from '@ant-design/icons';
@@ -8,20 +8,17 @@ import Msg from './Msg';
 
 function ChatList({ targetName }) {
   const dispatch = useDispatch();
-  const [msgList, setMsgList] = useState([]);
+  const msgList = useSelector((state) => state.chat.chat_list);
   const loading = useSelector((state) => state.chat.is_loading);
-
   useEffect(() => {
     // 로드될때 채팅 목록
     dispatch(chatActions.loadChatList());
-    chatActions.socket.on('load', (res) => {
-      setMsgList(() => [...res]);
-    });
     // 메세지 보낼때
     dispatch(chatActions.addChatList());
-    chatActions.socket.on('receive', (res) => {
-      setMsgList((list) => [...list, res]);
-    });
+    return () => {
+      // 언마운트 시 socket off
+      chatActions.socket.off();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
