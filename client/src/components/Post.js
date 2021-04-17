@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Avatar, Image } from 'antd';
-import UserProfile from './UserProfile';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Avatar, Image } from "antd";
+import UserProfile from "./UserProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
   RedoOutlined,
   CommentOutlined,
-} from '@ant-design/icons';
-import EditPostModal from './EditPostModal';
-import 'animate.css';
+} from "@ant-design/icons";
+import EditPostModal from "./EditPostModal";
+import "animate.css";
 
-import CommentList from './CommentList';
+import CommentList from "./CommentList";
+import { history } from "../redux/configureStore";
 
 const Post = (props) => {
   // Modal control operations
@@ -99,20 +100,20 @@ const Post = (props) => {
           <Postsub>
             <Avatar
               style={{
-                backgroundColor: '#87d068',
-                cursor: 'pointer',
-                width: '3rem',
-                height: '3rem',
-                borderRadius: '30%',
-                marginRight: '0.5rem',
-                fontSize: '25px',
-                display: 'flex',
-                alignItems: 'center',
+                backgroundColor: "#87d068",
+                cursor: "pointer",
+                width: "3rem",
+                height: "3rem",
+                borderRadius: "30%",
+                marginRight: "0.5rem",
+                fontSize: "25px",
+                display: "flex",
+                alignItems: "center",
               }}
               src={props.profile_img}
               onClick={OpenModal}
             >
-              {props.profile_img === ' ' ? props.user_id?.nickname[0] : null}
+              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
             </Avatar>
             <PostInfo>
               <UserInfo>
@@ -121,19 +122,21 @@ const Post = (props) => {
                 </UserName>
                 <WritingDt>{props.day}</WritingDt>
               </UserInfo>
-              <ContentBox>{props.content}</ContentBox>
             </PostInfo>
           </Postsub>
-          <ImgBox style={{ width: '40%', height: '40%' }}>
-            {props.imgUrl && (
-              <Image
-                src={props.imgUrl}
-                style={{ width: '100%', height: '100%', borderRadius: '10px' }}
-              />
-            )}{' '}
-          </ImgBox>
+          <ContentBox>{props.content}</ContentBox>
+          {props.imgUrl && (
+            <Image
+              src={props.imgUrl}
+              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+            />
+          )}
           <CommentFrame>
-            <button onClick={commentOn}>
+            <button
+              onClick={() => {
+                history.push(`/detail/${props.post_id}`);
+              }}
+            >
               <CommentOutlined />
             </button>
           </CommentFrame>
@@ -168,6 +171,7 @@ const PostFrame = styled.div`
 
 const Postsub = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const PostInfo = styled.div``;
@@ -244,15 +248,9 @@ const ImgBox = styled.div`
 
 // 포스트와 댓글 박스를 구별해주기 위함
 // 포스트 박스
-const PostBox = styled.div`
-  position: relative;
-  flex-basis: 50%;
-`;
+const PostBox = styled.div``;
 
 const CommentFrame = styled.div`
-  position: absolute;
-  right: 36%;
-  top: 50%;
   & > button {
     border: none;
     outline: none;
