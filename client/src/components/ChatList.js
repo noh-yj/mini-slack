@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { WechatOutlined } from '@ant-design/icons';
 import { Empty, Spin } from 'antd';
+import { WechatOutlined } from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 import Msg from './Msg';
-import { useSelector } from 'react-redux';
 
 function ChatList({ targetName }) {
+  const dispatch = useDispatch();
   // 스토어에서 채팅리스트 가져옴
   const msgList = useSelector((state) => state.chat.chat_list);
   const loading = useSelector((state) => state.chat.is_loading);
@@ -15,6 +17,12 @@ function ChatList({ targetName }) {
   const bottomView = () => {
     endPoint.current?.scrollIntoView();
   };
+  useEffect(() => {
+    // 로드될때 채팅 목록 디스패치
+    dispatch(chatActions.loadChatList());
+    // 메세지 보낼때 디스패치
+    dispatch(chatActions.addChatList());
+  }, [dispatch]);
 
   useEffect(() => {
     bottomView();
