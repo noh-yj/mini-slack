@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { Spin } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
+import { getCookie } from '../shared/Cookie';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
 import ChatMain from '../components/ChatMain';
 import ChatInput from '../components/ChatInput';
-import { getCookie } from '../shared/Cookie';
-import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as chatActions } from '../redux/modules/chat';
 
 function Chat(props) {
   const dispatch = useDispatch();
@@ -79,6 +79,7 @@ function Chat(props) {
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
+                  transform: 'translate(-50%, -50%)',
                 }}
               />
             )}

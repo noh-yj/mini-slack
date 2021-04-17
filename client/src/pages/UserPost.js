@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FormOutlined, SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
+import { getCookie } from '../shared/Cookie';
 import PostWriteModal from '../components/PostWriteModal';
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
 import UserPostList from '../components/UserPostList';
-import { getCookie } from '../shared/Cookie';
 
 function UserPost(props) {
   const { history } = props;
@@ -19,9 +19,11 @@ function UserPost(props) {
       text: '다시 로그인 해주세요!',
       icon: 'error',
     });
+    // 로그인창으로 이동
     history.replace('/');
   }
-  // Modal control operations
+
+  // PostWriteModal control operations
   const [isModalOpen, setModal] = useState(false);
 
   const modalBtn = () => {
@@ -29,7 +31,6 @@ function UserPost(props) {
   };
 
   const closeModal = (event) => {
-    console.log(event);
     if (event === undefined) {
       setModal(false);
       return;
@@ -53,11 +54,12 @@ function UserPost(props) {
             <UserPostList {...props} />
           </MainRight>
         </MainContent>
+
         <PostWriteBtn onClick={modalBtn}>
           <FormOutlined style={{ fontSize: '30px' }} />
         </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
-        {/* 심심해서 만든거 */}
+
         <Footer>
           🎨 Palette&nbsp;&nbsp;&nbsp;&nbsp;
           <SmileOutlined spin />
@@ -66,6 +68,7 @@ function UserPost(props) {
     </>
   );
 }
+
 const MainFrame = styled.div`
   & > button {
     border: none;
@@ -81,8 +84,6 @@ const MainFrame = styled.div`
     margin: 30px auto;
   }
 `;
-
-// Styling header
 
 const MainContent = styled.section`
   display: flex;

@@ -56,6 +56,7 @@ function UpdateUser({ status, close, user }) {
       }
       dispatch(userActions.updateUserDB(file, comment_myself, pwd));
     } else if (user?.snsId) {
+      // 소셜로그인 유저
       dispatch(userActions.updateUserDB(file, comment_myself));
     }
     close();

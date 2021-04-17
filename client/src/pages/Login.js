@@ -12,14 +12,18 @@ function Login(props) {
   const { history } = props;
   const [user_id, SetUserId] = useState('');
   const [password, setPassword] = useState('');
+  // 비밀번호 찾기
   const [findpwd, setFindpwd] = useState(false);
 
+  // 비밀번호 찾기 모달
   const OpenModal = () => {
     setFindpwd(true);
   };
   const CloseModal = () => {
     setFindpwd(false);
   };
+
+  // 로그인 버튼
   const login = () => {
     if (user_id === '' || password === '') {
       swal({

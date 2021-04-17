@@ -19,6 +19,7 @@ function App() {
   const cookie = getCookie('is_login') ? true : false;
 
   useEffect(() => {
+    // 쿠키(토큰) 값이 존재하면 회원정보를 불러옴(새로고침 시 회원 정보 날라갈때)
     if (cookie) {
       dispatch(userActions.getUserDB());
     }
