@@ -34,6 +34,7 @@ function Chat(props) {
   // 내 이름
   const username = useSelector((state) => state.user.user?.nickname);
   // 방 생성 정보
+
   const Info = {
     room: room,
     username: username,
@@ -46,18 +47,18 @@ function Chat(props) {
     dispatch(chatActions.loadChatList());
     // 메세지 보낼때 디스패치
     dispatch(chatActions.addChatList());
-
     return () => {
       // 채팅 나가면 소켓 연결 해제
-      dispatch(chatActions.socketDisConnect(room));
+
+      dispatch(chatActions.socketDisConnect());
     };
-  }, [dispatch, room]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   //   웹소켓 연결이 성공하면 채팅 방 생성
   if (chatActions.socket) {
     dispatch(chatActions.joinRoom(Info));
   }
-
   return (
     <>
       <MainFrame>

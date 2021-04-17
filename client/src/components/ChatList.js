@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Empty, Spin } from 'antd';
 import { WechatOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+
 import Msg from './Msg';
 
 function ChatList({ targetName }) {

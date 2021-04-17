@@ -32,16 +32,14 @@ const socket = socketIOClient(`${config.api}/chat`);
 const socketConnect = () => {
   return function () {
     socket.connect();
+    console.log(socket);
   };
 };
 // 소캣 연결 해제
-const socketDisConnect = (room) => {
+const socketDisConnect = () => {
   return function () {
-    socket.emit('leave', {
-      room: room,
-    });
-    // socket.disconnect();
-    console.log('연결 해제');
+    socket.disconnect();
+    console.log(socket);
   };
 };
 
@@ -53,6 +51,7 @@ const joinRoom = (Info) => {
     socket.emit('join', Info);
   };
 };
+
 // 메세지 보내기
 const msgSubmit = (Info) => {
   return function () {
@@ -80,28 +79,28 @@ const addChatList = () => {
   return function (dispatch, getState) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
-      // 브라우저 알람 기능 다른사람일 때
-      dispatch(badge(true));
-      dispatch(receive(res.username));
-      if (getState().user.user.nickname !== res.username) {
-        // 알랍 권한 허용일 경우
-        if (Notification.permission === 'granted') {
-          new Notification(res.username, {
-            body: res.msg,
-            icon: res.profile_img,
-          });
-          // 알람 권한이 허용이 아닐 경우
-        } else if (Notification.permission !== 'denied') {
-          Notification.requestPermission(function (permission) {
-            if (permission === 'granted') {
-              new Notification(res.username, {
-                body: res.msg,
-                icon: res.profile_img,
-              });
-            }
-          });
-        }
-      }
+      // // 브라우저 알람 기능 다른사람일 때
+      // dispatch(badge(true));
+      // dispatch(receive(res.username));
+      // if (getState().user.user.nickname !== res.username) {
+      //   // 알랍 권한 허용일 경우
+      //   if (Notification.permission === 'granted') {
+      //     new Notification(res.username, {
+      //       body: res.msg,
+      //       icon: res.profile_img,
+      //     });
+      //     // 알람 권한이 허용이 아닐 경우
+      //   } else if (Notification.permission !== 'denied') {
+      //     Notification.requestPermission(function (permission) {
+      //       if (permission === 'granted') {
+      //         new Notification(res.username, {
+      //           body: res.msg,
+      //           icon: res.profile_img,
+      //         });
+      //       }
+      //     });
+      //   }
+      // }
     });
   };
 };
