@@ -10,6 +10,7 @@ import { history } from '../redux/configureStore';
 const Header = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+
   // 유저 프로필 편집 모달
   const [userprofile, setUserprofile] = useState(false);
   const OpenModal = () => {

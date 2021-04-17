@@ -29,9 +29,13 @@ const socketConnect = () => {
   };
 };
 // 소캣 연결 해제
-const socketDisConnect = () => {
+const socketDisConnect = (room) => {
   return function () {
     socket.disconnect();
+    socket.emit('leave', {
+      room: room,
+    });
+    console.log('연결 해제');
   };
 };
 
@@ -67,9 +71,27 @@ const loadChatList = () => {
 
 // 채팅 내용 추가하기
 const addChatList = () => {
-  return function (dispatch) {
+  return function (dispatch, getState) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
+
+      if (getState().user.user.nickname !== res.username) {
+        if (Notification.permission === 'granted') {
+          new Notification(res.username, {
+            body: res.msg,
+            icon: res.profile_img,
+          });
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission(function (permission) {
+            if (permission === 'granted') {
+              new Notification(res.username, {
+                body: res.msg,
+                icon: res.profile_img,
+              });
+            }
+          });
+        }
+      }
     });
   };
 };

@@ -98,7 +98,7 @@ const getPostDB = () => {
       .then((res) => {
         let post_data = [];
         //let emoji_data = [];
-        console.log(res.data);
+
         res.data.posts.forEach((singleData) => {
           post_data.push({
             comment_list: singleData.comment,
