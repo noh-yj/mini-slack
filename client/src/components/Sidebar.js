@@ -19,6 +19,7 @@ const Sidebar = (props) => {
   let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const uid = useSelector((state) => state.user.user?.uid);
+  // 가입한 회원들 조회
   useEffect(() => {
     axios({
       method: 'get',
@@ -27,6 +28,7 @@ const Sidebar = (props) => {
       setUsers(res.data.users);
     });
   }, []);
+  // 검색 필터
   let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FormOutlined, SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
@@ -52,11 +52,12 @@ const Main = (props) => {
             <PostList />
           </MainRight>
         </MainContent>
+
         <PostWriteBtn onClick={modalBtn}>
           <FormOutlined style={{ fontSize: '30px' }} />
         </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
-        {/* 심심해서 만든거 */}
+
         <Footer>
           🎨 Palette&nbsp;&nbsp;&nbsp;&nbsp;
           <SmileOutlined spin />
@@ -81,8 +82,6 @@ const MainFrame = styled.div`
     margin: 30px auto;
   }
 `;
-
-// Styling header
 
 const MainContent = styled.section`
   display: flex;

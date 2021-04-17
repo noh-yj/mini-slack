@@ -19,11 +19,13 @@ const logOut = createAction(LOG_OUT, () => ({}));
 const initialState = {
   user: null,
   is_login: false,
+  is_loading: false,
 };
-
+// 회원 정보 조회
 const getUserDB = () => {
   return function (dispatch, getState, { history }) {
     const jwtToken = getCookie('is_login');
+    // 헤더에 토큰 default
     axios.defaults.headers.common['token'] = `${jwtToken}`;
 
     axios({
@@ -47,16 +49,18 @@ const getUserDB = () => {
       });
   };
 };
-
+// 회원 정보 수정
 const updateUserDB = (file, comment_myself, pwd) => {
   return function (dispatch, getState, { history }) {
+    // 회원정보 수정 시 비밀번호 변경하지 않는 경우 str null로 보냄 (서버랑 약속)
     if (pwd === '') {
       pwd = 'null';
     }
+    // 회원정보 수정 시 프로필 사진 변경하지 않는 경우 기존 img_url 보냄 (서버랑 약속)
     if (file === null) {
       file = getState().user.user.profile_img;
     }
-
+    // 변경된 값을 FormData에 담음
     let formData = new FormData();
     formData.append('profile_img', file);
     formData.append('comment_myself', comment_myself);
@@ -82,6 +86,7 @@ const updateUserDB = (file, comment_myself, pwd) => {
           title: '회원정보가 변경되었습니다😊',
           icon: 'success',
         });
+        // 회원 정보 변경 시 최신화를 위해 새로고침
         setTimeout(() => {
           window.location.reload();
         }, 550);
@@ -95,7 +100,7 @@ const updateUserDB = (file, comment_myself, pwd) => {
       });
   };
 };
-
+// 로그인
 const loginDB = (user_id, password) => {
   return function (dispatch, getState, { history }) {
     axios({
@@ -107,8 +112,11 @@ const loginDB = (user_id, password) => {
       },
     })
       .then((res) => {
+        // 발급 받은 토큰
         const jwtToken = res.data.token;
+        // 쿠키에 저장
         setCookie('is_login', jwtToken);
+        // 헤더에 토큰 default
         axios.defaults.headers.common['token'] = `${jwtToken}`;
         dispatch(
           setUser({
@@ -120,6 +128,7 @@ const loginDB = (user_id, password) => {
             snsId: res.data.user.snsId,
           }),
         );
+        // 뒤로가기 시 main이 보이게 끔 replace 사용(사용자 경험 개선)
         history.replace('/main');
       })
       .catch((e) => {
@@ -133,7 +142,7 @@ const loginDB = (user_id, password) => {
       });
   };
 };
-
+// 소셜로그인
 const socialLoginDB = (id) => {
   return function (dispatch, getState, { history }) {
     axios({
@@ -144,8 +153,11 @@ const socialLoginDB = (id) => {
       },
     })
       .then((res) => {
+        // 발급 받은 토큰
         const jwtToken = res.data.token;
+        // 쿠키에 저장
         setCookie('is_login', jwtToken);
+        // 헤더에 토큰 default
         axios.defaults.headers.common['token'] = `${jwtToken}`;
         dispatch(
           setUser({
@@ -157,6 +169,7 @@ const socialLoginDB = (id) => {
             snsId: res.data.user.snsId,
           }),
         );
+        // 뒤로가기 시 main이 보이게 끔 replace 사용(사용자 경험 개선)
         history.replace('/main');
       })
       .catch((e) => {
@@ -164,7 +177,7 @@ const socialLoginDB = (id) => {
       });
   };
 };
-
+// 회원가입
 const signupDB = (user_email, password, user_name) => {
   return function (dispatch, getState, { history }) {
     axios({
@@ -182,6 +195,7 @@ const signupDB = (user_email, password, user_name) => {
           title: '회원가입이 완료되었습니다😊',
           icon: 'success',
         });
+        // 뒤로가기 시 login쪽이 보이게 끔 replace 사용(사용자 경험 개선)
         history.replace('/');
       })
       .catch((e) => {
@@ -209,6 +223,7 @@ export default handleActions(
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
+        // 로그아웃 시 쿠키 삭제
         deleteCookie('is_login');
         draft.user = null;
         draft.is_login = false;

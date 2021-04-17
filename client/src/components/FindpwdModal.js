@@ -6,7 +6,9 @@ import swal from 'sweetalert';
 import axios from 'axios';
 import { config } from '../config';
 
-function DeleteModal({ status, close }) {
+function FindpwdModal({ status, close }) {
+  // 비밀번호 찾기 => 이메일을 입력하면 서버에서 해당 메일에 임시 비밀번호를 보내주는 원리를 이용
+  // 이후 임시 비밀번호로 로그인 후 프로필 편집에서 비밀번호를 변경
   const [user_id, SetUserId] = useState('');
   const findPwd = () => {
     if (user_id === '') {
@@ -116,4 +118,4 @@ const Title = styled.div`
   color: #0d0d0d;
   margin-bottom: 5px;
 `;
-export default DeleteModal;
+export default FindpwdModal;

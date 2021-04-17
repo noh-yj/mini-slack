@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 import { Image } from 'antd';
 
+// 유저 프로필 모달
 function UserProfile({ status, close, user }) {
   return (
     <>

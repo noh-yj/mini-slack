@@ -1,23 +1,22 @@
-import { createAction, handleActions } from "redux-actions";
-import produce from "immer";
-import { getCookie } from "../../shared/Cookie";
-import moment from "moment";
-import "moment/locale/ko";
+import { createAction, handleActions } from 'redux-actions';
+import produce from 'immer';
+import { getCookie } from '../../shared/Cookie';
+import 'moment/locale/ko';
 
-import axios from "axios";
-import { config } from "../../config";
-import swal from "sweetalert";
+import axios from 'axios';
+import { config } from '../../config';
+import swal from 'sweetalert';
 // import comment from "./comment";
 // import user from "./user";
 
 // actions
-const SET_POST = "SET_POST";
-const ADD_POST = "ADD_POST";
-const LOADING = "LOADING";
-const UPDATE_POST = "UPDATE_POST";
-const DELETE_POST = "DELETE_POST";
+const SET_POST = 'SET_POST';
+const ADD_POST = 'ADD_POST';
+const LOADING = 'LOADING';
+const UPDATE_POST = 'UPDATE_POST';
+const DELETE_POST = 'DELETE_POST';
 
-// action creator functions\
+// action creator functions
 // paging parameter will be added for infinity scroll
 const setPost = createAction(SET_POST, (post_list) => ({
   post_list,
@@ -33,7 +32,7 @@ const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 
 //initial state
 const initialState = {
-  is_loading: true,
+  is_loading: false,
   list: [],
   paging: { start: null, size: 5 },
 };
@@ -46,15 +45,15 @@ const addPostDB = (content, item) => {
     console.log(content, item);
     let formData = new FormData();
 
-    formData.append("content", content);
-    formData.append("BoardImg", item);
+    formData.append('content', content);
+    formData.append('BoardImg', item);
 
     const postDB = {
       url: `${config.api}/board`,
-      method: "POST",
+      method: 'POST',
       data: formData,
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     };
 
@@ -76,9 +75,9 @@ const addPostDB = (content, item) => {
       })
       .catch((error) => {
         swal({
-          title: "업로드 실패 🙄",
-          text: "뭔가.. 잘못됐어요!",
-          icon: "error",
+          title: '업로드 실패 🙄',
+          text: '뭔가.. 잘못됐어요!',
+          icon: 'error',
         });
       });
   };
@@ -89,17 +88,17 @@ const getPostDB = () => {
   return function (dispatch, getState, { history }) {
     const options = {
       url: `${config.api}/board`,
-      method: "GET",
+      method: 'GET',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     };
     axios(options)
       .then((res) => {
         let post_data = [];
         //let emoji_data = [];
-        console.log(res.data);
+
         res.data.posts.forEach((singleData) => {
           post_data.push({
             comment_list: singleData.comment,
@@ -107,7 +106,7 @@ const getPostDB = () => {
             imgUrl: singleData.imgUrl,
             user_id: singleData.user,
             profile_img: singleData.user?.profile_img,
-            day: singleData.createdAt.split("T")[0],
+            day: singleData.createdAt.split('T')[0],
             post_id: singleData._id,
           });
         });
@@ -121,12 +120,13 @@ const getPostDB = () => {
   };
 };
 
-// userPost
+// userPost 특정 유저가 작성한 게시물 조회
 const getUserPostDB = (id) => {
   return function (dispatch, getState, { history }) {
-    const jwtToken = getCookie("is_login");
+    dispatch(loading(true));
+    const jwtToken = getCookie('is_login');
     axios({
-      method: "get",
+      method: 'get',
       url: `${config.api}/member/${id}`,
       headers: {
         token: `${jwtToken}`,
@@ -142,7 +142,7 @@ const getUserPostDB = (id) => {
             imgUrl: singleData.imgUrl,
             user_id: singleData.user,
             profile_img: singleData.user?.profile_img,
-            day: singleData.createdAt.split("T")[0],
+            day: singleData.createdAt.split('T')[0],
             post_id: singleData._id,
           });
         });
@@ -150,7 +150,10 @@ const getUserPostDB = (id) => {
       })
       .catch((error) => {
         if (error.res) {
-          window.alert(error.res.data.errorMessage);
+          swal({
+            title: error.res.data.errorMessage,
+            icon: 'error',
+          });
         }
       });
   };
@@ -161,32 +164,32 @@ const updatePostDB = (post_id, content, item) => {
   return function (dispatch, getState, { history }) {
     let formData = new FormData();
 
-    formData.append("content", content);
-    formData.append("BoardImg", item);
+    formData.append('content', content);
+    formData.append('BoardImg', item);
 
     const options = {
       url: `${config.api}/board/${post_id}`,
-      method: "PATCH",
+      method: 'PATCH',
       data: formData,
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     };
     axios(options)
       .then((res) => {
         dispatch(updatePost(post_id, { content: content, img_url: item }));
         swal({
-          title: "수정 성공 ☺",
-          text: "게시글 수정에 성공하였습니다❕",
-          icon: "success",
+          title: '수정 성공 ☺',
+          text: '게시글 수정에 성공하였습니다❕',
+          icon: 'success',
         });
         window.location.reload();
       })
       .catch((error) => {
         swal({
-          title: "수정 실패 🙄",
-          text: "뭔가.. 잘못됐어요!",
-          icon: "error",
+          title: '수정 실패 🙄',
+          text: '뭔가.. 잘못됐어요!',
+          icon: 'error',
         });
       });
   };
@@ -197,11 +200,11 @@ const deletePostDB = (post_id) => {
   return function (dispatch, getState, { history }) {
     const options = {
       url: `${config.api}/board/${post_id}`,
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         // 백 분들과 맞춰보기
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     };
     axios(options)
@@ -209,16 +212,16 @@ const deletePostDB = (post_id) => {
         // 삭제할 건지 말지 한 번 더 물어볼까?
         dispatch(deletePost(post_id));
         swal({
-          title: "삭제 성공 👋",
+          title: '삭제 성공 👋',
           closeOnClickOutside: false,
         });
         window.location.reload();
       })
       .catch((error) => {
         swal({
-          title: "삭제 실패 🙄",
-          text: "뭔가.. 잘못됐어요!",
-          icon: "error",
+          title: '삭제 실패 🙄',
+          text: '뭔가.. 잘못됐어요!',
+          icon: 'error',
         });
       });
   };
@@ -253,7 +256,7 @@ export default handleActions(
         draft.is_loading = action.payload.is_loading;
       }),
   },
-  initialState
+  initialState,
 );
 
 // action creator

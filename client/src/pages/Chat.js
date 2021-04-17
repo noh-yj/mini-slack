@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { Spin } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
+import { getCookie } from '../shared/Cookie';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
 import ChatMain from '../components/ChatMain';
 import ChatInput from '../components/ChatInput';
-import { getCookie } from '../shared/Cookie';
-import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as chatActions } from '../redux/modules/chat';
 
 function Chat(props) {
   const dispatch = useDispatch();
@@ -46,11 +46,12 @@ function Chat(props) {
     dispatch(chatActions.loadChatList());
     // 메세지 보낼때 디스패치
     dispatch(chatActions.addChatList());
+
     return () => {
       // 채팅 나가면 소켓 연결 해제
-      dispatch(chatActions.socketDisConnect());
+      dispatch(chatActions.socketDisConnect(room));
     };
-  }, [dispatch]);
+  }, [dispatch, room]);
 
   //   웹소켓 연결이 성공하면 채팅 방 생성
   if (chatActions.socket) {
@@ -79,6 +80,7 @@ function Chat(props) {
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
+                  transform: 'translate(-50%, -50%)',
                 }}
               />
             )}

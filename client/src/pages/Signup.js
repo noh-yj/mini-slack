@@ -17,9 +17,9 @@ function Signup(props) {
   const [user_name, setUserName] = useState('');
   const [chk_userId, setChkUserId] = useState(false);
 
+  // 회원가입 버튼
   const signup = () => {
     // 유효성 검증
-
     if (
       password === '' ||
       passwordCheck === '' ||
@@ -63,13 +63,14 @@ function Signup(props) {
     }
     dispatch(userActions.signupDB(user_email, password, user_name));
   };
+  // 중복확인 버튼
   const checkEmail = () => {
+    // 유효성 검증
     if (user_email === '') {
       swal({
         title: '아이디를 입력해주세요.',
         icon: 'warning',
       });
-
       return;
     }
     if (!emailCheck(user_email)) {

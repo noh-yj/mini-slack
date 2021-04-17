@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Avatar, Image } from "antd";
-import UserProfile from "./UserProfile";
-import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as postActions } from "../redux/modules/post";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Avatar, Image } from 'antd';
+import UserProfile from './UserProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as postActions } from '../redux/modules/post';
 import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
   RedoOutlined,
   CommentOutlined,
-} from "@ant-design/icons";
-import EditPostModal from "./EditPostModal";
-import "animate.css";
+} from '@ant-design/icons';
+import EditPostModal from './EditPostModal';
+import 'animate.css';
 
-import CommentList from "./CommentList";
+import CommentList from './CommentList';
 
 const Post = (props) => {
   // Modal control operations
@@ -56,7 +56,7 @@ const Post = (props) => {
     console.log(props.post_id);
     dispatch(postActions.deletePostDB(props.post_id));
   };
-
+  // 유저 프로필 모달
   const [userprofile, setUserprofile] = useState(false);
   const OpenModal = () => {
     setUserprofile(true);
@@ -99,20 +99,20 @@ const Post = (props) => {
           <Postsub>
             <Avatar
               style={{
-                backgroundColor: "#87d068",
-                cursor: "pointer",
-                width: "3rem",
-                height: "3rem",
-                borderRadius: "30%",
-                marginRight: "0.5rem",
-                fontSize: "25px",
-                display: "flex",
-                alignItems: "center",
+                backgroundColor: '#87d068',
+                cursor: 'pointer',
+                width: '3rem',
+                height: '3rem',
+                borderRadius: '30%',
+                marginRight: '0.5rem',
+                fontSize: '25px',
+                display: 'flex',
+                alignItems: 'center',
               }}
               src={props.profile_img}
               onClick={OpenModal}
             >
-              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
+              {props.profile_img === ' ' ? props.user_id?.nickname[0] : null}
             </Avatar>
             <PostInfo>
               <UserInfo>
@@ -124,13 +124,13 @@ const Post = (props) => {
               <ContentBox>{props.content}</ContentBox>
             </PostInfo>
           </Postsub>
-          <ImgBox style={{ width: "40%", height: "40%" }}>
+          <ImgBox style={{ width: '40%', height: '40%' }}>
             {props.imgUrl && (
               <Image
                 src={props.imgUrl}
-                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+                style={{ width: '100%', height: '100%', borderRadius: '10px' }}
               />
-            )}{" "}
+            )}{' '}
           </ImgBox>
           <CommentFrame>
             <button onClick={commentOn}>

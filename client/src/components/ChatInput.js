@@ -17,6 +17,10 @@ function ChatInput({ room }) {
     msg: msg,
   };
   const msgSubmit = () => {
+    // 아무것도 입력하지 않은 경우 리턴
+    if (msg === '') {
+      return;
+    }
     // 채팅 전송, 디스패치
     dispatch(chatActions.msgSubmit(Info));
     setMsg('');
