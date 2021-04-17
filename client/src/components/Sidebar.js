@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Menu, Avatar, Input } from 'antd';
+import { Menu, Avatar, Input, Badge } from 'antd';
 import {
   MessageOutlined,
   UserOutlined,
@@ -11,14 +11,18 @@ import {
 import axios from 'axios';
 import { config } from '../config';
 import { history } from '../redux/configureStore';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as chatActions } from '../redux/modules/chat';
 
 const { SubMenu } = Menu;
 
 const Sidebar = (props) => {
+  const dispatch = useDispatch();
   let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const uid = useSelector((state) => state.user.user?.uid);
+  const is_badge = useSelector((state) => state.chat.is_badge);
+  const is_user = useSelector((state) => state.chat.receive_user);
   // 가입한 회원들 조회
   useEffect(() => {
     axios({
@@ -99,8 +103,12 @@ const Sidebar = (props) => {
                   key={idx + 'msg'}
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
+                    dispatch(chatActions.badge(false));
                   }}
                 >
+                  {val.nickname === is_user ? (
+                    <Badge dot={is_badge}></Badge>
+                  ) : null}
                   <Avatar
                     size={30}
                     style={{
@@ -112,6 +120,7 @@ const Sidebar = (props) => {
                   >
                     {val.profile_img === ' ' ? val.nickname[0] : null}
                   </Avatar>
+
                   {val.nickname}
                 </Menu.Item>
               );

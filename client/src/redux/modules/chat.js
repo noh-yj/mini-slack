@@ -7,16 +7,22 @@ import { config } from '../../config';
 const GET_MSG = 'GET_MSG';
 const SET_MSG = 'SET_MSG';
 const LOADING = 'LOADING';
+const BADGE = 'BADGE';
+const RECEIVE = 'RECEIVE';
 
 // 액션 생성함수
 const getMsg = createAction(GET_MSG, (msg) => ({ msg }));
 const setMsg = createAction(SET_MSG, (msg) => ({ msg }));
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
+const badge = createAction(BADGE, (is_badge) => ({ is_badge }));
+const receive = createAction(RECEIVE, (username) => ({ username }));
 
 // initialState
 const initialState = {
   chat_list: [],
   is_loading: false,
+  is_badge: false,
+  receive_username: '',
 };
 
 // 소켓 설정
@@ -31,10 +37,10 @@ const socketConnect = () => {
 // 소캣 연결 해제
 const socketDisConnect = (room) => {
   return function () {
-    socket.disconnect();
     socket.emit('leave', {
       room: room,
     });
+    // socket.disconnect();
     console.log('연결 해제');
   };
 };
@@ -74,13 +80,17 @@ const addChatList = () => {
   return function (dispatch, getState) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
-
+      // 브라우저 알람 기능 다른사람일 때
+      dispatch(badge(true));
+      dispatch(receive(res.username));
       if (getState().user.user.nickname !== res.username) {
+        // 알랍 권한 허용일 경우
         if (Notification.permission === 'granted') {
           new Notification(res.username, {
             body: res.msg,
             icon: res.profile_img,
           });
+          // 알람 권한이 허용이 아닐 경우
         } else if (Notification.permission !== 'denied') {
           Notification.requestPermission(function (permission) {
             if (permission === 'granted') {
@@ -112,6 +122,14 @@ export default handleActions(
       produce(state, (draft) => {
         draft.is_loading = action.payload.is_loading;
       }),
+    [BADGE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.is_badge = action.payload.is_badge;
+      }),
+    [RECEIVE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.receive_username = action.payload.username;
+      }),
   },
   initialState,
 );
@@ -123,6 +141,7 @@ const actionCreators = {
   msgSubmit,
   loadChatList,
   addChatList,
+  badge,
   socket,
 };
 
