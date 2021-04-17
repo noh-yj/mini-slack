@@ -18,13 +18,12 @@ function CommentList({ post_id, comment_list }) {
     setContents("");
   };
 
+  React.useEffect(() => {
+    dispatch(commentActions.getCommentDB(post_id));
+  }, []);
+
   return (
     <CommentListFrame>
-      <CommentBox>
-        {comment_list?.map((c) => {
-          return <Comment key={c._id} post_id={post_id} {...c} />;
-        })}
-      </CommentBox>
       <WritingBox>
         <ElTextarea
           wrap="hard"
@@ -34,22 +33,23 @@ function CommentList({ post_id, comment_list }) {
           onChange={changeContents}
           value={contents}
         />
-        <WriteCommentBtn onClick={addComment}>
-          작<br />성
-        </WriteCommentBtn>
+        <WriteCommentBtn onClick={addComment}>작 성</WriteCommentBtn>
       </WritingBox>
+      <CommentBox>
+        {comment_list?.map((c) => {
+          return <Comment key={c._id} post_id={post_id} {...c} />;
+        })}
+      </CommentBox>
     </CommentListFrame>
   );
 }
 
 const CommentListFrame = styled.div`
-  flex-basis: 50%;
   padding: 8px 12px;
   border: 1px solid #ececec;
   border-radius: 10px;
   background: #f0f2f5;
   position: relative;
-  max-height: 80%;
 `;
 
 const CommentBox = styled.div`
@@ -73,9 +73,6 @@ const CommentBox = styled.div`
 
 const WritingBox = styled.div`
   width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
   display: flex;
 `;
 

@@ -37,7 +37,7 @@ const Comment = (props) => {
     dispatch(commentActions.deleteCommentDB(props.post_id, props._id));
   };
 
-  const userId = useSelector((state) => state.user.user.uid);
+  //const userId = useSelector((state) => state.user.user.uid);
 
   return (
     <>
@@ -61,7 +61,7 @@ const Comment = (props) => {
         ) : (
           <CommentBox>{props.content}</CommentBox>
         )}
-        {userId === props.user.userId ? (
+        {/* {userId === props.user.userId ? (
           <Btngroup>
             {isEdit ? (
               <>
@@ -88,7 +88,7 @@ const Comment = (props) => {
               </>
             )}
           </Btngroup>
-        ) : null}
+        ) : null} */}
       </CommentFrame>
     </>
   );
@@ -99,11 +99,12 @@ const CommentFrame = styled.div`
   background: white;
   border-radius: 10px;
   padding: 4px 10px;
-  margin-bottom: 8px;
+  margin: 8px 0;
+  display: flex;
 `;
 
 const UserFrame = styled.div`
-  width: 100%;
+  width: 30%;
   display: flex;
   align-items: center;
   padding: 10px 0 12px 0;
@@ -115,17 +116,22 @@ const UserFrame = styled.div`
   }
 `;
 
-const CommentBox = styled.p``;
+const CommentBox = styled.p`
+  width: 60%;
+  padding: 10px 0 12px;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+`;
 
 const Btngroup = styled.div`
-  display: inline-block;
-  background: #ffffff;
-  border: solid #ececec;
+  display: flex;
   border-radius: 10px;
   & > button {
     background: none;
     border: none;
-    border-bottom: 1px solid #ececec;
+    border: 1px solid #ececec;
+    border-radius: 10px;
     outline: none;
     :hover {
       background: #ececec;

@@ -17,28 +17,10 @@ import "animate.css";
 import CommentList from "./CommentList";
 import { history } from "../redux/configureStore";
 
-const Post = (props) => {
-  // Modal control operations
-  const [isModalOpen, setModal] = useState(false);
-  const [isCommentOpen, openCommentBox] = useState(false);
-
-  const modalBtn = () => {
-    setModal(true);
-  };
-
-  const closeModal = (event) => {
-    if (event === undefined) {
-      setModal(false);
-      return;
-    }
-    // 현재 함수가 걸려있는 target 과 구분해주기 위함.
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-    setModal(false);
-  };
-
+const Detail = (props) => {
+  console.log(props);
   const dispatch = useDispatch();
+
   const userInfo = useSelector((state) => state.user.user);
   const [isOpen, setToggle] = useState(false);
   const toggleBtn = () => {
@@ -62,84 +44,67 @@ const Post = (props) => {
   const OpenModal = () => {
     setUserprofile(true);
   };
-  const CloseModal = () => {
-    setUserprofile(false);
-  };
+  // const CloseModal = () => {
+  //   setUserprofile(false);
+  // };
+
+  // const commentOn = () => {
+  //   if (!isCommentOpen) {
+  //     openCommentBox(true);
+  //     return;
+  //   }
+  //   openCommentBox(false);
+  // };
 
   return (
     <>
-      <PostFrame>
-        {userInfo?.uid === props.user_id.userId ? (
-          <MoreBtn onClick={toggleBtn}>
-            <MoreOutlined />
-          </MoreBtn>
-        ) : null}
+      {props.postInfo && (
+        <PostFrame>
+          <PostBox>
+            <Postsub>
+              <Avatar
+                style={{
+                  backgroundColor: "#87d068",
+                  cursor: "pointer",
+                  width: "3rem",
+                  height: "3rem",
+                  borderRadius: "30%",
+                  marginRight: "0.5rem",
+                  fontSize: "25px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                src={props.postInfo?.user_id.profile_img}
+                onClick={OpenModal}
+              >
+                {props.postInfo?.user_id.profile_img === " "
+                  ? props.postInfo?.user_id.nickname[0]
+                  : null}
+              </Avatar>
+              <PostInfo>
+                <UserInfo>
+                  <UserName onClick={OpenModal}>
+                    {props.postInfo?.user_id.nickname}
+                  </UserName>
+                  <WritingDt>{props.postInfo?.day}</WritingDt>
+                </UserInfo>
+              </PostInfo>
+            </Postsub>
+            <ContentBox>{props.postInfo?.content}</ContentBox>
+            {props.postInfo?.imgUrl && (
+              <Image
+                src={props.postInfo?.imgUrl}
+                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+              />
+            )}
+          </PostBox>
 
-        {isOpen && (
-          <Btngroup>
-            <button onClick={modalBtn}>
-              <EditOutlined />
-            </button>
-            <button>
-              <DeleteOutlined onClick={deletePost} />
-            </button>
-            <button onClick={closeToggle}>
-              <RedoOutlined />
-            </button>
-          </Btngroup>
-        )}
-        <PostBox>
-          <Postsub>
-            <Avatar
-              style={{
-                backgroundColor: "#87d068",
-                cursor: "pointer",
-                width: "3rem",
-                height: "3rem",
-                borderRadius: "30%",
-                marginRight: "0.5rem",
-                fontSize: "25px",
-                display: "flex",
-                alignItems: "center",
-              }}
-              src={props.profile_img}
-              onClick={OpenModal}
-            >
-              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
-            </Avatar>
-            <PostInfo>
-              <UserInfo>
-                <UserName onClick={OpenModal}>
-                  {props.user_id?.nickname}
-                </UserName>
-                <WritingDt>{props.day}</WritingDt>
-              </UserInfo>
-            </PostInfo>
-          </Postsub>
-          <ContentBox>{props.content}</ContentBox>
-          {props.imgUrl && (
-            <Image
-              src={props.imgUrl}
-              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
-            />
-          )}
-          <CommentFrame>
-            <button
-              onClick={() => {
-                history.push(`/detail/${props.post_id}`);
-              }}
-            >
-              <CommentOutlined />
-            </button>
-          </CommentFrame>
-        </PostBox>
-      </PostFrame>
-      <UserProfile status={userprofile} close={CloseModal} user={props} />
-      <EditPostModal
-        status={isModalOpen}
-        close={closeModal}
-        post_info={props}
-      />
+          <CommentList
+            post_id={props.postInfo.post_id}
+            comment_list={props.postInfo.comment_list}
+          />
+        </PostFrame>
+      )}
     </>
   );
 };
@@ -150,9 +115,11 @@ const PostFrame = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
   position: relative;
   cursor: default;
+  background: white;
 `;
 
 const Postsub = styled.div`
@@ -236,4 +203,4 @@ const CommentFrame = styled.div`
   }
 `;
 
-export default Post;
+export default Detail;
