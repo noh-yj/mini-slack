@@ -25,7 +25,7 @@ const initialState = {
   receive_username: '',
 };
 
-// 소켓 설정
+// 소켓 설정(전역으로 사용하기위해 export)
 const socket = socketIOClient(`${config.api}/chat`);
 
 // 채팅 목록 불러오기
@@ -45,10 +45,11 @@ const addChatList = () => {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
 
-      dispatch(badge(true));
-      dispatch(receive(res.username));
-      // 브라우저 알람 기능 다른사람일 때
+      // 알람 기능 다른사람일 때
       if (getState().user.user.nickname !== res.username) {
+        // 테스트 중
+        dispatch(badge(true));
+        dispatch(receive(res.username));
         // 알랍 권한 허용일 경우
         if (Notification.permission === 'granted') {
           new Notification(res.username, {

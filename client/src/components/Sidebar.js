@@ -22,7 +22,7 @@ const Sidebar = (props) => {
   const [search, setSearch] = useState('');
   const uid = useSelector((state) => state.user.user?.uid);
   const is_badge = useSelector((state) => state.chat.is_badge);
-  const is_user = useSelector((state) => state.chat.receive_user);
+  const alert_user = useSelector((state) => state.chat.receive_username);
   // 가입한 회원들 조회
   useEffect(() => {
     axios({
@@ -103,25 +103,45 @@ const Sidebar = (props) => {
                   key={idx + 'msg'}
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
-                    dispatch(chatActions.badge(false));
+                    if (val.nickname === alert_user) {
+                      dispatch(chatActions.badge(false));
+                    }
                   }}
                 >
-                  {/* 배지 일치여부 문제 */}
-
-                  <Badge dot={is_badge}>
-                    <Avatar
-                      size={30}
-                      style={{
-                        backgroundColor: '#87d068',
-                        cursor: 'pointer',
-                        marginRight: '20px',
-                      }}
-                      src={val.profile_img}
-                    >
-                      {val.profile_img === ' ' ? val.nickname[0] : null}
-                    </Avatar>
-                  </Badge>
-                  {val.nickname}
+                  {/* 배지 테스트 중 */}
+                  {val.nickname === alert_user ? (
+                    <>
+                      <Badge dot={is_badge}>
+                        <Avatar
+                          size={30}
+                          style={{
+                            backgroundColor: '#87d068',
+                            cursor: 'pointer',
+                            marginRight: '20px',
+                          }}
+                          src={val.profile_img}
+                        >
+                          {val.profile_img === ' ' ? val.nickname[0] : null}
+                        </Avatar>
+                      </Badge>
+                      {val.nickname}
+                    </>
+                  ) : (
+                    <>
+                      <Avatar
+                        size={30}
+                        style={{
+                          backgroundColor: '#87d068',
+                          cursor: 'pointer',
+                          marginRight: '20px',
+                        }}
+                        src={val.profile_img}
+                      >
+                        {val.profile_img === ' ' ? val.nickname[0] : null}
+                      </Avatar>
+                      {val.nickname}
+                    </>
+                  )}
                 </Menu.Item>
               );
             })}
