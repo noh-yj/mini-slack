@@ -33,6 +33,15 @@ const Sidebar = ({ room }) => {
     });
     // 전역소켓 연결
     chatActions.globalSocket.connect();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // 검색 필터
+  let searchUser = users.filter((val) => {
+    return val.nickname.indexOf(search) > -1;
+  });
+
+  useEffect(() => {
     // 베지 및 알림
     dispatch(chatActions.globalAddChatList(room));
 
@@ -40,12 +49,7 @@ const Sidebar = ({ room }) => {
       // 언마운트 시 socket off
       chatActions.globalSocket.off();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // 검색 필터
-  let searchUser = users.filter((val) => {
-    return val.nickname.indexOf(search) > -1;
-  });
+  }, [dispatch, room]);
 
   return (
     <>

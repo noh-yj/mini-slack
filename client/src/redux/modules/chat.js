@@ -52,6 +52,8 @@ const addChatList = () => {
 const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
+      console.log(room);
+      console.log(res.room);
       // 알람 기능 다른사람일 때
       if (getState().user.user.nickname !== res.username) {
         // 테스트 중
