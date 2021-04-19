@@ -61,7 +61,7 @@ function Chat(props) {
         <Header />
         <MainContent>
           <MainLeft>
-            <Sider />
+            <Sider room={room} />
           </MainLeft>
           <MainRight>
             {chatActions.socket ? (
