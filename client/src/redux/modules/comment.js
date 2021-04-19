@@ -86,6 +86,7 @@ const addCommentDB = (post_id, contents) => {
 const getCommentDB = (post_id) => {
   return function (dispatch, getState, { history }) {
     if (!post_id) {
+      console.log("HIHI");
       return;
     }
     axios({
@@ -93,6 +94,7 @@ const getCommentDB = (post_id) => {
       url: `${config.api}/comment/${post_id}`,
     })
       .then((res) => {
+        console.log(res.data);
         let list = [];
 
         res.data.forEach((rd) => {

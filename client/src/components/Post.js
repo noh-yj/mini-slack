@@ -18,6 +18,7 @@ import CommentList from "./CommentList";
 import { history } from "../redux/configureStore";
 
 const Post = (props) => {
+  console.log(props);
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
   const [isCommentOpen, openCommentBox] = useState(false);
@@ -69,7 +70,7 @@ const Post = (props) => {
   return (
     <>
       <PostFrame>
-        {userInfo?.uid === props.user_id.userId ? (
+        {userInfo?.uid === props.user_id?.userId ? (
           <MoreBtn onClick={toggleBtn}>
             <MoreOutlined />
           </MoreBtn>
@@ -102,24 +103,26 @@ const Post = (props) => {
                 display: "flex",
                 alignItems: "center",
               }}
-              src={props.profile_img}
+              src={props.user_id?.profile_img}
               onClick={OpenModal}
             >
-              {props.profile_img === " " ? props.user_id?.nickname[0] : null}
+              {props.user_id?.profile_img === " "
+                ? props.user_id?.nickname[0]
+                : null}
             </Avatar>
             <PostInfo>
               <UserInfo>
                 <UserName onClick={OpenModal}>
                   {props.user_id?.nickname}
                 </UserName>
-                <WritingDt>{props.day}</WritingDt>
+                <WritingDt>{props?.day}</WritingDt>
               </UserInfo>
             </PostInfo>
           </Postsub>
-          <ContentBox>{props.content}</ContentBox>
-          {props.imgUrl && (
+          <ContentBox>{props?.content}</ContentBox>
+          {props?.imgUrl && (
             <Image
-              src={props.imgUrl}
+              src={props?.imgUrl}
               style={{ width: "100%", height: "100%", borderRadius: "10px" }}
             />
           )}

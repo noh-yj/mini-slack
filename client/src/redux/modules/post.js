@@ -41,7 +41,7 @@ const initialState = {
 // Add Post to DB
 const addPostDB = (content, item) => {
   return function (dispatch, getState, { history }) {
-    let userId = getState().user.user.uid;
+    let user = getState().user.user;
     console.log(content, item);
     let formData = new FormData();
 
@@ -61,16 +61,21 @@ const addPostDB = (content, item) => {
       .then((res) => {
         console.log(res.data);
         let result = {
-          content: content,
-          day: res.data.createdAt,
-          img: item,
-          emoticon: [],
-          uid: userId,
+          user_id: {
+            userId: user.uid,
+            profile_img: user.profile_img,
+            nickname: user.nickname,
+          },
+
+          comment_list: res.data.post.comment,
+          content: res.data.post.content,
+          imgUrl: res.data.post.imgUrl,
+          profile_img: res.data.post.user?.profile_img,
+          day: res.data.post.createdAt.split("T")[0],
           post_id: res.data.post._id,
-          comment_cnt: 0,
         };
 
-        window.location.reload();
+        //window.location.reload();
         dispatch(addPost(result));
       })
       .catch((error) => {
@@ -110,6 +115,7 @@ const getPostDB = () => {
             post_id: singleData._id,
           });
         });
+        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
@@ -211,13 +217,13 @@ const updatePostDB = (post_id, content, item) => {
     };
     axios(options)
       .then((res) => {
-        dispatch(updatePost(post_id, { content: content, img_url: item }));
+        dispatch(updatePost(post_id, { content: content, imgUrl: "" }));
         swal({
           title: "수정 성공 ☺",
           text: "게시글 수정에 성공하였습니다❕",
           icon: "success",
         });
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         swal({
@@ -249,7 +255,7 @@ const deletePostDB = (post_id) => {
           title: "삭제 성공 👋",
           closeOnClickOutside: false,
         });
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         swal({
