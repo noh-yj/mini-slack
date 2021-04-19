@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { FormOutlined, SmileOutlined } from '@ant-design/icons';
+import { SmileOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
 import { getCookie } from '../shared/Cookie';
-import PostWriteModal from '../components/PostWriteModal';
+
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
 import UserPostList from '../components/UserPostList';
@@ -23,25 +23,6 @@ function UserPost(props) {
     history.replace('/');
   }
 
-  // PostWriteModal control operations
-  const [isModalOpen, setModal] = useState(false);
-
-  const modalBtn = () => {
-    setModal(true);
-  };
-
-  const closeModal = (event) => {
-    if (event === undefined) {
-      setModal(false);
-      return;
-    }
-    // 현재 함수가 걸려있는 target 과 구분해주기 위함.
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-    setModal(false);
-  };
-
   return (
     <>
       <MainFrame>
@@ -54,11 +35,6 @@ function UserPost(props) {
             <UserPostList {...props} />
           </MainRight>
         </MainContent>
-
-        <PostWriteBtn onClick={modalBtn}>
-          <FormOutlined style={{ fontSize: '30px' }} />
-        </PostWriteBtn>
-        <PostWriteModal status={isModalOpen} close={closeModal} />
 
         <Footer>
           🎨 Palette&nbsp;&nbsp;&nbsp;&nbsp;
@@ -108,15 +84,6 @@ const MainRight = styled.section`
   }
 `;
 
-const PostWriteBtn = styled.button`
-  position: fixed;
-  top: 80%;
-  right: 5%;
-  &:hover {
-    color: #1890ff;
-    transition: all 200ms ease-in-out;
-  }
-`;
 const Footer = styled.div`
   font-size: 24px;
   height: 95px;

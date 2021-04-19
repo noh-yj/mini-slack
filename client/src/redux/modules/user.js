@@ -27,7 +27,6 @@ const getUserDB = () => {
     const jwtToken = getCookie('is_login');
     // 헤더에 토큰 default
     axios.defaults.headers.common['token'] = `${jwtToken}`;
-
     axios({
       method: 'get',
       url: `${config.api}/auth/user`,
