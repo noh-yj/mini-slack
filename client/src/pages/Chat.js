@@ -43,13 +43,18 @@ function Chat(props) {
     chatActions.socket.connect();
 
     return () => {
-      // 채팅 방 나가기
-      chatActions.socket.emit('leave', { room: room });
       // 채팅 페이지 나가면 웹소켓 연결 해제
       chatActions.socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    return () => {
+      // 채팅 방 나가기
+      chatActions.socket.emit('leave', { room: room });
+    };
+  }, [room]);
 
   //   웹소켓 연결이 성공하면 채팅 방 생성
   if (chatActions.socket) {

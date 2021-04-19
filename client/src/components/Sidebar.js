@@ -36,10 +36,6 @@ const Sidebar = ({ room }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // 검색 필터
-  let searchUser = users.filter((val) => {
-    return val.nickname.indexOf(search) > -1;
-  });
 
   useEffect(() => {
     // 베지 및 알림
@@ -50,6 +46,11 @@ const Sidebar = ({ room }) => {
       chatActions.globalSocket.off();
     };
   }, [dispatch, room]);
+
+  // 검색 필터
+  let searchUser = users.filter((val) => {
+    return val.nickname.indexOf(search) > -1;
+  });
 
   return (
     <>
