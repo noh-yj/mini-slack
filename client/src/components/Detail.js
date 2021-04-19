@@ -58,7 +58,7 @@ const Detail = (props) => {
 
   return (
     <>
-      {props.postInfo && (
+      {props && (
         <PostFrame>
           <PostBox>
             <Postsub>
@@ -74,34 +74,34 @@ const Detail = (props) => {
                   display: "flex",
                   alignItems: "center",
                 }}
-                src={props.postInfo?.user_id.profile_img}
+                src={props?.user_id.profile_img}
                 onClick={OpenModal}
               >
-                {props.postInfo?.user_id.profile_img === " "
-                  ? props.postInfo?.user_id.nickname[0]
+                {props?.user_id.profile_img === " "
+                  ? props?.user_id.nickname[0]
                   : null}
               </Avatar>
               <PostInfo>
                 <UserInfo>
                   <UserName onClick={OpenModal}>
-                    {props.postInfo?.user_id.nickname}
+                    {props?.user_id.nickname}
                   </UserName>
-                  <WritingDt>{props.postInfo?.day}</WritingDt>
+                  <WritingDt>{props?.day}</WritingDt>
                 </UserInfo>
               </PostInfo>
             </Postsub>
-            <ContentBox>{props.postInfo?.content}</ContentBox>
-            {props.postInfo?.imgUrl && (
+            <ContentBox>{props?.content}</ContentBox>
+            {props?.imgUrl && (
               <Image
-                src={props.postInfo?.imgUrl}
+                src={props?.imgUrl}
                 style={{ width: "100%", height: "100%", borderRadius: "10px" }}
               />
             )}
           </PostBox>
 
           <CommentList
-            post_id={props.postInfo.post_id}
-            comment_list={props.postInfo.comment_list}
+            post_id={props.post_id}
+            comment_list={props.comment_list}
           />
         </PostFrame>
       )}

@@ -29,12 +29,12 @@ const Comment = (props) => {
 
   const updateComment = () => {
     dispatch(
-      commentActions.updateCommentDB(props.post_id, props._id, contents)
+      commentActions.updateCommentDB(props.post_id, props.comment_id, contents)
     );
   };
 
   const deleteComment = () => {
-    dispatch(commentActions.deleteCommentDB(props.post_id, props._id));
+    dispatch(commentActions.deleteCommentDB(props.post_id, props.comment_id));
   };
 
   //const userId = useSelector((state) => state.user.user.uid);
@@ -50,11 +50,13 @@ const Comment = (props) => {
               cursor: "pointer",
               margin: "0 8px 0 0",
             }}
-            src={props.user.profile_img}
+            src={props.user_id?.profile_img}
           >
-            {props.user.profile_img === " " ? props.user.nickname[0] : null}
+            {props.user_id?.profile_img === " "
+              ? props.user_id?.nickname[0]
+              : null}
           </Avatar>
-          <span>{props.user ? props.user.nickname : "User Name"}</span>
+          <span>{props.user_id ? props.user_id.nickname : "User Name"}</span>
         </UserFrame>
         {isEdit ? (
           <ElTextarea rows={1} value={contents} onChange={changeContents} />

@@ -68,7 +68,7 @@ const addCommentDB = (post_id, contents) => {
         let comment_info = {
           comment_id: res.data.newComment._id,
           content: res.data.newComment.content,
-          user_id: res.data.newComment.user.userId,
+          userId: res.data.newComment.user.userId,
         };
         dispatch(addComment(post_id, comment_info));
       })

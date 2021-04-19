@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 
 function PostDetail(props) {
-  console.log(props.postInfo);
+  console.log(props);
   const dispatch = useDispatch();
   const { history } = props;
   // 쿠키에 저장된 토큰 조회
@@ -30,6 +30,8 @@ function PostDetail(props) {
   const postInfo = useSelector((state) => state.post.list);
   const index = postInfo.findIndex((p) => p.post_id === props.match.params.id);
 
+  console.log(postInfo);
+
   React.useEffect(() => {
     if (postInfo.length === 0) {
       dispatch(postActions.getPostDB());
@@ -44,9 +46,7 @@ function PostDetail(props) {
           <MainLeft>
             <Sider />
           </MainLeft>
-          <MainRight>
-            {postInfo && <Detail postInfo={postInfo[index]} />}
-          </MainRight>
+          <MainRight>{postInfo && <Detail {...postInfo[index]} />}</MainRight>
         </MainContent>
 
         <Footer>
