@@ -27,6 +27,7 @@ const initialState = {
 
 // 소켓 설정(전역으로 사용하기위해 export)
 const socket = socketIOClient(`${config.api}/chat`);
+const globalSocket = socketIOClient(`${config.api}/`);
 
 // 채팅 목록 불러오기
 const loadChatList = () => {
@@ -44,12 +45,19 @@ const addChatList = () => {
   return function (dispatch, getState) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
+    });
+  };
+};
 
+const globalAddChatList = () => {
+  return function (dispatch, getState) {
+    globalSocket.on('globalReceive', (res) => {
       // 알람 기능 다른사람일 때
       if (getState().user.user.nickname !== res.username) {
         // 테스트 중
         dispatch(badge(true));
         dispatch(receive(res.username));
+
         // 알랍 권한 허용일 경우
         if (Notification.permission === 'granted') {
           new Notification(res.username, {
@@ -103,8 +111,10 @@ export default handleActions(
 const actionCreators = {
   loadChatList,
   addChatList,
+  globalAddChatList,
   badge,
   socket,
+  globalSocket,
 };
 
 export { actionCreators };

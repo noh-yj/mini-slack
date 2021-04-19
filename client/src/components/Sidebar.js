@@ -31,6 +31,13 @@ const Sidebar = (props) => {
     }).then((res) => {
       setUsers(res.data.users);
     });
+    chatActions.globalSocket.connect();
+    dispatch(chatActions.globalAddChatList());
+    return () => {
+      // 언마운트 시 socket off
+      chatActions.globalSocket.off();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // 검색 필터
   let searchUser = users.filter((val) => {
