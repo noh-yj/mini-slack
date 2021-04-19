@@ -29,15 +29,15 @@ const Comment = (props) => {
 
   const updateComment = () => {
     dispatch(
-      commentActions.updateCommentDB(props.post_id, props.comment_id, contents)
+      commentActions.updateCommentDB(props.post_id, props._id, contents)
     );
   };
 
   const deleteComment = () => {
-    dispatch(commentActions.deleteCommentDB(props.post_id, props.comment_id));
+    dispatch(commentActions.deleteCommentDB(props.post_id, props._id));
   };
 
-  //const userId = useSelector((state) => state.user.user.uid);
+  const userId = useSelector((state) => state.user.user.uid);
 
   return (
     <>
@@ -50,59 +50,67 @@ const Comment = (props) => {
               cursor: "pointer",
               margin: "0 8px 0 0",
             }}
-            src={props.user_id?.profile_img}
+            src={props.user?.profile_img}
           >
-            {props.user_id?.profile_img === " "
-              ? props.user_id?.nickname[0]
-              : null}
+            {props.user?.profile_img === " " ? props.user?.nickname[0] : null}
           </Avatar>
-          <span>{props.user_id ? props.user_id.nickname : "User Name"}</span>
+          <span>{props.user ? props.user.nickname : "User Name"}</span>
         </UserFrame>
         {isEdit ? (
-          <ElTextarea rows={1} value={contents} onChange={changeContents} />
+          <>
+            <ElTextarea rows={1} value={contents} onChange={changeContents} />
+            <Btngroup>
+              <button
+                onClick={() => {
+                  updateComment();
+                  setEdit(false);
+                }}
+              >
+                <CheckSquareOutlined />
+              </button>
+              <button
+                onClick={() => {
+                  setEdit(false);
+                  setContents(props.content);
+                }}
+              >
+                <RollbackOutlined />
+              </button>
+            </Btngroup>
+          </>
         ) : (
-          <CommentBox>{props.content}</CommentBox>
-        )}
-        {/* {userId === props.user.userId ? (
-          <Btngroup>
-            {isEdit ? (
-              <>
-                <button onClick={updateComment}>
-                  <CheckSquareOutlined />
-                </button>
-                <button
-                  onClick={() => {
-                    setEdit(false);
-                    setContents(props.content);
-                  }}
-                >
-                  <RollbackOutlined />
-                </button>
-              </>
-            ) : (
-              <>
+          <>
+            <CommentBox>
+              {props.content}
+              <CommentDate>{props.createdAt.split("T")[0]}</CommentDate>
+            </CommentBox>
+            {userId === props.user.userId ? (
+              <Btngroup>
                 <button onClick={setEdit}>
                   <EditOutlined />
                 </button>
                 <button onClick={deleteComment}>
                   <DeleteOutlined />
                 </button>
-              </>
-            )}
-          </Btngroup>
-        ) : null} */}
+              </Btngroup>
+            ) : null}
+          </>
+        )}
       </CommentFrame>
     </>
   );
 };
 
 const CommentFrame = styled.div`
-  width: 100%;
+  width: 90%;
   background: white;
   border-radius: 10px;
   padding: 4px 10px;
   margin: 8px 0;
   display: flex;
+  :hover {
+    background: #ffffed;
+  }
 `;
 
 const UserFrame = styled.div`
@@ -119,15 +127,18 @@ const UserFrame = styled.div`
 `;
 
 const CommentBox = styled.p`
-  width: 60%;
+  width: 70%;
   padding: 10px 0 12px;
   margin: 0 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
+const CommentDate = styled.span``;
+
 const Btngroup = styled.div`
-  display: flex;
+  display: inline-block;
   border-radius: 10px;
   & > button {
     background: none;
@@ -146,7 +157,7 @@ const InputBox = styled.input``;
 
 const ElTextarea = styled.textarea`
   box-sizing: border-box;
-  width: 100%;
+  width: 50%;
   font-size: 1rem;
   border: none;
   overflow: auto;

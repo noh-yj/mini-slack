@@ -1,21 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar, Image } from "antd";
-import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
-import {
-  MoreOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  RedoOutlined,
-  CommentOutlined,
-} from "@ant-design/icons";
-import EditPostModal from "./EditPostModal";
 import "animate.css";
 
 import CommentList from "./CommentList";
-import { history } from "../redux/configureStore";
 
 const Detail = (props) => {
   console.log(props);
@@ -44,17 +34,6 @@ const Detail = (props) => {
   const OpenModal = () => {
     setUserprofile(true);
   };
-  // const CloseModal = () => {
-  //   setUserprofile(false);
-  // };
-
-  // const commentOn = () => {
-  //   if (!isCommentOpen) {
-  //     openCommentBox(true);
-  //     return;
-  //   }
-  //   openCommentBox(false);
-  // };
 
   return (
     <>
@@ -99,10 +78,7 @@ const Detail = (props) => {
             )}
           </PostBox>
 
-          <CommentList
-            post_id={props.post_id}
-            comment_list={props.comment_list}
-          />
+          <CommentList post_id={props.post_id} />
         </PostFrame>
       )}
     </>

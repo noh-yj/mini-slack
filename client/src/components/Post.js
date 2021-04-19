@@ -21,7 +21,6 @@ const Post = (props) => {
   console.log(props);
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
-  const [isCommentOpen, openCommentBox] = useState(false);
 
   const modalBtn = () => {
     setModal(true);

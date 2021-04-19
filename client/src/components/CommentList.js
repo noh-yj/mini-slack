@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { actionCreators as commentActions } from "../redux/modules/comment";
 import Comment from "./Comment";
 
-function CommentList({ post_id, comment_list }) {
-  console.log(post_id);
+function CommentList({ post_id }) {
   const dispatch = useDispatch();
+  const commentList = useSelector((state) => state.comment.list);
 
   // contents upload
   const [contents, setContents] = React.useState("");
@@ -37,7 +37,7 @@ function CommentList({ post_id, comment_list }) {
         <WriteCommentBtn onClick={addComment}>작 성</WriteCommentBtn>
       </WritingBox>
       <CommentBox>
-        {comment_list?.map((c) => {
+        {commentList[post_id]?.map((c) => {
           return <Comment key={c._id} post_id={post_id} {...c} />;
         })}
       </CommentBox>
@@ -50,12 +50,11 @@ const CommentListFrame = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   background: #f0f2f5;
-  position: relative;
 `;
 
 const CommentBox = styled.div`
   width: 100%;
-  max-height: 80%;
+  max-height: 60vh;
   overflow: auto;
   ::-webkit-scrollbar {
     width: 12px; /* width of the entire scrollbar */

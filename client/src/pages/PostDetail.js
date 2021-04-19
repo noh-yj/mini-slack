@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { FormOutlined, SmileOutlined } from "@ant-design/icons";
+import { SmileOutlined } from "@ant-design/icons";
 import swal from "sweetalert";
 import { getCookie } from "../shared/Cookie";
-import PostWriteModal from "../components/PostWriteModal";
 import Header from "../components/Header";
 import Sider from "../components/Sidebar";
 import Detail from "../components/Detail";
@@ -28,15 +27,18 @@ function PostDetail(props) {
   }
 
   const postInfo = useSelector((state) => state.post.list);
-  const index = postInfo.findIndex((p) => p.post_id === props.match.params.id);
-
-  console.log(postInfo);
+  let index;
+  if (postInfo.length > 0) {
+    index = postInfo.findIndex((p) => p.post_id === props.match.params.id);
+  }
 
   React.useEffect(() => {
     if (postInfo.length === 0) {
       dispatch(postActions.getPostDB());
+    } else {
+      return;
     }
-  }, []);
+  });
 
   return (
     <>
@@ -46,7 +48,13 @@ function PostDetail(props) {
           <MainLeft>
             <Sider />
           </MainLeft>
-          <MainRight>{postInfo && <Detail {...postInfo[index]} />}</MainRight>
+          <MainRight>
+            {postInfo.length > 0 ? (
+              <>
+                <Detail {...postInfo[index]} />
+              </>
+            ) : null}
+          </MainRight>
         </MainContent>
 
         <Footer>
@@ -95,15 +103,6 @@ const MainRight = styled.section`
   min-height: 80vh;
 `;
 
-const PostWriteBtn = styled.button`
-  position: fixed;
-  top: 80%;
-  right: 5%;
-  &:hover {
-    color: #1890ff;
-    transition: all 200ms ease-in-out;
-  }
-`;
 const Footer = styled.div`
   font-size: 24px;
   height: 95px;

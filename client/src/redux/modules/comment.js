@@ -24,19 +24,19 @@ const addComment = createAction(ADD_COMMENT, (post_id, comment) => ({
   comment,
 }));
 
-// const updateComment = createAction(
-//   UPDATE_COMMENT,
-//   (post_id, comment_id, comment) => ({
-//     post_id,
-//     comment_id,
-//     comment,
-//   })
-// );
+const updateComment = createAction(
+  UPDATE_COMMENT,
+  (post_id, comment_id, comment) => ({
+    post_id,
+    comment_id,
+    comment,
+  })
+);
 
-// const deleteComment = createAction(DELETE_COMMENT, (post_id, comment_id) => ({
-//   post_id,
-//   comment_id,
-// }));
+const deleteComment = createAction(DELETE_COMMENT, (post_id, comment_id) => ({
+  post_id,
+  comment_id,
+}));
 
 // contains objects that has post_id & comment info
 const initialState = {
@@ -45,7 +45,6 @@ const initialState = {
 
 const addCommentDB = (post_id, contents) => {
   return function (dispatch, getState, { history }) {
-    // const userId = getState().user.user.uid;
     // console.log(userId);
     // generates data for sending a request to the server
     let comment_data = {
@@ -66,9 +65,10 @@ const addCommentDB = (post_id, contents) => {
           icon: "success",
         });
         let comment_info = {
-          comment_id: res.data.newComment._id,
+          _id: res.data.newComment._id,
           content: res.data.newComment.content,
-          userId: res.data.newComment.user.userId,
+          user: res.data.newComment.user,
+          createdAt: res.data.newComment.createdAt.split("T")[0],
         };
         dispatch(addComment(post_id, comment_info));
       })
@@ -97,9 +97,11 @@ const getCommentDB = (post_id) => {
         console.log(res.data);
         let list = [];
 
-        res.data.forEach((rd) => {
-          list.push(rd);
+        res.data.comments.forEach((rd) => {
+          list.push({ ...rd });
         });
+
+        console.log(list);
 
         dispatch(setComment(post_id, list));
       })
@@ -126,13 +128,12 @@ const updateCommentDB = (post_id, comment_id, comment) => {
       data: comment_data,
     })
       .then((res) => {
-        console.log(res.data);
         swal({
           title: "코멘트 수정😎",
           text: "댓글을 수정했습니다❕",
           icon: "success",
         });
-        window.location.reload();
+        dispatch(updateComment(post_id, comment_id, comment));
       })
       .catch((err) => {
         swal({
@@ -159,7 +160,7 @@ const deleteCommentDB = (post_id, comment_id) => {
           text: "댓글을 삭제했습니다❕",
           icon: "success",
         });
-        window.location.reload();
+        dispatch(deleteComment(post_id, comment_id));
       })
       .catch((err) => {
         swal({
@@ -186,14 +187,26 @@ export default handleActions(
           return;
         }
         draft.list[action.payload.post_id].unshift(action.payload.comment);
-        console.log(action.payload.post_id, action.payload.comment);
       }),
-    // [UPDATE_COMMENT]: (state, action) =>
-    //   produce(state, (draft) => {
-    //     let comment_list = state.list[action.payload.post_id];
-    //     let index = comment_list.findIndex();
-    //     draft.list[action.payload.post_id] = action.payload.comment_list;
-    //   }),
+    [UPDATE_COMMENT]: (state, action) =>
+      produce(state, (draft) => {
+        let comment_list = state.list[action.payload.post_id];
+        let index = comment_list.findIndex(
+          (c) => c._id === action.payload.comment_id
+        );
+        draft.list[action.payload.post_id][index] = {
+          ...comment_list[index],
+          content: action.payload.comment,
+        };
+      }),
+    [DELETE_COMMENT]: (state, action) =>
+      produce(state, (draft) => {
+        let comment_list = state.list[action.payload.post_id];
+        let index = comment_list.findIndex(
+          (c) => c._id === action.payload.comment_id
+        );
+        draft.list[action.payload.post_id].splice(index, 1);
+      }),
   },
   initialState
 );
