@@ -18,7 +18,6 @@ import CommentList from "./CommentList";
 import { history } from "../redux/configureStore";
 
 const Post = (props) => {
-  console.log(props);
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
 
@@ -68,7 +67,7 @@ const Post = (props) => {
 
   return (
     <>
-      <PostFrame>
+      <PostFrame onClick={toggleBtn}>
         {userInfo?.uid === props.user_id?.userId ? (
           <MoreBtn onClick={toggleBtn}>
             <MoreOutlined />
@@ -82,9 +81,6 @@ const Post = (props) => {
             </button>
             <button>
               <DeleteOutlined onClick={deletePost} />
-            </button>
-            <button onClick={closeToggle}>
-              <RedoOutlined />
             </button>
           </Btngroup>
         )}

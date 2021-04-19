@@ -126,40 +126,6 @@ const getPostDB = () => {
   };
 };
 
-// GET one specific Post From DB
-const getOnePostDB = (post_id) => {
-  return function (dispatch, getState, { history }) {
-    const options = {
-      url: `${config.api}/board/${post_id}`,
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-      },
-    };
-    axios(options)
-      .then((res) => {
-        let post_data = [];
-        console.log(res.data.post);
-        post_data.push({
-          comment_list: res.data.comment,
-          content: res.data.content,
-          imgUrl: res.data.imgUrl,
-          user_id: res.data.user,
-          profile_img: res.data.user?.profile_img,
-          day: res.data.createdAt.split("T")[0],
-          post_id: res.data._id,
-        });
-        dispatch(setPost(post_data));
-      })
-      .catch((error) => {
-        if (error.res) {
-          window.alert(error.res.data.errorMessage);
-        }
-      });
-  };
-};
-
 // userPost 특정 유저가 작성한 게시물 조회
 const getUserPostDB = (id) => {
   return function (dispatch, getState, { history }) {
@@ -202,7 +168,9 @@ const updatePostDB = (post_id, content, item) => {
     let formData = new FormData();
 
     formData.append("content", content);
-    formData.append("BoardImg", item);
+    if (item !== null) {
+      formData.append("BoardImg", item);
+    }
 
     const options = {
       url: `${config.api}/board/${post_id}`,
@@ -214,7 +182,17 @@ const updatePostDB = (post_id, content, item) => {
     };
     axios(options)
       .then((res) => {
-        dispatch(updatePost(post_id, { content: content, imgUrl: "" }));
+        console.log(res.data);
+        if (item !== null) {
+          dispatch(
+            updatePost(post_id, {
+              content: content,
+              imgUrl: res.data.post.imgUrl,
+            })
+          );
+        } else {
+          dispatch(updatePost(post_id, { content: content }));
+        }
         swal({
           title: "수정 성공 ☺",
           text: "게시글 수정에 성공하였습니다❕",
@@ -310,7 +288,6 @@ const actionCreators = {
   updatePostDB,
   deletePostDB,
   getUserPostDB,
-  getOnePostDB,
 };
 
 // export
