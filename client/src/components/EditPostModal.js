@@ -41,6 +41,7 @@ function EditPostModal({ status, close, post_info }) {
 
   const updatePost = () => {
     // contents 가 비어있을 때
+    console.log(file, contents);
     if (contents === "") {
       swal({
         title: "업로드에 실패하였습니다 😥",
@@ -52,9 +53,9 @@ function EditPostModal({ status, close, post_info }) {
     console.log(`contents: ${contents}, file: ${file}, preview: ${preview}`);
     dispatch(postActions.updatePostDB(post_info.post_id, contents, file));
     // 사진 없이 올리고 싶은 경우 고려해야함
-
-    setContents("");
-    setPreview(null);
+    setFile(file);
+    setContents(contents);
+    setPreview(preview);
     close();
   };
 
