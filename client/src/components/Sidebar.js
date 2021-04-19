@@ -16,14 +16,14 @@ import { actionCreators as chatActions } from '../redux/modules/chat';
 
 const { SubMenu } = Menu;
 
-const Sidebar = (props) => {
+const Sidebar = ({ room }) => {
   const dispatch = useDispatch();
   let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const uid = useSelector((state) => state.user.user?.uid);
   const is_badge = useSelector((state) => state.chat.is_badge);
-  const alert_user = useSelector((state) => state.chat.receive_username);
-  // 가입한 회원들 조회
+  const alert_user = useSelector((state) => state.chat.receive_info);
+
   useEffect(() => {
     axios({
       method: 'get',
@@ -31,8 +31,11 @@ const Sidebar = (props) => {
     }).then((res) => {
       setUsers(res.data.users);
     });
+    // 전역소켓 연결
     chatActions.globalSocket.connect();
-    dispatch(chatActions.globalAddChatList());
+    // 베지 및 알림
+    dispatch(chatActions.globalAddChatList(room));
+
     return () => {
       // 언마운트 시 socket off
       chatActions.globalSocket.off();
@@ -110,13 +113,13 @@ const Sidebar = (props) => {
                   key={idx + 'msg'}
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
-                    if (val.nickname === alert_user) {
+                    if (val.nickname === alert_user.username) {
                       dispatch(chatActions.badge(false));
                     }
                   }}
                 >
                   {/* 배지 테스트 중 */}
-                  {val.nickname === alert_user ? (
+                  {val.nickname === alert_user.username ? (
                     <>
                       <Badge dot={is_badge}>
                         <Avatar
@@ -158,6 +161,7 @@ const Sidebar = (props) => {
     </>
   );
 };
+
 const PostListFrame = styled.div`
   width: 100%;
   min-height: 80vh;

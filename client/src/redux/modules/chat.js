@@ -15,14 +15,14 @@ const getMsg = createAction(GET_MSG, (msg) => ({ msg }));
 const setMsg = createAction(SET_MSG, (msg) => ({ msg }));
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 const badge = createAction(BADGE, (is_badge) => ({ is_badge }));
-const receive = createAction(RECEIVE, (username) => ({ username }));
+const receive = createAction(RECEIVE, (info) => ({ info }));
 
 // initialState
 const initialState = {
   chat_list: [],
   is_loading: false,
   is_badge: false,
-  receive_username: '',
+  receive_info: '',
 };
 
 // 소켓 설정(전역으로 사용하기위해 export)
@@ -49,31 +49,33 @@ const addChatList = () => {
   };
 };
 
-const globalAddChatList = () => {
+const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
       // 알람 기능 다른사람일 때
       if (getState().user.user.nickname !== res.username) {
         // 테스트 중
-        dispatch(badge(true));
-        dispatch(receive(res.username));
-
-        // 알랍 권한 허용일 경우
-        if (Notification.permission === 'granted') {
-          new Notification(res.username, {
-            body: res.msg,
-            icon: res.profile_img,
-          });
-          // 알람 권한이 허용이 아닐 경우
-        } else if (Notification.permission !== 'denied') {
-          Notification.requestPermission(function (permission) {
-            if (permission === 'granted') {
-              new Notification(res.username, {
-                body: res.msg,
-                icon: res.profile_img,
-              });
-            }
-          });
+        // 해당 채팅방이 아닌 곳에서 알람
+        if (room !== res.room) {
+          dispatch(receive(res));
+          dispatch(badge(true));
+          // 알랍 권한 허용일 경우
+          if (Notification.permission === 'granted') {
+            new Notification(res.username, {
+              body: res.msg,
+              icon: res.profile_img,
+            });
+            // 알람 권한이 허용이 아닐 경우
+          } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission(function (permission) {
+              if (permission === 'granted') {
+                new Notification(res.username, {
+                  body: res.msg,
+                  icon: res.profile_img,
+                });
+              }
+            });
+          }
         }
       }
     });
@@ -102,7 +104,7 @@ export default handleActions(
       }),
     [RECEIVE]: (state, action) =>
       produce(state, (draft) => {
-        draft.receive_username = action.payload.username;
+        draft.receive_info = action.payload.info;
       }),
   },
   initialState,
