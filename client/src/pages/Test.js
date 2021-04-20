@@ -18,8 +18,6 @@ function Test() {
   };
 
   const onClick = (emoji, event) => {
-    //let index = emoji_list.findIndex((e) => e["emoji"] === emoji.native);
-
     if (emoji_list.length > 0) {
       emoji_list.pop();
     }
@@ -30,7 +28,6 @@ function Test() {
 
   return (
     <TestFrame>
-      <h2>유진님, 버튼 눌러보세요!</h2>
       <ToggleBtn onClick={toggleBtn}>
         {isOn ? (
           <SmileOutlined style={{ fontSize: "24px", color: "#08c" }} />
@@ -51,7 +48,6 @@ function Test() {
           />
         </div>
       )}
-      {/* <Picker style={{ position: "absolute", bottom: "20px", right: "20px" }} /> */}
     </TestFrame>
   );
 }

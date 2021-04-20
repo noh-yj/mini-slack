@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { Empty, Spin } from 'antd';
-import { WechatOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as chatActions } from '../redux/modules/chat';
-import Msg from './Msg';
+import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
+import { Empty, Spin } from "antd";
+import { WechatOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as chatActions } from "../redux/modules/chat";
+import Msg from "./Msg";
 
 function ChatList({ targetName }) {
   const dispatch = useDispatch();
@@ -36,19 +36,19 @@ function ChatList({ targetName }) {
     <>
       {loading ? (
         <Spin
-          size='large'
-          tip='Loading...'
+          size="large"
+          tip="Loading..."
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
           }}
         />
       ) : (
         <>
           <Title>
-            <WechatOutlined style={{ color: '#6F9CEB', marginRight: '12px' }} />
+            <WechatOutlined style={{ color: "#6F9CEB", marginRight: "12px" }} />
             {targetName}님과 대화
           </Title>
           <ChatBox>
