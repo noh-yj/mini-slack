@@ -82,9 +82,9 @@ const globalAddChatList = (room) => {
       const myId = getState().user.user.uid;
       const receive_val = res.room.split('-');
 
-      // 3자 채팅 무시
-      if (receive_val.includes(myId)) {
-        // 다른사람일 때 알림 울리게끔
+      // 나한태 오는 알림일 경우
+      if (receive_val.includes(myId) === true) {
+        // 내가 보내는 알림은 울리지 않게 끔
         if (getState().user.user.uid !== res.uid) {
           // 해당 채팅방에서는 알람이 울리지 않게 끔 조건 처리
           if (room !== res.room) {
