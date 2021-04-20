@@ -71,7 +71,7 @@ function Chat(props) {
             {chatActions.socket ? (
               <>
                 <ChatMain targetName={targetName} room={room} />
-                <ChatInput room={room} />
+                <ChatInput room={room} targetId={props.match.params.otherId} />
               </>
             ) : (
               <Spin
