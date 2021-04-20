@@ -77,11 +77,10 @@ const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
       // 알람 기능 다른사람일 때
-      dispatch(receiveBadge(res.uid));
       if (getState().user.user.nickname !== res.username) {
-        // 테스트 중
         // 해당 채팅방이 아닌 곳에서 알람
         if (room !== res.room) {
+          dispatch(receiveBadge(res.uid));
           // 알랍 권한 허용일 경우
           if (Notification.permission === 'granted') {
             new Notification(res.username, {
