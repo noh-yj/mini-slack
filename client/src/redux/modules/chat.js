@@ -20,7 +20,9 @@ const badgeOff = createAction(BADGE, (uid) => ({ uid }));
 const receiveBadge = createAction(RECEIVEBADGE, (uid) => ({
   uid,
 }));
-const user_list = createAction(USERS, (user_list) => ({ user_list }));
+const user_list = createAction(USERS, (user_list) => ({
+  user_list,
+}));
 
 // initialState
 const initialState = {
@@ -36,7 +38,7 @@ const socket = socketIOClient(`${config.api}/chat`);
 const globalSocket = socketIOClient(`${config.api}/`);
 
 const middlewareUsers = () => {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     axios({
       method: 'get',
       url: `${config.api}/member`,
@@ -76,29 +78,27 @@ const addChatList = () => {
 const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
-      // 알람 기능 다른사람일 때
-      if (getState().user.user.nickname !== res.username) {
-        // 해당 채팅방이 아닌 곳에서 알람
+      // 다른사람일 때
+      if (getState().user.user.uid !== res.uid) {
+        // 해당 채팅방에서는 알람이 울리지 않게 끔
+        dispatch(receiveBadge(res.uid));
         if (room !== res.room) {
-          if (res.targetId === getState().user.user.uid) {
-            dispatch(receiveBadge(res.uid));
-            // 알랍 권한 허용일 경우
-            if (Notification.permission === 'granted') {
-              new Notification(res.username, {
-                body: res.msg,
-                icon: res.profile_img,
-              });
-              // 알람 권한이 허용이 아닐 경우
-            } else if (Notification.permission !== 'denied') {
-              Notification.requestPermission(function (permission) {
-                if (permission === 'granted') {
-                  new Notification(res.username, {
-                    body: res.msg,
-                    icon: res.profile_img,
-                  });
-                }
-              });
-            }
+          // noti 권한 허용일 경우
+          if (Notification.permission === 'granted') {
+            new Notification(res.username, {
+              body: res.msg,
+              icon: res.profile_img,
+            });
+            // noti 권한이 허용이 아닐 경우
+          } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission(function (permission) {
+              if (permission === 'granted') {
+                new Notification(res.username, {
+                  body: res.msg,
+                  icon: res.profile_img,
+                });
+              }
+            });
           }
         }
       }

@@ -24,14 +24,12 @@ const Sidebar = ({ room }) => {
     dispatch(chatActions.middlewareUsers());
     // 전역소켓 연결
     chatActions.globalSocket.connect();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     // 베지 및 알림
     dispatch(chatActions.globalAddChatList(room));
-
     return () => {
       // 언마운트 시 socket off
       chatActions.globalSocket.off();
@@ -107,7 +105,6 @@ const Sidebar = ({ room }) => {
               return (
                 <Menu.Item
                   key={idx + 'msg'}
-                  // e.preventDefault() 처리 찾아보기
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
                     dispatch(chatActions.badgeOff(val.id));
