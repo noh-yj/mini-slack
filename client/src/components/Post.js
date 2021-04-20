@@ -189,7 +189,7 @@ const Post = (props) => {
             )}
             {emoji_list?.map((e, idx) => {
               // console.log(e, e.emoji);
-              if (userInfo.uid === e.user.userId) {
+              if (userInfo?.uid === e.user.userId) {
                 return (
                   <Me_EmojiBtn
                     onClick={() => {

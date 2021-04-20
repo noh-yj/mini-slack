@@ -108,6 +108,12 @@ export default handleActions(
       }),
     [UPDATE_EMOJI]: (state, action) =>
       produce(state, (draft) => {
+        if (!draft.list[action.payload.post_id]) {
+          draft.list[action.payload.post_id] = [
+            action.payload.emoticon_content,
+          ];
+          return;
+        }
         draft.list[action.payload.post_id].push(
           action.payload.emoticon_content
         );
