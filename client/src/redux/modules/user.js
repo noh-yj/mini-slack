@@ -19,7 +19,6 @@ const logOut = createAction(LOG_OUT, () => ({}));
 const initialState = {
   user: null,
   is_login: false,
-  is_loading: false,
 };
 // 회원 정보 조회
 const getUserDB = () => {

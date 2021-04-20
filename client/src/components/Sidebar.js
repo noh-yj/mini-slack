@@ -8,8 +8,8 @@ import {
   FrownOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import axios from 'axios';
-import { config } from '../config';
+// import axios from 'axios';
+// import { config } from '../config';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as chatActions } from '../redux/modules/chat';
@@ -18,19 +18,18 @@ const { SubMenu } = Menu;
 
 const Sidebar = ({ room }) => {
   const dispatch = useDispatch();
-  let [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const uid = useSelector((state) => state.user.user?.uid);
-  const is_badge = useSelector((state) => state.chat.is_badge);
-  const alert_user = useSelector((state) => state.chat.receive_info);
+  const users = useSelector((state) => state.chat.user_list);
 
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: `${config.api}/member`,
-    }).then((res) => {
-      setUsers(res.data.users);
-    });
+    // axios({
+    //   method: 'get',
+    //   url: `${config.api}/member`,
+    // }).then((res) => {
+    //   setUsers(res.data.users);
+    // });
+    dispatch(chatActions.middlewareUsers());
     // 전역소켓 연결
     chatActions.globalSocket.connect();
 
@@ -118,31 +117,11 @@ const Sidebar = ({ room }) => {
                   key={idx + 'msg'}
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
-                    if (val.nickname === alert_user.username) {
-                      dispatch(chatActions.badge(false));
-                    }
+                    dispatch(chatActions.badgeOff(val.id));
                   }}
                 >
-                  {/* 배지 테스트 중 */}
-                  {val.nickname === alert_user.username ? (
-                    <>
-                      <Badge dot={is_badge}>
-                        <Avatar
-                          size={30}
-                          style={{
-                            backgroundColor: '#87d068',
-                            cursor: 'pointer',
-                            marginRight: '20px',
-                          }}
-                          src={val.profile_img}
-                        >
-                          {val.profile_img === ' ' ? val.nickname[0] : null}
-                        </Avatar>
-                      </Badge>
-                      {val.nickname}
-                    </>
-                  ) : (
-                    <>
+                  <>
+                    <Badge dot={val.is_badge}>
                       <Avatar
                         size={30}
                         style={{
@@ -154,9 +133,9 @@ const Sidebar = ({ room }) => {
                       >
                         {val.profile_img === ' ' ? val.nickname[0] : null}
                       </Avatar>
-                      {val.nickname}
-                    </>
-                  )}
+                    </Badge>
+                    {val.nickname}
+                  </>
                 </Menu.Item>
               );
             })}

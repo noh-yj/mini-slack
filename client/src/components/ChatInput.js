@@ -7,14 +7,15 @@ import { actionCreators as chatActions } from '../redux/modules/chat';
 function ChatInput({ room }) {
   const [msg, setMsg] = useState('');
   const userImg = useSelector((state) => state.user.user?.profile_img);
-  const username = useSelector((state) => state.user.user?.nickname);
+  const username = useSelector((state) => state.user.user);
 
   // 채팅 전송 시 방 정보, 유저 이름, 유저 프로필, 메세지 전송
   const Info = {
     room: room,
-    username: username,
+    username: username?.nickname,
     profile_img: userImg,
     msg: msg,
+    uid: username?.uid,
   };
   const msgSubmit = () => {
     // 아무것도 입력하지 않은 경우 리턴
@@ -33,6 +34,7 @@ function ChatInput({ room }) {
       username: Info.username,
       profile_img: Info.profile_img,
       msg: Info.msg,
+      uid: Info.uid,
     });
     setMsg('');
   };
