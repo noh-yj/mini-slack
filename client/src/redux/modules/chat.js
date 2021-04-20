@@ -1,16 +1,16 @@
-import { createAction, handleActions } from 'redux-actions';
-import produce from 'immer';
-import socketIOClient from 'socket.io-client';
-import axios from 'axios';
-import { config } from '../../config';
+import { createAction, handleActions } from "redux-actions";
+import produce from "immer";
+import socketIOClient from "socket.io-client";
+import axios from "axios";
+import { config } from "../../config";
 
 // 액션
-const GET_MSG = 'GET_MSG';
-const SET_MSG = 'SET_MSG';
-const LOADING = 'LOADING';
-const BADGE = 'BADGE';
-const RECEIVEBADGE = 'RECEIVEBADGE';
-const USERS = 'USERS';
+const GET_MSG = "GET_MSG";
+const SET_MSG = "SET_MSG";
+const LOADING = "LOADING";
+const BADGE = "BADGE";
+const RECEIVEBADGE = "RECEIVEBADGE";
+const USERS = "USERS";
 
 // 액션 생성함수
 const getMsg = createAction(GET_MSG, (msg) => ({ msg }));
@@ -29,7 +29,7 @@ const initialState = {
   chat_list: [],
   is_loading: false,
   is_badge: false,
-  receive_info: '',
+  receive_info: "",
   user_list: [],
 };
 
@@ -41,7 +41,7 @@ const globalSocket = socketIOClient(`${config.api}/`);
 const middlewareUsers = () => {
   return function (dispatch) {
     axios({
-      method: 'get',
+      method: "get",
       url: `${config.api}/member`,
     })
       .then((res) => {
@@ -61,7 +61,7 @@ const loadChatList = () => {
   return function (dispatch) {
     dispatch(loading(true));
 
-    socket.on('load', (res) => {
+    socket.on("load", (res) => {
       dispatch(getMsg(res));
     });
   };
@@ -70,7 +70,7 @@ const loadChatList = () => {
 // 채팅 내용 추가하기
 const addChatList = () => {
   return function (dispatch) {
-    socket.on('receive', (res) => {
+    socket.on("receive", (res) => {
       dispatch(setMsg(res));
     });
   };
@@ -78,27 +78,27 @@ const addChatList = () => {
 
 const globalAddChatList = (room) => {
   return function (dispatch, getState) {
-    globalSocket.on('globalReceive', (res) => {
+    globalSocket.on("globalReceive", (res) => {
       const myId = getState().user.user.uid;
-      const receive_val = res.room.split('-');
+      const receive_val = res.room.split("-");
 
       // 3자 채팅 무시
-      if (receive_val.includes(myId)) {
+      if (receive_val.includes(myId) === true) {
         // 다른사람일 때 알림 울리게끔
         if (getState().user.user.uid !== res.uid) {
           // 해당 채팅방에서는 알람이 울리지 않게 끔 조건 처리
           if (room !== res.room) {
             // noti 권한 허용일 경우
             dispatch(receiveBadge(res.uid));
-            if (Notification.permission === 'granted') {
+            if (Notification.permission === "granted") {
               new Notification(res.username, {
                 body: res.msg,
                 icon: res.profile_img,
               });
               // noti 권한이 허용이 아닐 경우
-            } else if (Notification.permission !== 'denied') {
+            } else if (Notification.permission !== "denied") {
               Notification.requestPermission(function (permission) {
-                if (permission === 'granted') {
+                if (permission === "granted") {
                   new Notification(res.username, {
                     body: res.msg,
                     icon: res.profile_img,
@@ -132,14 +132,14 @@ export default handleActions(
     [BADGE]: (state, action) =>
       produce(state, (draft) => {
         const idx = draft.user_list.findIndex(
-          (val) => val.userId === action.payload.uid,
+          (val) => val.userId === action.payload.uid
         );
         draft.user_list[idx].is_badge = false;
       }),
     [RECEIVEBADGE]: (state, action) =>
       produce(state, (draft) => {
         const idx = draft.user_list.findIndex(
-          (val) => val.userId === action.payload.uid,
+          (val) => val.userId === action.payload.uid
         );
         draft.user_list[idx].is_badge = true;
       }),
@@ -148,7 +148,7 @@ export default handleActions(
         draft.user_list = action.payload.user_list;
       }),
   },
-  initialState,
+  initialState
 );
 
 const actionCreators = {

@@ -225,9 +225,7 @@ export default handleActions(
   {
     [SET_EMOJI]: (state, action) =>
       produce(state, (draft) => {
-        // draft.list.push(...action.payload.post_list);
         draft.list[action.payload.post_id] = action.payload.emoji_list;
-        console.log(action.payload.post_id, action.payload.emoji_list);
         //draft.paging = action.payload.paging;
         //draft.likelist = action.payload.likelist;
       }),
