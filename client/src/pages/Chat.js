@@ -41,7 +41,6 @@ function Chat(props) {
   useEffect(() => {
     // 웹소켓 연결
     chatActions.socket.connect();
-
     return () => {
       // 채팅 페이지 나가면 웹소켓 연결 해제
       chatActions.socket.disconnect();

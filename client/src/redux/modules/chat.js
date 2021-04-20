@@ -42,7 +42,7 @@ const loadChatList = () => {
 
 // 채팅 내용 추가하기
 const addChatList = () => {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     socket.on('receive', (res) => {
       dispatch(setMsg(res));
     });
@@ -52,15 +52,13 @@ const addChatList = () => {
 const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
-      console.log(room);
-      console.log(res.room);
       // 알람 기능 다른사람일 때
+      dispatch(receive(res));
+      dispatch(badge(true));
       if (getState().user.user.nickname !== res.username) {
         // 테스트 중
         // 해당 채팅방이 아닌 곳에서 알람
         if (room !== res.room) {
-          dispatch(receive(res));
-          dispatch(badge(true));
           // 알랍 권한 허용일 경우
           if (Notification.permission === 'granted') {
             new Notification(res.username, {

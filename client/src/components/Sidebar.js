@@ -51,6 +51,14 @@ const Sidebar = ({ room }) => {
   let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });
+  // const chatUsers = users.map((val) => {
+  //   return { ...val, is_badge: false };
+  // });
+  // chatUsers.forEach((p) => {
+  //   if (alert_user.username === p.nickname) {
+  //     p.is_badge = true;
+  //   }
+  // });
 
   return (
     <>
@@ -118,6 +126,7 @@ const Sidebar = ({ room }) => {
                   key={idx + 'msg'}
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
+
                     if (val.nickname === alert_user.username) {
                       dispatch(chatActions.badge(false));
                     }
