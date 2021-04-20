@@ -80,23 +80,25 @@ const globalAddChatList = (room) => {
       if (getState().user.user.nickname !== res.username) {
         // 해당 채팅방이 아닌 곳에서 알람
         if (room !== res.room) {
-          dispatch(receiveBadge(res.uid));
-          // 알랍 권한 허용일 경우
-          if (Notification.permission === 'granted') {
-            new Notification(res.username, {
-              body: res.msg,
-              icon: res.profile_img,
-            });
-            // 알람 권한이 허용이 아닐 경우
-          } else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function (permission) {
-              if (permission === 'granted') {
-                new Notification(res.username, {
-                  body: res.msg,
-                  icon: res.profile_img,
-                });
-              }
-            });
+          if (res.targetId === getState().user.user.uid) {
+            dispatch(receiveBadge(res.uid));
+            // 알랍 권한 허용일 경우
+            if (Notification.permission === 'granted') {
+              new Notification(res.username, {
+                body: res.msg,
+                icon: res.profile_img,
+              });
+              // 알람 권한이 허용이 아닐 경우
+            } else if (Notification.permission !== 'denied') {
+              Notification.requestPermission(function (permission) {
+                if (permission === 'granted') {
+                  new Notification(res.username, {
+                    body: res.msg,
+                    icon: res.profile_img,
+                  });
+                }
+              });
+            }
           }
         }
       }

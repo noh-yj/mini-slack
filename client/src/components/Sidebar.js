@@ -8,8 +8,6 @@ import {
   FrownOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-// import axios from 'axios';
-// import { config } from '../config';
 import { history } from '../redux/configureStore';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as chatActions } from '../redux/modules/chat';
@@ -23,12 +21,6 @@ const Sidebar = ({ room }) => {
   const users = useSelector((state) => state.chat.user_list);
 
   useEffect(() => {
-    // axios({
-    //   method: 'get',
-    //   url: `${config.api}/member`,
-    // }).then((res) => {
-    //   setUsers(res.data.users);
-    // });
     dispatch(chatActions.middlewareUsers());
     // 전역소켓 연결
     chatActions.globalSocket.connect();
@@ -115,6 +107,7 @@ const Sidebar = ({ room }) => {
               return (
                 <Menu.Item
                   key={idx + 'msg'}
+                  // e.preventDefault() 처리 찾아보기
                   onClick={() => {
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
                     dispatch(chatActions.badgeOff(val.id));
