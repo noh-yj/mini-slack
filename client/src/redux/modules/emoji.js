@@ -20,7 +20,10 @@ const updateEmoji = createAction(UPDATE_EMOJI, (post_id, emoticon_content) => ({
   post_id,
   emoticon_content,
 }));
-const deleteEmoji = createAction(DELETE_EMOJI, (emoji_id) => ({ emoji_id }));
+const deleteEmoji = createAction(DELETE_EMOJI, (post_id, emoji_id) => ({
+  post_id,
+  emoji_id,
+}));
 
 //initial state
 const initialState = {
@@ -51,9 +54,10 @@ const updateEmojiDB = (post_id, emoji) => {
       .then((res) => {
         let emoticon_content = {
           emoji: emoji,
+          user: { userId: res.data.post.user },
+          _id: res.data.emoticon._id,
         };
         dispatch(updateEmoji(post_id, emoticon_content));
-        console.log("SUCCESS");
       })
       .catch((error) => {
         swal({
@@ -65,160 +69,33 @@ const updateEmojiDB = (post_id, emoji) => {
   };
 };
 
-// // GET All Posts From DB
-// const getPostDB = () => {
-//   return function (dispatch, getState, { history }) {
-//     const jwtToken = getCookie("is_login");
-//     const options = {
-//       url: `${config.api}/board`,
-//       method: "GET",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json;charset=UTF-8",
-//         token: `${jwtToken}`,
-//       },
-//     };
-//     axios(options)
-//       .then((res) => {
-//         let post_data = [];
-//         //let emoji_data = [];
-
-//         res.data.posts.forEach((singleData) => {
-//           post_data.push({
-//             comment_list: singleData.comment,
-//             content: singleData.content,
-//             imgUrl: singleData.imgUrl,
-//             user_id: singleData.user,
-//             profile_img: singleData.user?.profile_img,
-//             day: singleData.createdAt.split("T")[0],
-//             post_id: singleData._id,
-//           });
-//         });
-//         console.log(post_data);
-//         dispatch(setPost(post_data));
-//       })
-//       .catch((error) => {
-//         if (error.res) {
-//           window.alert(error.res.data.errorMessage);
-//         }
-//       });
-//   };
-// };
-
-// // userPost 특정 유저가 작성한 게시물 조회
-// const getUserPostDB = (id) => {
-//   return function (dispatch, getState, { history }) {
-//     dispatch(loading(true));
-
-//     axios({
-//       method: "get",
-//       url: `${config.api}/member/${id}`,
-//     })
-//       .then((res) => {
-//         let post_data = [];
-
-//         res.data.posts.forEach((singleData) => {
-//           post_data.push({
-//             comment_list: singleData.comment,
-//             content: singleData.content,
-//             imgUrl: singleData.imgUrl,
-//             user_id: singleData.user,
-//             profile_img: singleData.user?.profile_img,
-//             day: singleData.createdAt.split("T")[0],
-//             post_id: singleData._id,
-//           });
-//         });
-//         dispatch(setPost(post_data));
-//       })
-//       .catch((error) => {
-//         if (error.res) {
-//           swal({
-//             title: error.res.data.errorMessage,
-//             icon: "error",
-//           });
-//         }
-//       });
-//   };
-// };
-
-// // UPDATE DB
-// const updatePostDB = (post_id, content, item) => {
-//   return function (dispatch, getState, { history }) {
-//     let formData = new FormData();
-
-//     formData.append("content", content);
-//     if (item !== null) {
-//       formData.append("BoardImg", item);
-//     }
-
-//     const options = {
-//       url: `${config.api}/board/${post_id}`,
-//       method: "PATCH",
-//       data: formData,
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     };
-//     axios(options)
-//       .then((res) => {
-//         console.log(res.data);
-//         if (item !== null) {
-//           dispatch(
-//             updatePost(post_id, {
-//               content: content,
-//               imgUrl: res.data.post.imgUrl,
-//             })
-//           );
-//         } else {
-//           dispatch(updatePost(post_id, { content: content }));
-//         }
-//         swal({
-//           title: "수정 성공 ☺",
-//           text: "게시글 수정에 성공하였습니다❕",
-//           icon: "success",
-//         });
-//       })
-//       .catch((error) => {
-//         swal({
-//           title: "수정 실패 🙄",
-//           text: "뭔가.. 잘못됐어요!",
-//           icon: "error",
-//         });
-//       });
-//   };
-// };
-
-// // Delete DB
-// const deletePostDB = (post_id) => {
-//   return function (dispatch, getState, { history }) {
-//     const options = {
-//       url: `${config.api}/board/${post_id}`,
-//       method: "DELETE",
-//       headers: {
-//         // 백 분들과 맞춰보기
-//         Accept: "application/json",
-//         "Content-Type": "application/json;charset=UTF-8",
-//       },
-//     };
-//     axios(options)
-//       .then((res) => {
-//         // 삭제할 건지 말지 한 번 더 물어볼까?
-//         dispatch(deletePost(post_id));
-//         swal({
-//           title: "삭제 성공 👋",
-//           closeOnClickOutside: false,
-//         });
-//         // window.location.reload();
-//       })
-//       .catch((error) => {
-//         swal({
-//           title: "삭제 실패 🙄",
-//           text: "뭔가.. 잘못됐어요!",
-//           icon: "error",
-//         });
-//       });
-//   };
-// };
+// Delete DB
+const deleteEmojiDB = (post_id, emoji_id) => {
+  return function (dispatch, getState, { history }) {
+    const options = {
+      url: `${config.api}/emoticon/${post_id}`,
+      method: "DELETE",
+      data: { emojiId: emoji_id },
+      headers: {
+        // 백 분들과 맞춰보기
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    };
+    axios(options)
+      .then((res) => {
+        // 삭제할 건지 말지 한 번 더 물어볼까?
+        dispatch(deleteEmoji(post_id, emoji_id));
+      })
+      .catch((error) => {
+        swal({
+          title: "삭제 실패 🙄",
+          text: "뭔가.. 잘못됐어요!",
+          icon: "error",
+        });
+      });
+  };
+};
 
 // reducer
 export default handleActions(
@@ -235,6 +112,14 @@ export default handleActions(
           action.payload.emoticon_content
         );
       }),
+    [DELETE_EMOJI]: (state, action) =>
+      produce(state, (draft) => {
+        let emoji_list = state.list[action.payload.post_id];
+        let index = emoji_list.findIndex(
+          (e) => e._id === action.payload.emoji_id
+        );
+        draft.list[action.payload.post_id].splice(index, 1);
+      }),
   },
   initialState
 );
@@ -245,6 +130,7 @@ const actionCreators = {
   //getPostDB,
   setEmoji,
   updateEmojiDB,
+  deleteEmojiDB,
 };
 
 // export

@@ -76,7 +76,7 @@ const Post = (props) => {
   const post_list = useSelector((state) => state.post.list);
   const index = post_list.findIndex((p) => p.post_id === props.post_id);
   const _post = post_list[index];
-  console.log(_post.emoticon);
+  // console.log(_post.emoticon);
 
   React.useEffect(() => {
     dispatch(emojiActions.setEmoji(props.post_id, _post.emoticon));
@@ -89,8 +89,10 @@ const Post = (props) => {
     dispatch(emojiActions.updateEmojiDB(props.post_id, emoji.native));
   };
 
+  const updateEmoji = () => {};
+
   const emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
-  console.log(emoji_list);
+  // console.log(emoji_list);
   return (
     <>
       <PostFrame
@@ -186,8 +188,22 @@ const Post = (props) => {
               </PickerFrame>
             )}
             {emoji_list?.map((e, idx) => {
-              console.log(e.emoji);
-              return <button key={idx}>{e.emoji}</button>;
+              // console.log(e, e.emoji);
+              if (userInfo.uid === e.user.userId) {
+                return (
+                  <Me_EmojiBtn
+                    onClick={() => {
+                      dispatch(
+                        emojiActions.deleteEmojiDB(props.post_id, e._id)
+                      );
+                    }}
+                    key={idx}
+                  >
+                    {e.emoji}
+                  </Me_EmojiBtn>
+                );
+              }
+              return <Not_Me_EmojiBtn key={idx}>{e.emoji}</Not_Me_EmojiBtn>;
             })}
           </CommentFrame>
         </PostBox>
@@ -307,4 +323,13 @@ const PickerFrame = styled.div`
   position: absolute;
   z-index: 1000;
 `;
+
+const Me_EmojiBtn = styled.button`
+  border-radius: 10px !important;
+  color: #1890ff !important;
+  border: 2px solid #1890ff !important;
+  margin-right: 4px;
+`;
+
+const Not_Me_EmojiBtn = styled.button``;
 export default Post;
