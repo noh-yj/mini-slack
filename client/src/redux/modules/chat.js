@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 import socketIOClient from 'socket.io-client';
+import axios from 'axios';
 import { config } from '../../config';
 
 // 액션
@@ -8,14 +9,18 @@ const GET_MSG = 'GET_MSG';
 const SET_MSG = 'SET_MSG';
 const LOADING = 'LOADING';
 const BADGE = 'BADGE';
-const RECEIVE = 'RECEIVE';
+const RECEIVEBADGE = 'RECEIVEBADGE';
+const USERS = 'USERS';
 
 // 액션 생성함수
 const getMsg = createAction(GET_MSG, (msg) => ({ msg }));
 const setMsg = createAction(SET_MSG, (msg) => ({ msg }));
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
-const badge = createAction(BADGE, (is_badge) => ({ is_badge }));
-const receive = createAction(RECEIVE, (info) => ({ info }));
+const badgeOff = createAction(BADGE, (uid) => ({ uid }));
+const receiveBadge = createAction(RECEIVEBADGE, (uid) => ({
+  uid,
+}));
+const user_list = createAction(USERS, (user_list) => ({ user_list }));
 
 // initialState
 const initialState = {
@@ -23,11 +28,30 @@ const initialState = {
   is_loading: false,
   is_badge: false,
   receive_info: '',
+  user_list: [],
 };
 
 // 소켓 설정(전역으로 사용하기위해 export)
 const socket = socketIOClient(`${config.api}/chat`);
 const globalSocket = socketIOClient(`${config.api}/`);
+
+const middlewareUsers = () => {
+  return function (dispatch, getState) {
+    axios({
+      method: 'get',
+      url: `${config.api}/member`,
+    })
+      .then((res) => {
+        const users = res.data.users.map((val) => {
+          return { ...val, is_badge: false };
+        });
+        dispatch(user_list(users));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+};
 
 // 채팅 목록 불러오기
 const loadChatList = () => {
@@ -53,8 +77,7 @@ const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
       // 알람 기능 다른사람일 때
-      dispatch(receive(res));
-      dispatch(badge(true));
+      dispatch(receiveBadge(res.uid));
       if (getState().user.user.nickname !== res.username) {
         // 테스트 중
         // 해당 채팅방이 아닌 곳에서 알람
@@ -100,11 +123,21 @@ export default handleActions(
       }),
     [BADGE]: (state, action) =>
       produce(state, (draft) => {
-        draft.is_badge = action.payload.is_badge;
+        const idx = draft.user_list.findIndex(
+          (val) => val.userId === action.payload.uid,
+        );
+        draft.user_list[idx].is_badge = false;
       }),
-    [RECEIVE]: (state, action) =>
+    [RECEIVEBADGE]: (state, action) =>
       produce(state, (draft) => {
-        draft.receive_info = action.payload.info;
+        const idx = draft.user_list.findIndex(
+          (val) => val.userId === action.payload.uid,
+        );
+        draft.user_list[idx].is_badge = true;
+      }),
+    [USERS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.user_list = action.payload.user_list;
       }),
   },
   initialState,
@@ -114,7 +147,8 @@ const actionCreators = {
   loadChatList,
   addChatList,
   globalAddChatList,
-  badge,
+  badgeOff,
+  middlewareUsers,
   socket,
   globalSocket,
 };
