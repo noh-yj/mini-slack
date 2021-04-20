@@ -6,6 +6,7 @@ import { Picker } from "emoji-mart";
 import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
+import { actionCreators as emojiActions } from "../redux/modules/emoji";
 import {
   MoreOutlined,
   EditOutlined,
@@ -72,12 +73,27 @@ const Post = (props) => {
     setBtn(true);
   };
 
+  // Emoji functions (update & delete)
+  const onClick = (emoji, event) => {
+    //  emoji_list.push({ emoji: emoji.native, user_name: "henry" });
+    //  console.log(emoji_list);
+    dispatch(emojiActions.updateEmojiDB(props.post_id, emoji.native));
+  };
+
+  const updateEmoji = () => {
+    dispatch();
+  };
+
   return (
     <>
       <PostFrame
         onClick={() => {
-          toggleBtn();
-          emojiBtn();
+          if (isOpen) {
+            setToggle(false);
+          }
+          if (isOn) {
+            setBtn(false);
+          }
         }}
       >
         {userInfo?.uid === props.user_id?.userId ? (
@@ -86,7 +102,7 @@ const Post = (props) => {
           </MoreBtn>
         ) : null}
 
-        {isOpen && (
+        {userInfo?.uid === props.user_id?.userId && isOpen ? (
           <Btngroup>
             <button onClick={modalBtn}>
               <EditOutlined />
@@ -95,7 +111,7 @@ const Post = (props) => {
               <DeleteOutlined onClick={deletePost} />
             </button>
           </Btngroup>
-        )}
+        ) : null}
         <PostBox>
           <Postsub>
             <Avatar
@@ -157,6 +173,7 @@ const Post = (props) => {
                   emoji="point_up"
                   enableFrequentEmojiSort={true}
                   native={true}
+                  onClick={onClick}
                 />
               </PickerFrame>
             )}

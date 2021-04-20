@@ -31,6 +31,7 @@ const initialState = {
 // Update emoji in DB
 const updateEmojiDB = (post_id, emoji) => {
   return function (dispatch, getState, { history }) {
+    console.log(post_id, emoji);
     let emoji_content = {
       emoji: emoji,
     };
@@ -40,7 +41,8 @@ const updateEmojiDB = (post_id, emoji) => {
       method: "PATCH",
       data: emoji_content,
       headers: {
-        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
       },
     };
 

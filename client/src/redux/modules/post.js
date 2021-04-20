@@ -113,6 +113,7 @@ const getPostDB = () => {
             profile_img: singleData.user?.profile_img,
             day: singleData.createdAt.split("T")[0],
             post_id: singleData._id,
+            emoticon: singleData.emoticon,
           });
         });
         console.log(post_data);
