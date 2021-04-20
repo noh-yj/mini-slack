@@ -5,7 +5,7 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as postActions } from "../redux/modules/post";
+import post, { actionCreators as postActions } from "../redux/modules/post";
 import { actionCreators as emojiActions } from "../redux/modules/emoji";
 import {
   MoreOutlined,
@@ -89,7 +89,7 @@ const Post = (props) => {
     dispatch(emojiActions.updateEmojiDB(props.post_id, emoji.native));
   };
 
-  const emoji_list = useSelector((state) => state.emoji.list);
+  const emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
   console.log(emoji_list);
   return (
     <>
@@ -180,13 +180,15 @@ const Post = (props) => {
                   emoji="point_up"
                   enableFrequentEmojiSort={true}
                   native={true}
+                  showSearchBar={false}
                   onClick={onClick}
                 />
               </PickerFrame>
             )}
-            {/* {emoji_list.map((e) => {
-              return <button>{e.emoji}</button>;
-            })} */}
+            {emoji_list?.map((e, idx) => {
+              console.log(e.emoji);
+              return <button key={idx}>{e.emoji}</button>;
+            })}
           </CommentFrame>
         </PostBox>
       </PostFrame>
@@ -303,6 +305,6 @@ const ToggleBtn = styled.button`
 
 const PickerFrame = styled.div`
   position: absolute;
-  z-index: 5;
+  z-index: 1000;
 `;
 export default Post;
