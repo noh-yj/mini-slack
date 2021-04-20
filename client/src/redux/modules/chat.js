@@ -37,6 +37,7 @@ const initialState = {
 const socket = socketIOClient(`${config.api}/chat`);
 const globalSocket = socketIOClient(`${config.api}/`);
 
+// 유저 목록 조회
 const middlewareUsers = () => {
   return function (dispatch) {
     axios({
@@ -78,27 +79,33 @@ const addChatList = () => {
 const globalAddChatList = (room) => {
   return function (dispatch, getState) {
     globalSocket.on('globalReceive', (res) => {
-      // 다른사람일 때
-      if (getState().user.user.uid !== res.uid) {
-        // 해당 채팅방에서는 알람이 울리지 않게 끔
-        dispatch(receiveBadge(res.uid));
-        if (room !== res.room) {
-          // noti 권한 허용일 경우
-          if (Notification.permission === 'granted') {
-            new Notification(res.username, {
-              body: res.msg,
-              icon: res.profile_img,
-            });
-            // noti 권한이 허용이 아닐 경우
-          } else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function (permission) {
-              if (permission === 'granted') {
-                new Notification(res.username, {
-                  body: res.msg,
-                  icon: res.profile_img,
-                });
-              }
-            });
+      const myId = getState().user.user.uid;
+      const receive_val = res.room.split('-');
+
+      // 3자 채팅 무시
+      if (receive_val.includes(myId)) {
+        // 다른사람일 때 알림 울리게끔
+        if (getState().user.user.uid !== res.uid) {
+          // 해당 채팅방에서는 알람이 울리지 않게 끔 조건 처리
+          if (room !== res.room) {
+            // noti 권한 허용일 경우
+            dispatch(receiveBadge(res.uid));
+            if (Notification.permission === 'granted') {
+              new Notification(res.username, {
+                body: res.msg,
+                icon: res.profile_img,
+              });
+              // noti 권한이 허용이 아닐 경우
+            } else if (Notification.permission !== 'denied') {
+              Notification.requestPermission(function (permission) {
+                if (permission === 'granted') {
+                  new Notification(res.username, {
+                    body: res.msg,
+                    icon: res.profile_img,
+                  });
+                }
+              });
+            }
           }
         }
       }

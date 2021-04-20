@@ -21,6 +21,7 @@ const Sidebar = ({ room }) => {
   const users = useSelector((state) => state.chat.user_list);
 
   useEffect(() => {
+    // 전체 유저 조회
     dispatch(chatActions.middlewareUsers());
     // 전역소켓 연결
     chatActions.globalSocket.connect();
