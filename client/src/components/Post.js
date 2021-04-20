@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar, Image } from "antd";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
@@ -8,19 +10,17 @@ import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
-  RedoOutlined,
   CommentOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 import EditPostModal from "./EditPostModal";
 import "animate.css";
 
-import CommentList from "./CommentList";
 import { history } from "../redux/configureStore";
 
 const Post = (props) => {
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
-
   const modalBtn = () => {
     setModal(true);
   };
@@ -48,10 +48,6 @@ const Post = (props) => {
     setToggle(false);
   };
 
-  const closeToggle = () => {
-    setToggle(false);
-  };
-
   const deletePost = () => {
     console.log(props.post_id);
     dispatch(postActions.deletePostDB(props.post_id));
@@ -65,9 +61,25 @@ const Post = (props) => {
     setUserprofile(false);
   };
 
+  // Emoji button
+  const [isOn, setBtn] = useState(false);
+
+  const emojiBtn = () => {
+    if (isOn) {
+      setBtn(false);
+      return;
+    }
+    setBtn(true);
+  };
+
   return (
     <>
-      <PostFrame onClick={toggleBtn}>
+      <PostFrame
+        onClick={() => {
+          toggleBtn();
+          emojiBtn();
+        }}
+      >
         {userInfo?.uid === props.user_id?.userId ? (
           <MoreBtn onClick={toggleBtn}>
             <MoreOutlined />
@@ -129,6 +141,25 @@ const Post = (props) => {
             >
               <CommentOutlined />
             </button>
+            <ToggleBtn onClick={emojiBtn}>
+              {isOn ? (
+                <SmileOutlined style={{ fontSize: "24px", color: "#08c" }} />
+              ) : (
+                <SmileOutlined style={{ fontSize: "24px", color: "gray" }} />
+              )}
+            </ToggleBtn>
+            {/* <Picker onSelect={this.addEmoji} /> */}
+            {isOn && (
+              <PickerFrame>
+                <Picker
+                  className="pickerBtn"
+                  title="Pick your emoji…"
+                  emoji="point_up"
+                  enableFrequentEmojiSort={true}
+                  native={true}
+                />
+              </PickerFrame>
+            )}
           </CommentFrame>
         </PostBox>
       </PostFrame>
@@ -234,4 +265,17 @@ const CommentFrame = styled.div`
   }
 `;
 
+// Emoji related styling
+const ToggleBtn = styled.button`
+  width: 50px;
+  height: 50px;
+  background: none;
+  outline: none;
+  border: none;
+`;
+
+const PickerFrame = styled.div`
+  position: absolute;
+  z-index: 5;
+`;
 export default Post;
