@@ -32,9 +32,9 @@ function ChatInput({ room }) {
     chatActions.globalSocket.emit('globalSend', {
       room: Info.room,
       username: Info.username,
+      uid: Info.uid,
       profile_img: Info.profile_img,
       msg: Info.msg,
-      uid: Info.uid,
     });
     setMsg('');
   };
