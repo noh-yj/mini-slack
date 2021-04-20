@@ -4,7 +4,7 @@ import { Input, Button } from 'antd';
 import { useSelector } from 'react-redux';
 import { actionCreators as chatActions } from '../redux/modules/chat';
 
-function ChatInput({ room, targetId }) {
+function ChatInput({ room }) {
   const [msg, setMsg] = useState('');
   const userImg = useSelector((state) => state.user.user?.profile_img);
   const username = useSelector((state) => state.user.user);
@@ -35,7 +35,6 @@ function ChatInput({ room, targetId }) {
       profile_img: Info.profile_img,
       msg: Info.msg,
       uid: Info.uid,
-      targetId: targetId,
     });
     setMsg('');
   };
