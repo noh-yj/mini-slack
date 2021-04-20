@@ -50,7 +50,6 @@ const Post = (props) => {
   };
 
   const deletePost = () => {
-    console.log(props.post_id);
     dispatch(postActions.deletePostDB(props.post_id));
   };
   // 유저 프로필 모달
@@ -74,16 +73,24 @@ const Post = (props) => {
   };
 
   // Emoji functions (update & delete)
+  const post_list = useSelector((state) => state.post.list);
+  const index = post_list.findIndex((p) => p.post_id === props.post_id);
+  const _post = post_list[index];
+  console.log(_post.emoticon);
+
+  React.useEffect(() => {
+    dispatch(emojiActions.setEmoji(props.post_id, _post.emoticon));
+  }, []);
+
   const onClick = (emoji, event) => {
     //  emoji_list.push({ emoji: emoji.native, user_name: "henry" });
     //  console.log(emoji_list);
+    // if (_post.emoticon)
     dispatch(emojiActions.updateEmojiDB(props.post_id, emoji.native));
   };
 
-  const updateEmoji = () => {
-    dispatch();
-  };
-
+  const emoji_list = useSelector((state) => state.emoji.list);
+  console.log(emoji_list);
   return (
     <>
       <PostFrame
@@ -177,6 +184,9 @@ const Post = (props) => {
                 />
               </PickerFrame>
             )}
+            {/* {emoji_list.map((e) => {
+              return <button>{e.emoji}</button>;
+            })} */}
           </CommentFrame>
         </PostBox>
       </PostFrame>

@@ -16,18 +16,19 @@ const setEmoji = createAction(SET_EMOJI, (post_id, emoji_list) => ({
   emoji_list,
 }));
 
-const updateEmoji = createAction(UPDATE_EMOJI, (post_id, emoji) => ({
+const updateEmoji = createAction(UPDATE_EMOJI, (post_id, emoticon_content) => ({
   post_id,
-  emoji,
+  emoticon_content,
 }));
 const deleteEmoji = createAction(DELETE_EMOJI, (emoji_id) => ({ emoji_id }));
 
 //initial state
 const initialState = {
-  list: [],
+  list: {},
 };
 
 // middleware communication
+
 // Update emoji in DB
 const updateEmojiDB = (post_id, emoji) => {
   return function (dispatch, getState, { history }) {
@@ -48,7 +49,11 @@ const updateEmojiDB = (post_id, emoji) => {
 
     axios(emojiDB)
       .then((res) => {
-        console.log(res.data);
+        let emoticon_content = {
+          emoji: emoji,
+        };
+        dispatch(updateEmoji(post_id, emoticon_content));
+        console.log("SUCCESS");
       })
       .catch((error) => {
         swal({
@@ -221,16 +226,16 @@ export default handleActions(
     [SET_EMOJI]: (state, action) =>
       produce(state, (draft) => {
         // draft.list.push(...action.payload.post_list);
-        draft.list = action.payload.emoji_list;
+        draft.list[action.payload.post_id] = action.payload.emoji_list;
+        console.log(action.payload.post_id, action.payload.emoji_list);
         //draft.paging = action.payload.paging;
         //draft.likelist = action.payload.likelist;
       }),
     [UPDATE_EMOJI]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.list.findIndex(
-          (p) => p.post_id === action.payload.post_id
+        draft.list[action.payload.post_id].push(
+          action.payload.emoticon_content
         );
-        draft.list[idx] = { ...draft.list[idx], ...action.payload.emoji };
       }),
   },
   initialState
