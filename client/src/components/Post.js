@@ -188,8 +188,7 @@ const Post = (props) => {
               </PickerFrame>
             )}
             {emoji_list?.map((e, idx) => {
-              // console.log(e, e.emoji);
-              if (userInfo?.uid === e.user.userId) {
+              if (userInfo?.uid === e.user?.userId) {
                 return (
                   <Me_EmojiBtn
                     onClick={() => {
@@ -331,5 +330,10 @@ const Me_EmojiBtn = styled.button`
   margin-right: 4px;
 `;
 
-const Not_Me_EmojiBtn = styled.button``;
+const Not_Me_EmojiBtn = styled.button`
+  border-radius: 10px !important;
+  color: #ececec !important;
+  border: 2px solid #ececec !important;
+  margin-right: 4px;
+`;
 export default Post;
