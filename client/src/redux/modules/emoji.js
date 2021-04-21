@@ -36,7 +36,6 @@ const initialState = {
 // Update emoji in DB
 const updateEmojiDB = (post_id, emoji) => {
   return function (dispatch, getState, { history }) {
-    console.log(post_id, emoji);
     let emoji_content = {
       emoji: emoji,
     };
@@ -54,13 +53,6 @@ const updateEmojiDB = (post_id, emoji) => {
     axios(emojiDB)
       .then((res) => {
         let emoji_info = res.data.emoji;
-
-        console.log(emoji_info);
-        // let emoji_icon = emoji_info[emoji_info.length - 1].emoticon;
-
-        // emoticon_content[emoji_icon] =
-        //   emoji_info[emoji_info.length - 1][emoji_icon];
-        // emoticon_content["emoticon"] = emoji;
         dispatch(updateEmoji(post_id, emoji_info));
       })
       .catch((error) => {
@@ -111,12 +103,6 @@ export default handleActions(
       }),
     [UPDATE_EMOJI]: (state, action) =>
       produce(state, (draft) => {
-        // if (!draft.list[action.payload.post_id]) {
-        //   draft.list[action.payload.post_id] = [
-        //     action.payload.emoticon_content,
-        //   ];
-        //   return;
-        // }
         draft.list[action.payload.post_id] = action.payload.emoticon_content;
       }),
     [DELETE_EMOJI]: (state, action) =>

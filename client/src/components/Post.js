@@ -224,7 +224,7 @@ const Post = (props) => {
                   }
                   return (
                     <Not_Me_EmojiBtn
-                      key={idx}
+                      key={index}
                       onClick={() => {
                         dispatch(
                           emojiActions.updateEmojiDB(props.post_id, i.emoticon),
