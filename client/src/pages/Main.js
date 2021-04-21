@@ -1,25 +1,25 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { FormOutlined, SmileOutlined } from "@ant-design/icons";
-import swal from "sweetalert";
-import PostWriteModal from "../components/PostWriteModal";
-import Header from "../components/Header";
-import Sider from "../components/Sidebar";
-import PostList from "../components/PostList";
-import { getCookie } from "../shared/Cookie";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { FormOutlined, SmileOutlined, MenuOutlined } from '@ant-design/icons';
+import swal from 'sweetalert';
+import PostWriteModal from '../components/PostWriteModal';
+import Header from '../components/Header';
+import Sider from '../components/Sidebar';
+import PostList from '../components/PostList';
+import { getCookie } from '../shared/Cookie';
 
 const Main = (props) => {
   const { history } = props;
   // 쿠키에 저장된 토큰 조회
-  const cookie = getCookie("is_login") ? true : false;
+  const cookie = getCookie('is_login') ? true : false;
   // 토큰이 없을 경우 사용을 못하게 로그인 화면으로 이동시키기
   if (!cookie) {
     swal({
-      title: "토큰이 만료되었거나 잘못된 접근입니다.",
-      text: "다시 로그인 해주세요!",
-      icon: "error",
+      title: '토큰이 만료되었거나 잘못된 접근입니다.',
+      text: '다시 로그인 해주세요!',
+      icon: 'error',
     });
-    history.replace("/");
+    history.replace('/');
   }
   // Modal control operations
   const [isModalOpen, setModal] = useState(false);
@@ -39,22 +39,29 @@ const Main = (props) => {
     }
     setModal(false);
   };
+  // 반응형 햄버거 토글
+  const [toggle, setToggle] = useState(false);
+  const click = () => {
+    setToggle(!toggle);
+  };
 
   return (
     <>
       <MainFrame>
         <Header />
+        <ToggleBtn>
+          <MenuOutlined onClick={click} />
+        </ToggleBtn>
         <MainContent>
-          <MainLeft>
+          <MainLeft toggle={toggle}>
             <Sider />
           </MainLeft>
-          <MainRight>
+          <MainRight toggle={toggle}>
             <PostList />
           </MainRight>
         </MainContent>
-
         <PostWriteBtn onClick={modalBtn}>
-          <FormOutlined style={{ fontSize: "30px" }} />
+          <FormOutlined style={{ fontSize: '30px' }} />
         </PostWriteBtn>
         <PostWriteModal status={isModalOpen} close={closeModal} />
 
@@ -77,9 +84,18 @@ const MainFrame = styled.div`
   & > button:hover {
     transform: scale(1.1);
   }
+`;
 
-  @media only screen and (max-width: 768px) {
-    margin: 30px auto;
+const ToggleBtn = styled.div`
+  width: 20px;
+  height: 25px;
+  font-size: 20px;
+  position: fixed;
+  top: 14px;
+  left: 10px;
+  display: none;
+  @media only screen and (max-width: 375px) {
+    display: block;
   }
 `;
 
@@ -96,13 +112,25 @@ const MainLeft = styled.section`
   padding: 16px 24px;
   border-right: 1px solid rgb(235, 237, 240);
   flex-basis: 25%;
+  display: block;
+  @media only screen and (max-width: 375px) {
+    display: ${(props) => (props.toggle ? 'block' : 'none')};
+    flex-basis: ${(props) => (props.toggle ? '100%' : '0%')};
+  }
 `;
 
 const MainRight = styled.section`
   flex-basis: 75%;
   padding: 16px 24px;
   min-height: 80vh;
-  &::after {
+  @media only screen and (max-width: 768px) {
+    padding: 16px 0;
+  }
+
+  @media only screen and (max-width: 375px) {
+    display: ${(props) => (props.toggle ? 'none' : 'block')};
+    flex-basis: ${(props) => (props.toggle ? '0%' : '100%')};
+    padding: 15px;
   }
 `;
 
@@ -111,7 +139,7 @@ const PostWriteBtn = styled.button`
   top: 80%;
   right: 5%;
   cursor: pointer;
-  z-index: 5000;
+  z-index: 19;
   &:hover {
     color: #1890ff;
     transition: all 200ms ease-in-out;
@@ -125,5 +153,9 @@ const Footer = styled.div`
   justify-content: center;
   font-weight: bold;
   cursor: default;
+  @media only screen and (max-width: 375px) {
+    height: 40px;
+    font-size: 18px;
+  }
 `;
 export default Main;

@@ -6,7 +6,6 @@ import { history } from '../redux/configureStore';
 import { useDispatch } from 'react-redux';
 import { getCookie } from './Cookie';
 import { actionCreators as userActions } from '../redux/modules/user';
-import { actionCreators as chatActions } from '../redux/modules/chat';
 import Test from '../pages/Test';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
