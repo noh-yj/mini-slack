@@ -6,13 +6,14 @@ import { Picker } from "emoji-mart";
 import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
 import post, { actionCreators as postActions } from "../redux/modules/post";
-import { actionCreators as emojiActions } from "../redux/modules/emoji";
+import emoji, { actionCreators as emojiActions } from "../redux/modules/emoji";
 import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
   CommentOutlined,
   SmileOutlined,
+  ConsoleSqlOutlined,
 } from "@ant-design/icons";
 import EditPostModal from "./EditPostModal";
 import "animate.css";
@@ -78,22 +79,26 @@ const Post = (props) => {
   const _post = post_list[index];
   // console.log(_post.emoticon);
 
+  let emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
+  let emoji_subList = emoji_list;
+  emoji_list = [emoji_list];
+
   React.useEffect(() => {
     dispatch(emojiActions.setEmoji(props.post_id, _post.emoji));
   }, []);
 
   const onClick = (emoji, event) => {
-    //  emoji_list.push({ emoji: emoji.native, user_name: "henry" });
-    //  console.log(emoji_list);
-    // if (_post.emoticon)
+    let index = emoji_subList.findIndex((e) => e.emoticon === emoji.native);
+    if (
+      index !== -1 &&
+      emoji_subList[index][emoji.native].includes(userInfo?.uid)
+    ) {
+      dispatch(emojiActions.deleteEmojiDB(props.post_id, emoji.native));
+      return;
+    }
     dispatch(emojiActions.updateEmojiDB(props.post_id, emoji.native));
   };
 
-  const updateEmoji = () => {};
-
-  let emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
-  emoji_list = [emoji_list];
-  console.log(emoji_list);
   return (
     <>
       <PostFrame
@@ -190,22 +195,26 @@ const Post = (props) => {
                 />
               </PickerFrame>
             )}
-            {/* [{😁: ["asdfasdfasdf"], emoticon: 😁}, {😍: ["asdfasdfasdfadsf"]}] */}
+
             {emoji_list?.map((e, idx) => {
-              console.log(e);
               {
-                return e?.map((i) => {
-                  // console.log(i[i.emoticon].includes(userInfo?.uid));
-                  if (i[i.emoticon].includes(userInfo?.uid) === true) {
-                    // console.log(i.emoticon);
+                return e?.map((i, index) => {
+                  if (i[i.emoticon]?.includes(userInfo?.uid) === true) {
                     return (
                       <Me_EmojiBtn
                         onClick={() => {
-                          console.log("DELETE");
+                          if (i[i.emoticon]?.includes(userInfo?.uid) === true) {
+                            dispatch(
+                              emojiActions.deleteEmojiDB(
+                                props.post_id,
+                                i.emoticon
+                              )
+                            );
+                          }
                         }}
                         key={idx}
                       >
-                        {i.emoticon} {i[i.emoticon].length}
+                        {i?.emoticon} {i[i.emoticon]?.length}
                       </Me_EmojiBtn>
                     );
                   }
@@ -213,40 +222,17 @@ const Post = (props) => {
                     <Not_Me_EmojiBtn
                       key={idx}
                       onClick={() => {
-                        console.log("UPDATE");
+                        dispatch(
+                          emojiActions.updateEmojiDB(props.post_id, i.emoticon)
+                        );
+                        console.log(props.post_id, i.emoticon);
                       }}
                     >
-                      {i.emoticon} {i[i.emoticon].length}
+                      {i?.emoticon} {i[i.emoticon]?.length}
                     </Not_Me_EmojiBtn>
                   );
                 });
               }
-              // if (e[e.emoticon]?.includes(userInfo?.uid) === true) {
-              //   return (
-              //     <Me_EmojiBtn
-              //       onClick={() => {
-              //         dispatch(
-              //           emojiActions.deleteEmojiDB(props.post_id, e._id)
-              //         );
-              //       }}
-              //       key={idx}
-              //     >
-              //       {e.emoticon}
-              //     </Me_EmojiBtn>
-              //   );
-              // }
-              // return (
-              //   <Not_Me_EmojiBtn
-              //     key={idx}
-              //     onClick={() => {
-              //       dispatch(
-              //         emojiActions.updateEmojiDB(props.post_id, e.emoticon)
-              //       );
-              //     }}
-              //   >
-              //     {e.emoticon}
-              //   </Not_Me_EmojiBtn>
-              // );
             })}
           </CommentFrame>
         </PostBox>
