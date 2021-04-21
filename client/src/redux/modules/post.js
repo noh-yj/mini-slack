@@ -7,6 +7,7 @@ import swal from 'sweetalert';
 
 // actions
 const SET_POST = 'SET_POST';
+const USER_POST = 'USER_POST';
 const ADD_POST = 'ADD_POST';
 const LOADING = 'LOADING';
 const UPDATE_POST = 'UPDATE_POST';
@@ -28,6 +29,7 @@ const updatePost = createAction(UPDATE_POST, (post_id, content) => ({
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
 const scrollLoading = createAction(SCROLLLOADING, (loading) => ({ loading }));
+const userPost = createAction(USER_POST, (post_list) => ({ post_list }));
 
 //initial state
 const initialState = {
@@ -35,6 +37,7 @@ const initialState = {
   list: [],
   paging: { page: 1, size: 3 },
   scroll_loading: false,
+  user_post_list: [],
 };
 
 // middleware communication
@@ -105,8 +108,10 @@ const getPostDB = (page = 1, size = 3) => {
         token: `${jwtToken}`,
       },
     };
+    console.log(page);
     axios(options)
       .then((res) => {
+        console.log(res.data);
         let paging = {
           page: res.data.posts.length === size ? page + 1 : null,
           size: size,
@@ -139,7 +144,7 @@ const getPostDB = (page = 1, size = 3) => {
 
 // userPost 특정 유저가 작성한 게시물 조회
 const getUserPostDB = (id) => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch) {
     dispatch(loading(true));
 
     axios({
@@ -147,20 +152,23 @@ const getUserPostDB = (id) => {
       url: `${config.api}/member/${id}`,
     })
       .then((res) => {
+        console.log(res.data.posts);
         let post_data = [];
 
         res.data.posts.forEach((singleData) => {
           post_data.push({
-            comment_list: singleData.comment,
-            content: singleData.content,
-            imgUrl: singleData.imgUrl,
-            user_id: singleData.user,
-            profile_img: singleData.user?.profile_img,
-            day: singleData.createdAt.split('T')[0],
-            post_id: singleData._id,
+            comment_list: singleData.post.comment,
+            content: singleData.post.content,
+            imgUrl: singleData.post.imgUrl,
+            user_id: singleData.post.user,
+            profile_img: singleData.post.user?.profile_img,
+            day: singleData.post.createdAt.split('T')[0],
+            post_id: singleData.post._id,
+            emoticon: singleData.post.emoticon,
+            emoji: singleData.emoji,
           });
         });
-        dispatch(setPost(post_data));
+        dispatch(userPost(post_data));
       })
       .catch((error) => {
         if (error.res) {
@@ -287,6 +295,11 @@ export default handleActions(
     [SCROLLLOADING]: (state, action) =>
       produce(state, (draft) => {
         draft.scroll_loading = action.payload.loading;
+      }),
+    [USER_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.user_post_list = action.payload.post_list;
+        draft.is_loading = false;
       }),
   },
   initialState,

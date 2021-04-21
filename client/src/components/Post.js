@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Avatar, Image } from "antd";
-import "emoji-mart/css/emoji-mart.css";
-import { Picker } from "emoji-mart";
-import UserProfile from "./UserProfile";
-import { useDispatch, useSelector } from "react-redux";
-import post, { actionCreators as postActions } from "../redux/modules/post";
-import emoji, { actionCreators as emojiActions } from "../redux/modules/emoji";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Avatar, Image } from 'antd';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
+import UserProfile from './UserProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import post, { actionCreators as postActions } from '../redux/modules/post';
+import emoji, { actionCreators as emojiActions } from '../redux/modules/emoji';
 import {
   MoreOutlined,
   EditOutlined,
@@ -14,11 +14,11 @@ import {
   CommentOutlined,
   SmileOutlined,
   ConsoleSqlOutlined,
-} from "@ant-design/icons";
-import EditPostModal from "./EditPostModal";
-import "animate.css";
+} from '@ant-design/icons';
+import EditPostModal from './EditPostModal';
+import 'animate.css';
 
-import { history } from "../redux/configureStore";
+import { history } from '../redux/configureStore';
 
 const Post = (props) => {
   // Modal control operations
@@ -74,17 +74,21 @@ const Post = (props) => {
   };
 
   // Emoji functions (update & delete)
-  const post_list = useSelector((state) => state.post.list);
+
+  let post_list;
+  const user_post = useSelector((state) => state.post.user_post_list);
+  const post = useSelector((state) => state.post.list);
+  props.is_user ? (post_list = user_post) : (post_list = post);
+
   const index = post_list.findIndex((p) => p.post_id === props.post_id);
   const _post = post_list[index];
-  // console.log(_post.emoticon);
 
   let emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
   let emoji_subList = emoji_list;
   emoji_list = [emoji_list];
 
   React.useEffect(() => {
-    dispatch(emojiActions.setEmoji(props.post_id, _post.emoji));
+    dispatch(emojiActions.setEmoji(props.post_id, _post?.emoji));
   }, []);
 
   const onClick = (emoji, event) => {
@@ -131,20 +135,20 @@ const Post = (props) => {
           <Postsub>
             <Avatar
               style={{
-                backgroundColor: "#87d068",
-                cursor: "pointer",
-                width: "3rem",
-                height: "3rem",
-                borderRadius: "30%",
-                marginRight: "0.5rem",
-                fontSize: "25px",
-                display: "flex",
-                alignItems: "center",
+                backgroundColor: '#87d068',
+                cursor: 'pointer',
+                width: '3rem',
+                height: '3rem',
+                borderRadius: '30%',
+                marginRight: '0.5rem',
+                fontSize: '25px',
+                display: 'flex',
+                alignItems: 'center',
               }}
               src={props.user_id?.profile_img}
               onClick={OpenModal}
             >
-              {props.user_id?.profile_img === " "
+              {props.user_id?.profile_img === ' '
                 ? props.user_id?.nickname[0]
                 : null}
             </Avatar>
@@ -162,7 +166,7 @@ const Post = (props) => {
             <PostBody>
               <Image
                 src={props?.imgUrl}
-                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+                style={{ width: '100%', height: '100%', borderRadius: '10px' }}
               />
             </PostBody>
           )}
@@ -176,18 +180,18 @@ const Post = (props) => {
             </button>
             <ToggleBtn onClick={emojiBtn}>
               {isOn ? (
-                <SmileOutlined style={{ fontSize: "24px", color: "#08c" }} />
+                <SmileOutlined style={{ fontSize: '24px', color: '#08c' }} />
               ) : (
-                <SmileOutlined style={{ fontSize: "24px", color: "gray" }} />
+                <SmileOutlined style={{ fontSize: '24px', color: 'gray' }} />
               )}
             </ToggleBtn>
             {/* <Picker onSelect={this.addEmoji} /> */}
             {isOn && (
               <PickerFrame>
                 <Picker
-                  className="pickerBtn"
-                  title="Pick your emoji…"
-                  emoji="point_up"
+                  className='pickerBtn'
+                  title='Pick your emoji…'
+                  emoji='point_up'
                   enableFrequentEmojiSort={true}
                   native={true}
                   showSearchBar={false}
@@ -207,8 +211,8 @@ const Post = (props) => {
                             dispatch(
                               emojiActions.deleteEmojiDB(
                                 props.post_id,
-                                i.emoticon
-                              )
+                                i.emoticon,
+                              ),
                             );
                           }
                         }}
@@ -223,7 +227,7 @@ const Post = (props) => {
                       key={idx}
                       onClick={() => {
                         dispatch(
-                          emojiActions.updateEmojiDB(props.post_id, i.emoticon)
+                          emojiActions.updateEmojiDB(props.post_id, i.emoticon),
                         );
                         console.log(props.post_id, i.emoticon);
                       }}

@@ -8,12 +8,13 @@ import { actionCreators as postActions } from '../redux/modules/post';
 const UserPostList = (props) => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
-  const post_list = useSelector((state) => state.post.list);
+  const post_list = useSelector((state) => state.post.user_post_list);
   const loading = useSelector((state) => state.post.is_loading);
+
   React.useEffect(() => {
     dispatch(postActions.getUserPostDB(id));
   }, [dispatch, id]);
-
+  console.log(post_list);
   return (
     <PostListFrame>
       {loading ? (
@@ -36,7 +37,7 @@ const UserPostList = (props) => {
           ) : (
             <>
               {post_list?.map((p, idx) => {
-                return <Post key={idx} {...p} />;
+                return <Post key={idx} {...p} is_user />;
               })}
             </>
           )}

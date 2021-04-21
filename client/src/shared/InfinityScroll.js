@@ -25,16 +25,14 @@ function InfinityScroll(props) {
     if (loading) {
       return;
     }
-    setTimeout(() => {
-      if (is_next) {
-        height?.addEventListener('scroll', handleScroll);
-      } else {
-        height?.removeEventListener('scroll', handleScroll);
-      }
-      return () => {
-        height?.removeEventListener('scroll', handleScroll);
-      };
-    }, 300);
+    if (is_next) {
+      height?.addEventListener('scroll', handleScroll);
+    } else {
+      height?.removeEventListener('scroll', handleScroll);
+    }
+    return () => {
+      height?.removeEventListener('scroll', handleScroll);
+    };
   }, [is_next, loading]);
 
   return (
