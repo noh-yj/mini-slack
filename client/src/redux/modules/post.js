@@ -71,6 +71,7 @@ const addPostDB = (content, item) => {
           profile_img: res.data.post.user?.profile_img,
           day: res.data.post.createdAt.split("T")[0],
           post_id: res.data.post._id,
+          emoji: [],
         };
 
         //window.location.reload();
@@ -116,6 +117,7 @@ const getPostDB = () => {
             day: singleData.post.createdAt.split("T")[0],
             post_id: singleData.post._id,
             emoticon: singleData.post.emoticon,
+            emoji: singleData.emoji,
           });
         });
         console.log(post_data);

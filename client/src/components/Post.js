@@ -79,7 +79,7 @@ const Post = (props) => {
   // console.log(_post.emoticon);
 
   React.useEffect(() => {
-    dispatch(emojiActions.setEmoji(props.post_id, _post.emoticon));
+    dispatch(emojiActions.setEmoji(props.post_id, _post.emoji));
   }, []);
 
   const onClick = (emoji, event) => {
@@ -91,8 +91,9 @@ const Post = (props) => {
 
   const updateEmoji = () => {};
 
-  const emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
-  // console.log(emoji_list);
+  let emoji_list = useSelector((state) => state.emoji.list[props.post_id]);
+  emoji_list = [emoji_list];
+  console.log(emoji_list);
   return (
     <>
       <PostFrame
@@ -187,33 +188,63 @@ const Post = (props) => {
                 />
               </PickerFrame>
             )}
+            {/* [{😁: ["asdfasdfasdf"], emoticon: 😁}, {😍: ["asdfasdfasdfadsf"]}] */}
             {emoji_list?.map((e, idx) => {
-              if (userInfo?.uid === e.user?.userId) {
-                return (
-                  <Me_EmojiBtn
-                    onClick={() => {
-                      dispatch(
-                        emojiActions.deleteEmojiDB(props.post_id, e._id)
-                      );
-                    }}
-                    key={idx}
-                  >
-                    {e.emoji}
-                  </Me_EmojiBtn>
-                );
-              }
-              return (
-                <Not_Me_EmojiBtn
-                  key={idx}
-                  onClick={() => {
-                    dispatch(
-                      emojiActions.updateEmojiDB(props.post_id, e.emoji)
+              console.log(e);
+              {
+                return e?.map((i) => {
+                  // console.log(i[i.emoticon].includes(userInfo?.uid));
+                  if (i[i.emoticon].includes(userInfo?.uid) === true) {
+                    // console.log(i.emoticon);
+                    return (
+                      <Me_EmojiBtn
+                        onClick={() => {
+                          console.log("DELETE");
+                        }}
+                        key={idx}
+                      >
+                        {i.emoticon} {i[i.emoticon].length}
+                      </Me_EmojiBtn>
                     );
-                  }}
-                >
-                  {e.emoji}
-                </Not_Me_EmojiBtn>
-              );
+                  }
+                  return (
+                    <Not_Me_EmojiBtn
+                      key={idx}
+                      onClick={() => {
+                        console.log("UPDATE");
+                      }}
+                    >
+                      {i.emoticon} {i[i.emoticon].length}
+                    </Not_Me_EmojiBtn>
+                  );
+                });
+              }
+              // if (e[e.emoticon]?.includes(userInfo?.uid) === true) {
+              //   return (
+              //     <Me_EmojiBtn
+              //       onClick={() => {
+              //         dispatch(
+              //           emojiActions.deleteEmojiDB(props.post_id, e._id)
+              //         );
+              //       }}
+              //       key={idx}
+              //     >
+              //       {e.emoticon}
+              //     </Me_EmojiBtn>
+              //   );
+              // }
+              // return (
+              //   <Not_Me_EmojiBtn
+              //     key={idx}
+              //     onClick={() => {
+              //       dispatch(
+              //         emojiActions.updateEmojiDB(props.post_id, e.emoticon)
+              //       );
+              //     }}
+              //   >
+              //     {e.emoticon}
+              //   </Not_Me_EmojiBtn>
+              // );
             })}
           </CommentFrame>
         </PostBox>

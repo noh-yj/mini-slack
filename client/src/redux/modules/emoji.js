@@ -54,7 +54,7 @@ const updateEmojiDB = (post_id, emoji) => {
       .then((res) => {
         console.log(res.data);
         let emoticon_content = {
-          emoji: emoji,
+          emoji: res.data.emoji,
           user: { userId: res.data.emoticon.user },
           _id: res.data.emoticon._id,
         };
