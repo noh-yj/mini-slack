@@ -20,9 +20,10 @@ const updateEmoji = createAction(UPDATE_EMOJI, (post_id, emoticon_content) => ({
   post_id,
   emoticon_content,
 }));
-const deleteEmoji = createAction(DELETE_EMOJI, (post_id, emoji_id) => ({
+const deleteEmoji = createAction(DELETE_EMOJI, (post_id, emoji, uid) => ({
   post_id,
-  emoji_id,
+  emoji,
+  uid,
 }));
 
 //initial state
@@ -52,13 +53,15 @@ const updateEmojiDB = (post_id, emoji) => {
 
     axios(emojiDB)
       .then((res) => {
-        console.log(res.data);
-        let emoticon_content = {
-          emoji: res.data.emoji,
-          user: { userId: res.data.emoticon.user },
-          _id: res.data.emoticon._id,
-        };
-        dispatch(updateEmoji(post_id, emoticon_content));
+        let emoji_info = res.data.emoji;
+
+        console.log(emoji_info);
+        // let emoji_icon = emoji_info[emoji_info.length - 1].emoticon;
+
+        // emoticon_content[emoji_icon] =
+        //   emoji_info[emoji_info.length - 1][emoji_icon];
+        // emoticon_content["emoticon"] = emoji;
+        dispatch(updateEmoji(post_id, emoji_info));
       })
       .catch((error) => {
         swal({
@@ -71,12 +74,13 @@ const updateEmojiDB = (post_id, emoji) => {
 };
 
 // Delete DB
-const deleteEmojiDB = (post_id, emoji_id) => {
+const deleteEmojiDB = (post_id, emoji) => {
   return function (dispatch, getState, { history }) {
+    const userInfo = getState().user.user;
     const options = {
       url: `${config.api}/emoticon/${post_id}`,
       method: "DELETE",
-      data: { emojiId: emoji_id },
+      data: { emoji: emoji },
       headers: {
         // 백 분들과 맞춰보기
         Accept: "application/json",
@@ -86,7 +90,7 @@ const deleteEmojiDB = (post_id, emoji_id) => {
     axios(options)
       .then((res) => {
         // 삭제할 건지 말지 한 번 더 물어볼까?
-        dispatch(deleteEmoji(post_id, emoji_id));
+        dispatch(deleteEmoji(post_id, emoji, userInfo?.uid));
       })
       .catch((error) => {
         swal({
@@ -104,28 +108,38 @@ export default handleActions(
     [SET_EMOJI]: (state, action) =>
       produce(state, (draft) => {
         draft.list[action.payload.post_id] = action.payload.emoji_list;
-        //draft.paging = action.payload.paging;
-        //draft.likelist = action.payload.likelist;
       }),
     [UPDATE_EMOJI]: (state, action) =>
       produce(state, (draft) => {
-        if (!draft.list[action.payload.post_id]) {
-          draft.list[action.payload.post_id] = [
-            action.payload.emoticon_content,
-          ];
-          return;
-        }
-        draft.list[action.payload.post_id].push(
-          action.payload.emoticon_content
-        );
+        // if (!draft.list[action.payload.post_id]) {
+        //   draft.list[action.payload.post_id] = [
+        //     action.payload.emoticon_content,
+        //   ];
+        //   return;
+        // }
+        draft.list[action.payload.post_id] = action.payload.emoticon_content;
       }),
     [DELETE_EMOJI]: (state, action) =>
       produce(state, (draft) => {
         let emoji_list = state.list[action.payload.post_id];
         let index = emoji_list.findIndex(
-          (e) => e._id === action.payload.emoji_id
+          (e) => e.emoticon === action.payload.emoji
         );
-        draft.list[action.payload.post_id].splice(index, 1);
+        let emoji_user_list = emoji_list[index][action.payload.emoji];
+        let user_index = emoji_user_list.findIndex(
+          (u) => u === action.payload.uid
+        );
+
+        draft.list[action.payload.post_id][index][action.payload.emoji].splice(
+          user_index,
+          1
+        );
+        if (
+          draft.list[action.payload.post_id][index][action.payload.emoji]
+            .length === 0
+        ) {
+          draft.list[action.payload.post_id].splice(index, 1);
+        }
       }),
   },
   initialState

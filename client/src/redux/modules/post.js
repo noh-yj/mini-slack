@@ -107,7 +107,6 @@ const getPostDB = () => {
         //let emoji_data = [];
 
         res.data.posts.forEach((singleData) => {
-          console.log(singleData.emoji);
           post_data.push({
             comment_list: singleData.post.comment,
             content: singleData.post.content,
@@ -120,7 +119,6 @@ const getPostDB = () => {
             emoji: singleData.emoji,
           });
         });
-        console.log(post_data);
         dispatch(setPost(post_data));
       })
       .catch((error) => {
