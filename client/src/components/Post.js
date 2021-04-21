@@ -202,7 +202,18 @@ const Post = (props) => {
                   </Me_EmojiBtn>
                 );
               }
-              return <Not_Me_EmojiBtn key={idx}>{e.emoji}</Not_Me_EmojiBtn>;
+              return (
+                <Not_Me_EmojiBtn
+                  key={idx}
+                  onClick={() => {
+                    dispatch(
+                      emojiActions.updateEmojiDB(props.post_id, e.emoji)
+                    );
+                  }}
+                >
+                  {e.emoji}
+                </Not_Me_EmojiBtn>
+              );
             })}
           </CommentFrame>
         </PostBox>

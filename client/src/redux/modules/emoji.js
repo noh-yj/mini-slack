@@ -52,6 +52,7 @@ const updateEmojiDB = (post_id, emoji) => {
 
     axios(emojiDB)
       .then((res) => {
+        console.log(res.data);
         let emoticon_content = {
           emoji: emoji,
           user: { userId: res.data.emoticon.user },

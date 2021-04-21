@@ -101,19 +101,21 @@ const getPostDB = () => {
     };
     axios(options)
       .then((res) => {
+        console.log(res.data);
         let post_data = [];
         //let emoji_data = [];
 
         res.data.posts.forEach((singleData) => {
+          console.log(singleData.emoji);
           post_data.push({
-            comment_list: singleData.comment,
-            content: singleData.content,
-            imgUrl: singleData.imgUrl,
-            user_id: singleData.user,
-            profile_img: singleData.user?.profile_img,
-            day: singleData.createdAt.split("T")[0],
-            post_id: singleData._id,
-            emoticon: singleData.emoticon,
+            comment_list: singleData.post.comment,
+            content: singleData.post.content,
+            imgUrl: singleData.post.imgUrl,
+            user_id: singleData.post.user,
+            profile_img: singleData.post.user?.profile_img,
+            day: singleData.post.createdAt.split("T")[0],
+            post_id: singleData.post._id,
+            emoticon: singleData.post.emoticon,
           });
         });
         console.log(post_data);
