@@ -38,6 +38,7 @@ const Sidebar = ({ room }) => {
   }, [dispatch, room]);
 
   // 검색 필터
+
   let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });

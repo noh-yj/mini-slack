@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Avatar, Image } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as postActions } from "../redux/modules/post";
-import "animate.css";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Avatar, Image } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as postActions } from '../redux/modules/post';
+import 'animate.css';
 
-import CommentList from "./CommentList";
+import CommentList from './CommentList';
 
 const Detail = (props) => {
   console.log(props);
@@ -43,20 +43,20 @@ const Detail = (props) => {
             <Postsub>
               <Avatar
                 style={{
-                  backgroundColor: "#87d068",
-                  cursor: "pointer",
-                  width: "3rem",
-                  height: "3rem",
-                  borderRadius: "30%",
-                  marginRight: "0.5rem",
-                  fontSize: "25px",
-                  display: "flex",
-                  alignItems: "center",
+                  backgroundColor: '#87d068',
+                  cursor: 'pointer',
+                  width: '3rem',
+                  height: '3rem',
+                  borderRadius: '30%',
+                  marginRight: '0.5rem',
+                  fontSize: '25px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
                 src={props?.user_id.profile_img}
                 onClick={OpenModal}
               >
-                {props?.user_id.profile_img === " "
+                {props?.user_id.profile_img === ' '
                   ? props?.user_id.nickname[0]
                   : null}
               </Avatar>
@@ -71,13 +71,18 @@ const Detail = (props) => {
             </Postsub>
             <ContentBox>{props?.content}</ContentBox>
             {props?.imgUrl && (
-              <Image
-                src={props?.imgUrl}
-                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
-              />
+              <PostBody>
+                <Image
+                  src={props?.imgUrl}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '10px',
+                  }}
+                />
+              </PostBody>
             )}
           </PostBox>
-
           <CommentList post_id={props.post_id} />
         </PostFrame>
       )}
@@ -96,10 +101,18 @@ const PostFrame = styled.div`
   position: relative;
   cursor: default;
   background: white;
+  height: 80vh;
+  overflow: auto;
 `;
 
 const Postsub = styled.div`
   display: flex;
+`;
+const PostBody = styled.div`
+  width: 40%;
+  @media only screen and (max-width: 375px) {
+    width: 100%;
+  }
 `;
 
 const PostInfo = styled.div``;

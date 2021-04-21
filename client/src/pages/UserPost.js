@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SmileOutlined } from '@ant-design/icons';
+import { SmileOutlined, MenuOutlined } from '@ant-design/icons';
 import swal from 'sweetalert';
 import { getCookie } from '../shared/Cookie';
-
 import Header from '../components/Header';
 import Sider from '../components/Sidebar';
 import UserPostList from '../components/UserPostList';
@@ -22,16 +21,24 @@ function UserPost(props) {
     // 로그인창으로 이동
     history.replace('/');
   }
+  // 반응형 햄버거 토글
+  const [toggle, setToggle] = useState(false);
+  const click = () => {
+    setToggle(!toggle);
+  };
 
   return (
     <>
       <MainFrame>
         <Header />
+        <ToggleBtn>
+          <MenuOutlined onClick={click} />
+        </ToggleBtn>
         <MainContent>
-          <MainLeft>
+          <MainLeft toggle={toggle}>
             <Sider />
           </MainLeft>
-          <MainRight>
+          <MainRight toggle={toggle}>
             <UserPostList {...props} />
           </MainRight>
         </MainContent>
@@ -55,9 +62,18 @@ const MainFrame = styled.div`
   & > button:hover {
     transform: scale(1.1);
   }
+`;
 
-  @media only screen and (max-width: 768px) {
-    margin: 30px auto;
+const ToggleBtn = styled.div`
+  width: 20px;
+  height: 25px;
+  font-size: 20px;
+  position: fixed;
+  top: 14px;
+  left: 10px;
+  display: none;
+  @media only screen and (max-width: 375px) {
+    display: block;
   }
 `;
 
@@ -74,13 +90,25 @@ const MainLeft = styled.section`
   padding: 16px 24px;
   border-right: 1px solid rgb(235, 237, 240);
   flex-basis: 25%;
+  display: block;
+  @media only screen and (max-width: 375px) {
+    display: ${(props) => (props.toggle ? 'block' : 'none')};
+    flex-basis: ${(props) => (props.toggle ? '100%' : '0%')};
+  }
 `;
 
 const MainRight = styled.section`
   flex-basis: 75%;
   padding: 16px 24px;
   min-height: 80vh;
-  &::after {
+  @media only screen and (max-width: 768px) {
+    padding: 16px 0;
+  }
+
+  @media only screen and (max-width: 375px) {
+    display: ${(props) => (props.toggle ? 'none' : 'block')};
+    flex-basis: ${(props) => (props.toggle ? '0%' : '100%')};
+    padding: 15px;
   }
 `;
 
@@ -92,5 +120,9 @@ const Footer = styled.div`
   justify-content: center;
   font-weight: bold;
   cursor: default;
+  @media only screen and (max-width: 375px) {
+    height: 40px;
+    font-size: 18px;
+  }
 `;
 export default UserPost;

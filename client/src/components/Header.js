@@ -75,6 +75,12 @@ const HeaderFrame = styled.div`
   display: flex;
   justify-content: space-between;
   cursor: default;
+  @media only screen and (max-width: 768px) {
+    padding: 0 40px;
+  }
+  @media only screen and (max-width: 375px) {
+    padding: 0 10px;
+  }
 `;
 
 const Logo = styled.div`
@@ -87,6 +93,9 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  @media only screen and (max-width: 375px) {
+    padding: 0 25px;
+  }
 `;
 
 const UserFrame = styled.div`
@@ -97,6 +106,9 @@ const UserFrame = styled.div`
   padding: 10px 0 12px 0;
   & p {
     margin: 0 0 0 14px;
+  }
+  @media only screen and (max-width: 800px) {
+    width: auto;
   }
 `;
 const LogOut = styled.div`

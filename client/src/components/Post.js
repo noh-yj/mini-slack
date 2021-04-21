@@ -154,10 +154,12 @@ const Post = (props) => {
           </Postsub>
           <ContentBox>{props?.content}</ContentBox>
           {props?.imgUrl && (
-            <Image
-              src={props?.imgUrl}
-              style={{ width: "100%", height: "100%", borderRadius: "10px" }}
-            />
+            <PostBody>
+              <Image
+                src={props?.imgUrl}
+                style={{ width: "100%", height: "100%", borderRadius: "10px" }}
+              />
+            </PostBody>
           )}
           <CommentFrame>
             <button
@@ -274,6 +276,12 @@ const Postsub = styled.div`
   display: flex;
 `;
 
+const PostBody = styled.div`
+  width: 40%;
+  @media only screen and (max-width: 375px) {
+    width: 100%;
+  }
+`;
 const PostInfo = styled.div``;
 
 const MoreBtn = styled.button`
