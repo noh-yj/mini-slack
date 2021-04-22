@@ -37,8 +37,7 @@ const Sidebar = ({ room }) => {
     };
   }, [dispatch, room]);
 
-  // 검색 필터
-
+  // 유저 검색 필터
   let searchUser = users.filter((val) => {
     return val.nickname.indexOf(search) > -1;
   });
@@ -77,6 +76,7 @@ const Sidebar = ({ room }) => {
                 <Menu.Item
                   key={idx}
                   onClick={() => {
+                    // 유저가 작성한 게시물로 이동
                     history.push(`/user/post/${val.id}`);
                   }}
                 >
@@ -108,6 +108,7 @@ const Sidebar = ({ room }) => {
                 <Menu.Item
                   key={idx + 'msg'}
                   onClick={() => {
+                    // 채팅 페이지 이동
                     history.push(`/chat/${val.id}/${uid}/${val.nickname}`);
                     dispatch(chatActions.badgeOff(val.id));
                   }}

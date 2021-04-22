@@ -8,6 +8,7 @@ function Msg(props) {
 
   return (
     <>
+      {/* 상대방 메세지 왼쪽 */}
       {me?.nickname !== props.username ? (
         <>
           <Row style={{ margin: '10px 0' }}>
@@ -27,6 +28,7 @@ function Msg(props) {
         </>
       ) : (
         <>
+          {/* 내 메세지 오른쪽 */}
           <Row
             style={{
               margin: '10px 0',

@@ -86,7 +86,6 @@ function Signup(props) {
       data: { email: user_email },
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           swal({
             title: '사용 가능한 아이디 입니다.',

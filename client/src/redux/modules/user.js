@@ -22,7 +22,7 @@ const initialState = {
 };
 // 회원 정보 조회
 const getUserDB = () => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch) {
     const jwtToken = getCookie('is_login');
     // 헤더에 토큰 default
     axios.defaults.headers.common['token'] = `${jwtToken}`;
@@ -49,7 +49,7 @@ const getUserDB = () => {
 };
 // 회원 정보 수정
 const updateUserDB = (file, comment_myself, pwd) => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch, getState) {
     // 회원정보 수정 시 비밀번호 변경하지 않는 경우 str null로 보냄 (서버랑 약속)
     if (pwd === '') {
       pwd = 'null';

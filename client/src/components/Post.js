@@ -77,6 +77,7 @@ const Post = (props) => {
   let post_list;
   const user_post = useSelector((state) => state.post.user_post_list);
   const post = useSelector((state) => state.post.list);
+  // 유저 게시물일때 전체 게시물일때 post_list useSelector 조건 처리
   props.is_user ? (post_list = user_post) : (post_list = post);
 
   const index = post_list.findIndex((p) => p.post_id === props.post_id);
