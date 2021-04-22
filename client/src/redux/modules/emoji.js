@@ -80,7 +80,6 @@ const deleteEmojiDB = (post_id, emoji) => {
     };
     axios(options)
       .then((res) => {
-        // 삭제할 건지 말지 한 번 더 물어볼까?
         dispatch(deleteEmoji(post_id, emoji, userInfo?.uid));
       })
       .catch((error) => {
@@ -133,7 +132,6 @@ export default handleActions(
 // action creator
 
 const actionCreators = {
-  //getPostDB,
   setEmoji,
   updateEmojiDB,
   deleteEmojiDB,

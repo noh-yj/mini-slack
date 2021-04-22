@@ -1,15 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { PictureOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
-import swal from 'sweetalert';
+import React from "react";
+import styled from "styled-components";
+import { PictureOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
+import swal from "sweetalert";
 
 function EditPostModal({ status, close, post_info }) {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.user);
-  //const dispatch = useDispatch();
   // Image file & preview image setting
   const [file, setFile] = React.useState(null);
   const [preview, setPreview] = React.useState(post_info.imgUrl);
@@ -41,11 +40,11 @@ function EditPostModal({ status, close, post_info }) {
 
   const updatePost = () => {
     // contents 가 비어있을 때
-    if (contents === '') {
+    if (contents === "") {
       swal({
-        title: '업로드에 실패하였습니다 😥',
-        text: '게시글이 공란입니다.',
-        icon: 'error',
+        title: "업로드에 실패하였습니다 😥",
+        text: "게시글이 공란입니다.",
+        icon: "error",
       });
       return;
     }
@@ -77,37 +76,32 @@ function EditPostModal({ status, close, post_info }) {
                 <Avatar
                   size={40}
                   style={{
-                    backgroundColor: '#87d068',
-                    cursor: 'pointer',
-                    margin: '0 8px 0 0',
+                    backgroundColor: "#87d068",
+                    cursor: "pointer",
+                    margin: "0 8px 0 0",
                   }}
                   src={userInfo?.profile_img}
                 >
-                  {userInfo?.profile_img === ' ' ? userInfo?.nickname[0] : null}
+                  {userInfo?.profile_img === " " ? userInfo?.nickname[0] : null}
                 </Avatar>
-                <span>{userInfo ? userInfo.nickname : 'User Name'}</span>
+                <span>{userInfo ? userInfo.nickname : "User Name"}</span>
               </ModalUserFrame>
               <ElTextarea
-                wrap='hard'
-                placeholder='무슨 생각을 하고 계시나요?'
+                wrap="hard"
+                placeholder="무슨 생각을 하고 계시나요?"
                 autoFocus
-                autoComplete='true'
+                autoComplete="true"
                 onChange={changeContents}
                 value={contents}
               />
               <Image src={preview} />
-              {/* {file !== null ? (
-                <>
-                  <Image src={preview} />
-                </>
-              ) : null} */}
               <AdditionalPost>
                 게시물에 추가
                 {/* Image file uploader */}
-                <InputLabel className='input-file-button' htmlFor='input-file'>
+                <InputLabel className="input-file-button" htmlFor="input-file">
                   <PictureOutlined />
                 </InputLabel>
-                <Input type='file' id='input-file' onChange={selectFile} />
+                <Input type="file" id="input-file" onChange={selectFile} />
               </AdditionalPost>
               <PostingBtn onClick={updatePost}>수정</PostingBtn>
             </ModalFrame>

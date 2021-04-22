@@ -1,43 +1,44 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { SmileOutlined, MenuOutlined } from '@ant-design/icons';
-import swal from 'sweetalert';
-import { getCookie } from '../shared/Cookie';
-import Header from '../components/Header';
-import Sider from '../components/Sidebar';
-import Detail from '../components/Detail';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { SmileOutlined, MenuOutlined } from "@ant-design/icons";
+import swal from "sweetalert";
+import { getCookie } from "../shared/Cookie";
+import Header from "../components/Header";
+import Sider from "../components/Sidebar";
+import Detail from "../components/Detail";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 function PostDetail(props) {
   const dispatch = useDispatch();
   const { history } = props;
   // 쿠키에 저장된 토큰 조회
-  const cookie = getCookie('is_login') ? true : false;
+  const cookie = getCookie("is_login") ? true : false;
   // 토큰이 없을 경우 사용을 못하게 로그인 화면으로 이동시키기
   if (!cookie) {
     swal({
-      title: '토큰이 만료되었거나 잘못된 접근입니다.',
-      text: '다시 로그인 해주세요!',
-      icon: 'error',
+      title: "토큰이 만료되었거나 잘못된 접근입니다.",
+      text: "다시 로그인 해주세요!",
+      icon: "error",
     });
     // 로그인창으로 이동
-    history.replace('/');
+    history.replace("/");
   }
 
   const postInfo = useSelector((state) => state.post.list);
+
   let index;
-  if (postInfo.length > 0) {
+  if (postInfo?.length > 0) {
     index = postInfo.findIndex((p) => p.post_id === props.match.params.id);
   }
 
   React.useEffect(() => {
-    if (postInfo.length === 0) {
+    if (postInfo?.length === 0) {
       dispatch(postActions.getPostDB());
     } else {
       return;
     }
-  });
+  }, []);
   // 반응형 햄버거 토글
   const [toggle, setToggle] = useState(false);
   const click = () => {
@@ -56,7 +57,7 @@ function PostDetail(props) {
             <Sider />
           </MainLeft>
           <MainRight toggle={toggle}>
-            {postInfo.length > 0 ? (
+            {postInfo?.length > 0 ? (
               <>
                 <Detail {...postInfo[index]} />
               </>
@@ -113,8 +114,8 @@ const MainLeft = styled.section`
   flex-basis: 25%;
   display: block;
   @media only screen and (max-width: 375px) {
-    display: ${(props) => (props.toggle ? 'block' : 'none')};
-    flex-basis: ${(props) => (props.toggle ? '100%' : '0%')};
+    display: ${(props) => (props.toggle ? "block" : "none")};
+    flex-basis: ${(props) => (props.toggle ? "100%" : "0%")};
   }
 `;
 
@@ -127,8 +128,8 @@ const MainRight = styled.section`
   }
 
   @media only screen and (max-width: 375px) {
-    display: ${(props) => (props.toggle ? 'none' : 'block')};
-    flex-basis: ${(props) => (props.toggle ? '0%' : '100%')};
+    display: ${(props) => (props.toggle ? "none" : "block")};
+    flex-basis: ${(props) => (props.toggle ? "0%" : "100%")};
     padding: 15px;
   }
 `;

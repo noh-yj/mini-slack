@@ -34,6 +34,11 @@ function CommentList({ post_id }) {
           autoComplete="true"
           onChange={changeContents}
           value={contents}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              addComment();
+            }
+          }}
         />
         <WriteCommentBtn onClick={addComment}>작 성</WriteCommentBtn>
       </WritingBox>
@@ -68,7 +73,6 @@ const CommentBox = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: #d8d9dc; /* color of the scroll thumb */
     border-radius: 20px; /* roundness of the scroll thumb */
-    //border: 3px solid orange; /* creates padding around scroll thumb */
   }
 `;
 

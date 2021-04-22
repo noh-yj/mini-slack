@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Spin } from 'antd';
-import Post from './Post';
-import InfinityScroll from '../shared/InfinityScroll';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as postActions } from '../redux/modules/post';
+import React from "react";
+import styled from "styled-components";
+import { Spin } from "antd";
+import Post from "./Post";
+import InfinityScroll from "../shared/InfinityScroll";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 const PostList = (props) => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const PostList = (props) => {
   }, []);
 
   return (
-    <PostListFrame id='scroll'>
+    <PostListFrame id="scroll">
       {view_loading ? (
         <>
           <InfinityScroll
@@ -41,13 +41,13 @@ const PostList = (props) => {
         </>
       ) : (
         <Spin
-          size='large'
-          tip='Loading...'
+          size="large"
+          tip="Loading..."
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
           }}
         />
       )}
@@ -76,6 +76,5 @@ const PostListFrame = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: #d8d9dc; /* color of the scroll thumb */
     border-radius: 20px; /* roundness of the scroll thumb */
-    //border: 3px solid orange; /* creates padding around scroll thumb */
   }
 `;

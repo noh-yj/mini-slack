@@ -8,7 +8,7 @@ import CommentList from "./CommentList";
 const Detail = (props) => {
   return (
     <>
-      {props && (
+      {props.user_id ? (
         <PostFrame>
           <PostBox>
             <Postsub>
@@ -53,7 +53,7 @@ const Detail = (props) => {
           </PostBox>
           <CommentList post_id={props.post_id} />
         </PostFrame>
-      )}
+      ) : null}
     </>
   );
 };
