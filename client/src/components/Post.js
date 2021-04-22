@@ -6,6 +6,7 @@ import { Picker } from "emoji-mart";
 import UserProfile from "./UserProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
+import { actionCreators as commentActions } from "../redux/modules/comment";
 import { actionCreators as emojiActions } from "../redux/modules/emoji";
 import {
   MoreOutlined,
@@ -105,9 +106,15 @@ const Post = (props) => {
   };
 
   // get comment number in a certain post
+  React.useEffect(() => {
+    dispatch(commentActions.getCommentDB(props.post_id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const comment_list = useSelector(
     (state) => state.comment.list[props.post_id]
   );
+
+  console.log(comment_list);
   const num_comments = comment_list?.length;
 
   return (
@@ -178,7 +185,7 @@ const Post = (props) => {
             </PostBody>
           )}
           <CommentFrame>
-            {comment_list ? (
+            {comment_list?.length > 0 ? (
               <CommentIconBtn
                 style={{ color: "#808080" }}
                 onClick={() => {
@@ -195,7 +202,6 @@ const Post = (props) => {
                 }}
               >
                 <CommentOutlined />
-                <NumComment>{num_comments}</NumComment>
               </CommentIconBtn>
             )}
 
