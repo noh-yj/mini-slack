@@ -20,7 +20,7 @@
 - 페이지 단위 컴포넌트 구성: 로그인, 회원가입, 메인 페이지, 상세페이지, 유저 게시물 페이지, 채팅 페이지
 - DB구성
 - user: {\_id, nickname, email, password, comment_myself, profile_img, createdAt, updatedAt}
-- post: {content, url, imgUrl, user, emoticon, comment, createdAt, updatedAt}
+- post: {content, url, imgUrl, user, emoji , comment, createdAt, updatedAt}
 - comment: {content, user, createdAt, updatedAt}
 - emoticon: {emoji, user, post, createdAt, updatedAt}
 - chat: {room, username, msg, createdAt, updatedAt}
