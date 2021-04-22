@@ -113,7 +113,6 @@ const Post = (props) => {
     (state) => state.comment.list[props.post_id],
   );
 
-  console.log(comment_list);
   const num_comments = comment_list?.length;
 
   return (
