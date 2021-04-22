@@ -4,11 +4,9 @@ import { Avatar, Image } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as postActions } from '../redux/modules/post';
 import 'animate.css';
-
 import CommentList from './CommentList';
 
 const Detail = (props) => {
-  console.log(props);
   const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state.user.user);
@@ -26,7 +24,6 @@ const Detail = (props) => {
   };
 
   const deletePost = () => {
-    console.log(props.post_id);
     dispatch(postActions.deletePostDB(props.post_id));
   };
   // 유저 프로필 모달

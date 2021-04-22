@@ -1,14 +1,13 @@
-import { createAction, handleActions } from "redux-actions";
-import produce from "immer";
-import { getCookie } from "../../shared/Cookie";
-import axios from "axios";
-import { config } from "../../config";
-import swal from "sweetalert";
+import { createAction, handleActions } from 'redux-actions';
+import produce from 'immer';
+import axios from 'axios';
+import { config } from '../../config';
+import swal from 'sweetalert';
 
 // actions
-const SET_EMOJI = "SET_EMOJI";
-const UPDATE_EMOJI = "UPDATE_EMOJI";
-const DELETE_EMOJI = "DELETE_EMOJI";
+const SET_EMOJI = 'SET_EMOJI';
+const UPDATE_EMOJI = 'UPDATE_EMOJI';
+const DELETE_EMOJI = 'DELETE_EMOJI';
 
 // action creator functions
 const setEmoji = createAction(SET_EMOJI, (post_id, emoji_list) => ({
@@ -42,11 +41,11 @@ const updateEmojiDB = (post_id, emoji) => {
 
     const emojiDB = {
       url: `${config.api}/emoticon/${post_id}`,
-      method: "PATCH",
+      method: 'PATCH',
       data: emoji_content,
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     };
 
@@ -57,9 +56,9 @@ const updateEmojiDB = (post_id, emoji) => {
       })
       .catch((error) => {
         swal({
-          title: "업로드 실패 🙄",
-          text: "뭔가.. 잘못됐어요!",
-          icon: "error",
+          title: '업로드 실패 🙄',
+          text: '뭔가.. 잘못됐어요!',
+          icon: 'error',
         });
       });
   };
@@ -71,12 +70,12 @@ const deleteEmojiDB = (post_id, emoji) => {
     const userInfo = getState().user.user;
     const options = {
       url: `${config.api}/emoticon/${post_id}`,
-      method: "DELETE",
+      method: 'DELETE',
       data: { emoji: emoji },
       headers: {
         // 백 분들과 맞춰보기
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     };
     axios(options)
@@ -86,9 +85,9 @@ const deleteEmojiDB = (post_id, emoji) => {
       })
       .catch((error) => {
         swal({
-          title: "삭제 실패 🙄",
-          text: "뭔가.. 잘못됐어요!",
-          icon: "error",
+          title: '삭제 실패 🙄',
+          text: '뭔가.. 잘못됐어요!',
+          icon: 'error',
         });
       });
   };
@@ -109,16 +108,16 @@ export default handleActions(
       produce(state, (draft) => {
         let emoji_list = state.list[action.payload.post_id];
         let index = emoji_list.findIndex(
-          (e) => e.emoticon === action.payload.emoji
+          (e) => e.emoticon === action.payload.emoji,
         );
         let emoji_user_list = emoji_list[index][action.payload.emoji];
         let user_index = emoji_user_list.findIndex(
-          (u) => u === action.payload.uid
+          (u) => u === action.payload.uid,
         );
 
         draft.list[action.payload.post_id][index][action.payload.emoji].splice(
           user_index,
-          1
+          1,
         );
         if (
           draft.list[action.payload.post_id][index][action.payload.emoji]
@@ -128,7 +127,7 @@ export default handleActions(
         }
       }),
   },
-  initialState
+  initialState,
 );
 
 // action creator

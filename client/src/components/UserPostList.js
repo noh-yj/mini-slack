@@ -8,13 +8,13 @@ import { actionCreators as postActions } from '../redux/modules/post';
 const UserPostList = (props) => {
   const id = props.match.params.id;
   const dispatch = useDispatch();
+  // 유저 작성 게시물
   const post_list = useSelector((state) => state.post.user_post_list);
   const loading = useSelector((state) => state.post.is_loading);
 
   React.useEffect(() => {
     dispatch(postActions.getUserPostDB(id));
   }, [dispatch, id]);
-  console.log(post_list);
   return (
     <PostListFrame>
       {loading ? (

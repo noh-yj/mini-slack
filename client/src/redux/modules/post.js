@@ -35,15 +35,16 @@ const userPost = createAction(USER_POST, (post_list) => ({ post_list }));
 const initialState = {
   is_loading: false,
   list: [],
-  paging: { page: 1, size: 3 },
+  paging: { page: 1, size: 5 },
   scroll_loading: false,
   user_post_list: [],
+  view_loading: false,
 };
 
 // middleware communication
 // Add Post to DB
 const addPostDB = (content, item) => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch, getState) {
     let user = getState().user.user;
 
     let formData = new FormData();
@@ -91,9 +92,10 @@ const addPostDB = (content, item) => {
 };
 
 // GET All Posts From DB
-const getPostDB = (page = 1, size = 3) => {
+const getPostDB = (page = 1, size = 5) => {
   return function (dispatch, getState) {
     let _paging = getState().post.paging;
+    // page가 null이면 더이상 호출할게 없으므로 리턴
     if (!_paging.page) {
       return;
     }
@@ -108,11 +110,11 @@ const getPostDB = (page = 1, size = 3) => {
         token: `${jwtToken}`,
       },
     };
-    console.log(page);
     axios(options)
       .then((res) => {
-        console.log(res.data);
         let paging = {
+          // 받아온 데이터길이랑 사이즈가 일치하지 않으면 더이상 페이지가 없는것이므로 null
+          // 그렇지 않다면 페이지 + 1
           page: res.data.posts.length === size ? page + 1 : null,
           size: size,
         };
@@ -152,7 +154,6 @@ const getUserPostDB = (id) => {
       url: `${config.api}/member/${id}`,
     })
       .then((res) => {
-        console.log(res.data.posts);
         let post_data = [];
 
         res.data.posts.forEach((singleData) => {
@@ -183,7 +184,7 @@ const getUserPostDB = (id) => {
 
 // UPDATE DB
 const updatePostDB = (post_id, content, item) => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch) {
     let formData = new FormData();
 
     formData.append('content', content);
@@ -229,7 +230,7 @@ const updatePostDB = (post_id, content, item) => {
 
 // Delete DB
 const deletePostDB = (post_id) => {
-  return function (dispatch, getState, { history }) {
+  return function (dispatch) {
     const options = {
       url: `${config.api}/board/${post_id}`,
       method: 'DELETE',
@@ -265,8 +266,8 @@ export default handleActions(
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list.push(...action.payload.post_list);
-        draft.is_loading = false;
         draft.scroll_loading = false;
+        draft.view_loading = true;
         if (action.payload.paging) {
           draft.paging = action.payload.paging;
         }

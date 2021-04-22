@@ -28,8 +28,6 @@ const user_list = createAction(USERS, (user_list) => ({
 const initialState = {
   chat_list: [],
   is_loading: false,
-  is_badge: false,
-  receive_info: '',
   user_list: [],
 };
 
@@ -46,6 +44,7 @@ const middlewareUsers = () => {
     })
       .then((res) => {
         const users = res.data.users.map((val) => {
+          // 알림 배지 여부를 위해 처리
           return { ...val, is_badge: false };
         });
         dispatch(user_list(users));
@@ -88,8 +87,10 @@ const globalAddChatList = (room) => {
         if (getState().user.user.uid !== res.uid) {
           // 해당 채팅방에서는 알람이 울리지 않게 끔 조건 처리
           if (room !== res.room) {
-            // noti 권한 허용일 경우
+            // 배지 알림
             dispatch(receiveBadge(res.uid));
+            // 크롬 noti
+            // noti 권한 허용일 경우
             if (Notification.permission === 'granted') {
               new Notification(res.username, {
                 body: res.msg,

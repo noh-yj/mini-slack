@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ChatList from './ChatList';
 
 function ChatMain({ targetName }) {
+  // 채팅 리스트 상위 컴포넌트
   return (
     <>
       <PostListFrame>

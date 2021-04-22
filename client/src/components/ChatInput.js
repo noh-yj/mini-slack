@@ -29,6 +29,7 @@ function ChatInput({ room }) {
       profile_img: Info.profile_img,
       msg: Info.msg,
     });
+    // 알람 전송
     chatActions.globalSocket.emit('globalSend', {
       room: Info.room,
       username: Info.username,
