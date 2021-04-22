@@ -199,3 +199,5 @@
   ![https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F56851583-97de-461b-bec9-8609902e06f7%2FUntitled.png?table=block&id=90a2fe36-60f2-4283-bae2-89a1922cd8b3&width=3790&userId=c34daa7f-c2d8-4a10-98d0-a0b23d4ebcfc&cache=v2](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F56851583-97de-461b-bec9-8609902e06f7%2FUntitled.png?table=block&id=90a2fe36-60f2-4283-bae2-89a1922cd8b3&width=3790&userId=c34daa7f-c2d8-4a10-98d0-a0b23d4ebcfc&cache=v2)
 
   채팅을 할시에, 해당 유저와 실시간 채팅이 가능하게 구현하였음.
+
+### [YouTube Link](https://www.youtube.com/watch?v=8IvPPMpnCZ4)
