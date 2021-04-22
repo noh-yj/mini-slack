@@ -6,12 +6,6 @@ import "animate.css";
 import CommentList from "./CommentList";
 
 const Detail = (props) => {
-  // 유저 프로필 모달
-  const [userprofile, setUserprofile] = useState(false);
-  const OpenModal = () => {
-    setUserprofile(true);
-  };
-
   return (
     <>
       {props && (
@@ -31,7 +25,6 @@ const Detail = (props) => {
                   alignItems: "center",
                 }}
                 src={props?.user_id.profile_img}
-                onClick={OpenModal}
               >
                 {props?.user_id.profile_img === " "
                   ? props?.user_id.nickname[0]
@@ -39,9 +32,7 @@ const Detail = (props) => {
               </Avatar>
               <PostInfo>
                 <UserInfo>
-                  <UserName onClick={OpenModal}>
-                    {props?.user_id.nickname}
-                  </UserName>
+                  <UserName>{props?.user_id.nickname}</UserName>
                   <WritingDt>{props?.day}</WritingDt>
                 </UserInfo>
               </PostInfo>
