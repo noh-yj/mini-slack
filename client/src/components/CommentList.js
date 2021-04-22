@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { actionCreators as commentActions } from "../redux/modules/comment";
@@ -21,6 +21,7 @@ function CommentList({ post_id }) {
 
   React.useEffect(() => {
     dispatch(commentActions.getCommentDB(post_id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

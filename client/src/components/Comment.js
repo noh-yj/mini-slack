@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Avatar } from 'antd';
+import React from "react";
+import styled from "styled-components";
+import { Avatar } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   CheckSquareOutlined,
   RollbackOutlined,
-} from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as commentActions } from '../redux/modules/comment';
+} from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as commentActions } from "../redux/modules/comment";
 
 const Comment = (props) => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const Comment = (props) => {
 
   const updateComment = () => {
     dispatch(
-      commentActions.updateCommentDB(props.post_id, props._id, contents),
+      commentActions.updateCommentDB(props.post_id, props._id, contents)
     );
   };
 
@@ -46,15 +46,15 @@ const Comment = (props) => {
           <Avatar
             size={40}
             style={{
-              backgroundColor: '#87d068',
-              cursor: 'pointer',
-              margin: '0 8px 0 0',
+              backgroundColor: "#87d068",
+              cursor: "pointer",
+              margin: "0 8px 0 0",
             }}
             src={props.user?.profile_img}
           >
-            {props.user?.profile_img === ' ' ? props.user?.nickname[0] : null}
+            {props.user?.profile_img === " " ? props.user?.nickname[0] : null}
           </Avatar>
-          <span>{props.user ? props.user.nickname : 'User Name'}</span>
+          <span>{props.user ? props.user.nickname : "User Name"}</span>
         </UserFrame>
         {isEdit ? (
           <>
@@ -82,7 +82,7 @@ const Comment = (props) => {
           <>
             <CommentBox>
               {props.content}
-              <CommentDate>{props.createdAt.split('T')[0]}</CommentDate>
+              <CommentDate>{props.createdAt.split("T")[0]}</CommentDate>
             </CommentBox>
             {userId === props.user.userId ? (
               <Btngroup>
@@ -158,8 +158,6 @@ const Btngroup = styled.div`
     }
   }
 `;
-
-const InputBox = styled.input``;
 
 const ElTextarea = styled.textarea`
   box-sizing: border-box;

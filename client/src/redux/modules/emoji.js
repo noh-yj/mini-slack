@@ -1,6 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
-import { getCookie } from "../../shared/Cookie";
 import axios from "axios";
 import { config } from "../../config";
 import swal from "sweetalert";
