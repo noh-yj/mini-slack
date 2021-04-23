@@ -205,5 +205,4 @@
 ### 유튜브 링크
 
 <br/>
-<hr/>
 ### [YouTube Link](https://www.youtube.com/watch?v=8IvPPMpnCZ4)
