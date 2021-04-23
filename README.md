@@ -200,4 +200,10 @@
 
   채팅을 할시에, 해당 유저와 실시간 채팅이 가능하게 구현하였음.
 
+---
+
+### 유튜브 링크
+
+<br/>
+<hr/>
 ### [YouTube Link](https://www.youtube.com/watch?v=8IvPPMpnCZ4)
